@@ -8,7 +8,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-        /* FONDO NEGRO PURO ABSOLUTO */
         :root { --bg-dark: #000000; --panel-bg: rgba(20, 20, 23, 0.8); --border-color: rgba(63, 63, 70, 0.4); --accent-blue: #38bdf8; --accent-red: #f43f5e; --accent-green: #10b981; --text-main: #f4f4f5; --text-muted: #9ca3af; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); margin: 0; padding: 30px 15px; min-height: 100vh; }
         
@@ -18,7 +17,6 @@
         .title-area h1 span { color: var(--accent-blue); }
         .title-area p { margin: 0; font-size: 13px; color: var(--text-muted); font-weight: 500; }
         
-        /* ESTILO DEL SENSOR DE CONEXIÓN */
         .system-status { display: flex; align-items: center; gap: 10px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); padding: 10px 18px; border-radius: 30px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-green); transition: all 0.3s ease; }
         .pulse-dot { width: 8px; height: 8px; background-color: var(--accent-green); border-radius: 50%; box-shadow: 0 0 12px var(--accent-green); transition: all 0.3s ease; }
         
@@ -44,6 +42,8 @@
         .mono-cell { font-family: 'JetBrains Mono', monospace; font-size: 14px; }
         .rank-gold { background: linear-gradient(135deg, #fbbf24, #d97706); color: #000; font-weight: 800; padding: 3px 8px; border-radius: 4px; font-size: 12px; }
         .rank-normal { color: var(--text-muted); font-weight: 700; }
+        .rank-dnf { background: rgba(244, 63, 94, 0.2); color: var(--accent-red); font-weight: 800; padding: 3px 8px; border-radius: 4px; font-size: 12px; border: 1px solid rgba(244, 63, 94, 0.4); }
+        
         .error-alert { color: var(--accent-red); background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.2); padding: 25px; border-radius: 12px; text-align: center; font-weight: 600; }
 
         .circuits-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px; }
@@ -65,7 +65,6 @@
                 <h1>F1 <span>Telemetry</span> Analytics</h1>
                 <p><i class="fa-solid fa-cloud"></i> Producción Multi-Cloud &bull; Frontend: Render &bull; Backend: AWS EC2 (DuckDNS)</p>
             </div>
-            <!-- INDICADOR DE CONEXIÓN DINÁMICO -->
             <div class="system-status" id="aws-status">
                 <div class="pulse-dot"></div>
                 <span id="aws-status-text">Conectando...</span>
@@ -82,7 +81,7 @@
             <div class="filter-panel">
                 <div class="filter-group">
                     <label>Temporada</label>
-                    <select id="tel-season" onchange="updateCircuitsDropdown(); fetchTelemetryData();">
+                    <select id="tel-season" onchange="fetchTelemetryData();">
                         <option value="2026">2026</option>
                         <option value="2025">2025</option>
                         <option value="2024">2024</option>
@@ -141,7 +140,6 @@
     </div>
 
     <script>
-        // === TU DOMINIO DUCKDNS ===
         const SECURE_AWS_URL = "https://telemetria-f1.duckdns.org";
 
         // CALENDARIO COMPLETO (24 CARRERAS)
@@ -160,11 +158,12 @@
             {val: "qatar", txt: "Qatar GP"}, {val: "abudhabi", txt: "Abu Dhabi GP"}
         ];
 
-        const circuitMapping = {
-            "2026": allRaces, "2025": allRaces, "2024": allRaces, "2023": allRaces
-        };
+        function populateCircuits() {
+            const circuitSelect = document.getElementById('tel-circuit');
+            circuitSelect.innerHTML = "";
+            allRaces.forEach(c => { circuitSelect.innerHTML += `<option value="${c.val}">${c.txt}</option>`; });
+        }
 
-        // FUNCIÓN DEL SENSOR DINÁMICO
         function updateStatus(isOnline) {
             const statusDiv = document.getElementById('aws-status');
             const statusText = document.getElementById('aws-status-text');
@@ -197,13 +196,6 @@
             if(viewId === 'circuits-view') fetchCircuitsData();
         }
 
-        function updateCircuitsDropdown() {
-            const season = document.getElementById('tel-season').value;
-            const circuitSelect = document.getElementById('tel-circuit');
-            circuitSelect.innerHTML = "";
-            circuitMapping[season].forEach(c => { circuitSelect.innerHTML += `<option value="${c.val}">${c.txt}</option>`; });
-        }
-
         async function fetchTelemetryData() {
             const season = document.getElementById('tel-season').value;
             const circuit = document.getElementById('tel-circuit').value;
@@ -216,14 +208,23 @@
                 if (!res.ok) throw new Error("Fallo en servidor");
                 const data = await res.json();
                 
-                updateStatus(true); // El sensor detecta la conexión
+                updateStatus(true);
 
                 meta.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${data.circuit} &bull; Laps: ${data.laps}`;
                 tbody.innerHTML = "";
                 data.data.forEach(row => {
-                    const posBadge = row.pos === 1 ? `<span class="rank-gold">P1</span>` : `<span class="rank-normal">P${row.pos}</span>`;
+                    let posBadge;
+                    let opacityStyle = "";
+                    
+                    if (row.pos === 1) { posBadge = `<span class="rank-gold">P1</span>`; }
+                    else if (row.pos === "DNF") { 
+                        posBadge = `<span class="rank-dnf">DNF</span>`; 
+                        opacityStyle = "opacity: 0.4;"; 
+                    }
+                    else { posBadge = `<span class="rank-normal">P${row.pos}</span>`; }
+
                     tbody.innerHTML += `
-                        <tr>
+                        <tr style="${opacityStyle}">
                             <td>${posBadge}</td>
                             <td><span class="driver-name">${row.driver}</span><span class="team-cell">${row.team}</span></td>
                             <td class="mono-cell" style="color:var(--accent-blue); font-weight:bold;">${row.best_lap}</td>
@@ -237,7 +238,7 @@
                     `;
                 });
             } catch (err) {
-                updateStatus(false); // El sensor cambia a rojo
+                updateStatus(false);
                 tbody.innerHTML = `<tr><td colspan="9"><div class="error-alert">Error de conexión HTTPS con AWS.</div></td></tr>`;
             }
         }
@@ -250,8 +251,7 @@
                 if (!res.ok) throw new Error("Fallo en servidor");
                 const data = await res.json();
                 
-                updateStatus(true); // Conectado
-
+                updateStatus(true);
                 tbody.innerHTML = "";
                 data.standings.forEach(row => {
                     const rankBadge = row.rank === 1 ? `<span class="rank-gold">Mundial</span>` : `<span class="rank-normal">#${row.rank}</span>`;
@@ -267,7 +267,7 @@
                     `;
                 });
             } catch (err) {
-                updateStatus(false); // Desconectado
+                updateStatus(false);
                 tbody.innerHTML = `<tr><td colspan="6"><div class="error-alert">Error al procesar el ranking histórico.</div></td></tr>`;
             }
         }
@@ -279,13 +279,12 @@
                 if (!res.ok) throw new Error("Fallo en servidor");
                 const data = await res.json();
                 
-                updateStatus(true); // Conectado
-
+                updateStatus(true);
                 grid.innerHTML = "";
                 data.forEach(circuit => {
                     grid.innerHTML += `
                         <div class="circuit-card">
-                            <img src="${circuit.image}" alt="${circuit.name}" class="circuit-image">
+                            <img src="${circuit.image}" alt="${circuit.name}" class="circuit-image" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Formula_1_logo.svg/1024px-Formula_1_logo.svg.png'">
                             <h3>${circuit.name}</h3>
                             <p><i class="fa-solid fa-map-pin"></i> ${circuit.location}</p>
                             <div class="circuit-stats">
@@ -296,12 +295,13 @@
                     `;
                 });
             } catch (err) {
-                updateStatus(false); // Desconectado
+                updateStatus(false);
                 grid.innerHTML = `<div class="error-alert" style="grid-column: 1 / -1;">Fallo al cargar la base de circuitos. AWS Inaccesible.</div>`;
             }
         }
 
-        updateCircuitsDropdown();
+        // Inicialización
+        populateCircuits();
         fetchTelemetryData();
     </script>
 </body>
