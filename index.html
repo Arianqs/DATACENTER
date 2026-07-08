@@ -8,8 +8,10 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-        :root { --bg-dark: #09090b; --panel-bg: rgba(20, 20, 23, 0.8); --border-color: rgba(63, 63, 70, 0.4); --accent-blue: #38bdf8; --accent-red: #f43f5e; --accent-green: #10b981; --text-main: #f4f4f5; --text-muted: #9ca3af; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); background-image: radial-gradient(circle at 5% 20%, rgba(56, 189, 248, 0.05), transparent 30%), radial-gradient(circle at 95% 70%, rgba(244, 63, 94, 0.04), transparent 30%); color: var(--text-main); margin: 0; padding: 30px 15px; min-height: 100vh; }
+        /* FONDO NEGRO PURO IMPLEMENTADO AQUÍ */
+        :root { --bg-dark: #000000; --panel-bg: rgba(20, 20, 23, 0.8); --border-color: rgba(63, 63, 70, 0.4); --accent-blue: #38bdf8; --accent-red: #f43f5e; --accent-green: #10b981; --text-main: #f4f4f5; --text-muted: #9ca3af; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); margin: 0; padding: 30px 15px; min-height: 100vh; }
+        
         .dashboard { max-width: 1200px; margin: 0 auto; }
         .main-header { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; backdrop-filter: blur(10px); }
         .title-area h1 { font-size: 26px; font-weight: 900; margin: 0 0 5px 0; letter-spacing: -0.5px; text-transform: uppercase; }
@@ -128,21 +130,33 @@
 
         <div id="circuits-view" class="view-content">
             <div class="filter-panel">
-                <div class="info-badge" style="margin-left:0;"><i class="fa-solid fa-image"></i> Biblioteca Gráfica de Pistas (Sincronizado vía AWS API)</div>
+                <div class="info-badge" style="margin-left:0;"><i class="fa-solid fa-image"></i> Biblioteca Gráfica de Pistas (F1 Official Data)</div>
             </div>
             <div class="circuits-grid" id="circuits-grid-container"></div>
         </div>
     </div>
 
     <script>
-        // === LA URL DEFINITIVA DE PRODUCCIÓN CON DUCKDNS ===
         const SECURE_AWS_URL = "https://telemetria-f1.duckdns.org";
 
+        // CALENDARIO COMPLETO (24 CARRERAS)
+        const allRaces = [
+            {val: "bahrain", txt: "Bahrain GP"}, {val: "saudi", txt: "Saudi Arabian GP"},
+            {val: "australia", txt: "Australian GP"}, {val: "japan", txt: "Japanese GP"},
+            {val: "china", txt: "Chinese GP"}, {val: "miami", txt: "Miami GP"},
+            {val: "imola", txt: "Emilia Romagna GP"}, {val: "monaco", txt: "Monaco GP"},
+            {val: "canada", txt: "Canadian GP"}, {val: "spain", txt: "Spanish GP"},
+            {val: "austria", txt: "Austrian GP"}, {val: "silverstone", txt: "British GP"},
+            {val: "hungary", txt: "Hungarian GP"}, {val: "spa", txt: "Belgian GP"},
+            {val: "netherlands", txt: "Dutch GP"}, {val: "monza", txt: "Italian GP"},
+            {val: "azerbaijan", txt: "Azerbaijan GP"}, {val: "singapore", txt: "Singapore GP"},
+            {val: "usa", txt: "United States GP"}, {val: "mexico", txt: "Mexico City GP"},
+            {val: "interlagos", txt: "São Paulo GP"}, {val: "vegas", txt: "Las Vegas GP"},
+            {val: "qatar", txt: "Qatar GP"}, {val: "abudhabi", txt: "Abu Dhabi GP"}
+        ];
+
         const circuitMapping = {
-            "2026": [ {val: "miami", txt: "Miami GP"}, {val: "monaco", txt: "Monaco GP"} ],
-            "2025": [ {val: "miami", txt: "Miami GP"}, {val: "monza", txt: "Monza GP"} ],
-            "2024": [ {val: "suzuka", txt: "Suzuka GP"}, {val: "spa", txt: "Spa GP"} ],
-            "2023": [ {val: "monza", txt: "Monza GP"} ]
+            "2026": allRaces, "2025": allRaces, "2024": allRaces, "2023": allRaces
         };
 
         function switchTab(viewId) {
@@ -191,7 +205,7 @@
                     `;
                 });
             } catch (err) {
-                tbody.innerHTML = `<tr><td colspan="9"><div class="error-alert">Error de conexión HTTPS con DuckDNS. Verifica los puertos 80/443 en AWS.</div></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9"><div class="error-alert">Error de conexión con AWS. Verifica que Nginx esté corriendo.</div></td></tr>`;
             }
         }
 
@@ -216,7 +230,7 @@
                     `;
                 });
             } catch (err) {
-                tbody.innerHTML = `<tr><td colspan="6"><div class="error-alert">Error al procesar el ranking histórico desde el dominio.</div></td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6"><div class="error-alert">Error al procesar el ranking.</div></td></tr>`;
             }
         }
 
@@ -240,7 +254,7 @@
                     `;
                 });
             } catch (err) {
-                grid.innerHTML = `<div class="error-alert" style="grid-column: 1 / -1;">Fallo al cargar la base de circuitos desde DuckDNS.</div>`;
+                grid.innerHTML = `<div class="error-alert" style="grid-column: 1 / -1;">Fallo al cargar la base de circuitos.</div>`;
             }
         }
 
