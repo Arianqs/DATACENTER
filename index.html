@@ -29,15 +29,14 @@
         .filter-panel { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px 25px; margin-bottom: 20px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap; backdrop-filter: blur(10px); }
         .filter-group { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
         .filter-group label { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; white-space: nowrap; }
-        select { background-color: #121214; color: #fff; border: 1px solid var(--border-color); padding: 10px 16px; font-size: 14px; font-weight: 600; border-radius: 6px; outline: none; cursor: pointer; width: 100%; min-width: 150px; }
+        select { background-color: #121214; color: #fff; border: 1px solid var(--border-color); padding: 10px 16px; font-size: 14px; font-weight: 600; border-radius: 6px; outline: none; cursor: pointer; width: 100%; min-width: 130px; }
         .info-badge { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--accent-blue); margin-left: auto; font-weight: 500; text-align: right; }
         
         .view-content { display: none; }
         .view-content.active { display: block; }
         
-        /* CONTENEDOR RESPONSIVO PARA LAS TABLAS */
         .table-container { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow-x: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px); -webkit-overflow-scrolling: touch; }
-        table { width: 100%; min-width: 800px; border-collapse: separate; border-spacing: 0; text-align: left; }
+        table { width: 100%; min-width: 850px; border-collapse: separate; border-spacing: 0; text-align: left; }
         th { background: rgba(255,255,255,0.02); color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 16px 20px; border-bottom: 1px solid var(--border-color); letter-spacing: 1px; white-space: nowrap; }
         td { padding: 16px 20px; font-size: 14px; border-bottom: 1px solid rgba(63, 63, 70, 0.2); white-space: nowrap; }
         tr:last-child td { border-bottom: none; }
@@ -64,7 +63,6 @@
         .future-alert { color: var(--accent-blue); background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.2); padding: 40px 20px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 15px; line-height: 1.5; }
         .error-alert { color: var(--accent-red); background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.2); padding: 25px; border-radius: 12px; text-align: center; font-weight: 600; }
 
-        /* REGLAS RESPONSIVAS PARA DISPOSITIVOS MÓVILES */
         @media (max-width: 768px) {
             body { padding: 15px 10px; }
             .main-header { flex-direction: column; align-items: flex-start; gap: 15px; padding: 15px; }
@@ -83,7 +81,7 @@
         <header class="main-header">
             <div class="title-area">
                 <h1>F1 <span>Telemetry</span> Analytics</h1>
-                <p><i class="fa-solid fa-cloud"></i> Multi-Cloud &bull; Frontend: Render &bull; Backend: AWS</p>
+                <p><i class="fa-solid fa-cloud"></i> Producción Multi-Cloud &bull; Frontend: Render &bull; Backend: AWS EC2 (DuckDNS)</p>
             </div>
             <div class="system-status" id="aws-status">
                 <div class="pulse-dot"></div>
@@ -112,6 +110,16 @@
                     <label>Circuito</label>
                     <select id="tel-circuit" onchange="fetchTelemetryData();"></select>
                 </div>
+                <div class="filter-group">
+                    <label>Sesión</label>
+                    <select id="tel-session" onchange="fetchTelemetryData();">
+                        <option value="race">Gran Premio (Carrera)</option>
+                        <option value="qualifying">Clasificatoria</option>
+                        <option value="sprint">Sprint Shootout</option>
+                        <option value="fp2">Prácticas 2</option>
+                        <option value="fp1">Prácticas 1</option>
+                    </select>
+                </div>
                 <div class="info-badge" id="circuit-meta">Estableciendo canal...</div>
             </div>
             <div id="telemetry-table-container" class="table-container">
@@ -124,9 +132,7 @@
                     <tbody id="telemetry-table-body"></tbody>
                 </table>
             </div>
-            <div id="telemetry-future-msg" style="display:none;" class="future-alert">
-                <i class="fa-solid fa-calendar-days"></i> El Gran Premio seleccionado se encuentra programado. Los datos de telemetría estarán disponibles en tiempo real al finalizar el evento.
-            </div>
+            <div id="telemetry-future-msg" style="display:none;" class="future-alert"></div>
         </div>
 
         <div id="standings-view" class="view-content">
@@ -156,7 +162,7 @@
 
         <div id="circuits-view" class="view-content">
             <div class="filter-panel">
-                <div class="info-badge" style="margin-left:0; text-align: left;"><i class="fa-solid fa-layer-group"></i> Catálogo Mundial de la FIA (24 Circuitos)</div>
+                <div class="info-badge" style="margin-left:0; text-align: left;"><i class="fa-solid fa-layer-group"></i> Catálogo Mundial de la FIA (24 Circuitos Completos)</div>
             </div>
             <div class="circuits-grid" id="circuits-grid-container"></div>
         </div>
@@ -221,6 +227,7 @@
         async function fetchTelemetryData() {
             const season = document.getElementById('tel-season').value;
             const circuit = document.getElementById('tel-circuit').value;
+            const session = document.getElementById('tel-session').value;
             const tbody = document.getElementById('telemetry-table-body');
             const meta = document.getElementById('circuit-meta');
             const tableDiv = document.getElementById('telemetry-table-container');
@@ -228,22 +235,31 @@
             if(!circuit) return;
 
             try {
-                const res = await fetch(`${SECURE_AWS_URL}/api/telemetry?season=${season}&circuit=${circuit}`);
+                const res = await fetch(`${SECURE_AWS_URL}/api/telemetry?season=${season}&circuit=${circuit}&session=${session}`);
                 if (!res.ok) throw new Error("Fallo de red");
                 const data = await res.json();
                 
                 updateStatus(true);
 
-                if(data.future) {
+                // Control dinámico de respuestas lógicas
+                if(data.status === "FUTURE") {
                     tableDiv.style.display = "none";
                     msgDiv.style.display = "block";
+                    msgDiv.innerHTML = `<i class="fa-solid fa-calendar-days"></i> El evento seleccionado se encuentra programado para el calendario oficial 2026. Los datos por sesión se habilitarán al concluir las jornadas de pista oficiales.`;
                     meta.innerHTML = `<i class="fa-solid fa-clock"></i> Próximamente`;
+                    return;
+                }
+                if(data.status === "NO_SPRINT") {
+                    tableDiv.style.display = "none";
+                    msgDiv.style.display = "block";
+                    msgDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Formato No Válido: La FIA no programó fines de semana con formato Sprint para este circuito en la temporada histórica seleccionada.`;
+                    meta.innerHTML = `<i class="fa-solid fa-ban"></i> Sin Sprint`;
                     return;
                 }
 
                 tableDiv.style.display = "block";
                 msgDiv.style.display = "none";
-                meta.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${data.circuit} &bull; Laps: ${data.laps}`;
+                meta.innerHTML = `<i class="fa-solid fa-location-dot"></i> Laps: ${data.laps} &bull; ${data.circuit}`;
                 tbody.innerHTML = "";
                 
                 data.data.forEach(row => {
@@ -334,6 +350,7 @@
             }
         }
 
+        // Inicialización
         populateCircuits();
         fetchTelemetryData();
     </script>
