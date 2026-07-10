@@ -10,14 +10,14 @@ let inactivityTimer;
 function resetTimer() {
     clearTimeout(inactivityTimer);
     if (currentUserTier) {
-        // Cierre de sesión silencioso a los 5 minutos (300,000 ms)
+        // Cierre silencioso tras 5 min de inactividad
         inactivityTimer = setTimeout(() => { logout(); }, 5 * 60 * 1000); 
     }
 }
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Con Imágenes Oficiales F1)
+// VISTAS HTML PRINCIPALES (Imágenes Reales)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -28,35 +28,29 @@ const UI_LANDING = `
             <button class="btn btn-primary" style="padding: 8px 16px;" onclick="openAuthModal('register')">Registrarse</button>
         </div>
     </nav>
-    <main class="hero-section" style="background: linear-gradient(to bottom, rgba(5,5,5,0.6) 0%, rgba(5,5,5,1) 100%), url('https://upload.wikimedia.org/wikipedia/commons/4/46/F1_2019_Silverstone_-_12.jpg') no-repeat center center; background-size: cover;">
+    <main class="hero-section">
         <h1>Domina la pista con datos precisos</h1>
         <p>Plataforma SaaS de grado de ingeniería. Telemetría directa, tiempos por sector y estadísticas de la FIA conectadas a un clúster AWS EC2 de alta disponibilidad.</p>
         <button class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
-        
-        <div class="hero-features">
-            <div class="feature-item"><i class="fa-solid fa-chart-line"></i><h3>Análisis Histórico</h3><p>Accede a todos los campeonatos y clasificaciones desde 2023.</p></div>
-            <div class="feature-item"><i class="fa-solid fa-stopwatch"></i><h3>Tiempos por Sector</h3><p>Desglose milimétrico de sectores S1, S2, S3 y telemetría de velocidad.</p></div>
-            <div class="feature-item"><i class="fa-solid fa-server"></i><h3>Core AWS Integrado</h3><p>Arquitectura Cloud con SQLite para un flujo de datos en tiempo real.</p></div>
-        </div>
     </main>
 
     <section>
         <h2 class="section-title">Pilotos <span>Destacados 2026</span></h2>
         <div class="drivers-grid">
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img" style="object-fit: contain; padding-top: 20px;">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img">
                 <div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img" style="object-fit: contain; padding-top: 20px;">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img">
                 <div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img" style="object-fit: contain; padding-top: 20px;">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img">
                 <div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img" style="object-fit: contain; padding-top: 20px;">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img">
                 <div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div>
             </div>
         </div>
@@ -65,20 +59,20 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <div class="circuit-item" style="background:#fff;">
-                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/v1677244985/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Monaco_Circuit.png" style="object-fit:contain; padding:20px; box-sizing:border-box;">
+            <div class="circuit-item">
+                <img src="https://images.unsplash.com/photo-1580828362624-912f20dc00cb?q=80&w=800&auto=format&fit=crop">
                 <div class="circuit-overlay"><h4>GP Mónaco</h4></div>
             </div>
-            <div class="circuit-item" style="background:#fff;">
-                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/v1677244985/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Italy_Circuit.png" style="object-fit:contain; padding:20px; box-sizing:border-box;">
+            <div class="circuit-item">
+                <img src="https://images.unsplash.com/photo-1614028059850-8b1717be08e2?q=80&w=800&auto=format&fit=crop">
                 <div class="circuit-overlay"><h4>GP Monza</h4></div>
             </div>
-            <div class="circuit-item" style="background:#fff;">
-                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/v1677244985/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Belgium_Circuit.png" style="object-fit:contain; padding:20px; box-sizing:border-box;">
+            <div class="circuit-item">
+                <img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?q=80&w=800&auto=format&fit=crop">
                 <div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div>
             </div>
-            <div class="circuit-item" style="background:#fff;">
-                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/v1677244985/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Singapore_Circuit.png" style="object-fit:contain; padding:20px; box-sizing:border-box;">
+            <div class="circuit-item">
+                <img src="https://images.unsplash.com/photo-1504116246416-d352b21cd68b?q=80&w=800&auto=format&fit=crop">
                 <div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div>
             </div>
         </div>
@@ -475,11 +469,12 @@ async function fetchCircuitsData() {
         let data = await res.json();
         handleNetError(false);
         
+        // El Dashboard del usuario gratis sigue mostrando solo 3 mapas técnicos
         if (currentUserTier === 'Free') { data = data.slice(0, 3); }
 
         grid.innerHTML = "";
         data.forEach(c => {
-            grid.innerHTML += `<div class="card"><img src="${c.image}"><h3>${c.name}</h3><p>${c.location}</p></div>`;
+            grid.innerHTML += `<div class="card"><img src="${c.image}" style="object-fit:contain;"><h3>${c.name}</h3><p>${c.location}</p></div>`;
         });
 
         if (currentUserTier === 'Free') {
