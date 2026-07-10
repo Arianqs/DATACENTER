@@ -1,64 +1,72 @@
 // ==========================================
-// 1. INTERFAZ DEL PORTAL SaaS (PAYWALL)
+// 1. ESTADO DE LA APLICACIÓN (CUENTA DE USUARIO)
 // ==========================================
-const SAAS_PORTAL_UI = `
-    <div class="saas-portal">
-        <div class="saas-header">
-            <h1>F1 Telemetry <span>Pro</span></h1>
-            <p>Plataforma SaaS de análisis de datos, telemetría y tiempos de la Fórmula 1 en tiempo real. Selecciona tu plan de acceso a nuestra infraestructura Multi-Cloud.</p>
-        </div>
+let currentAccountTier = null; // Puede ser 'Free' o 'Pro'
 
-        <div class="pricing-grid">
-            <!-- Plan Free -->
-            <div class="pricing-card">
-                <div class="tier-name">Plan Aficionado</div>
-                <div class="tier-price">$0<span>/mes</span></div>
-                <ul class="tier-features">
-                    <li><i class="fa-solid fa-check"></i> Clasificación Mundial Histórica</li>
-                    <li><i class="fa-solid fa-check"></i> Catálogo de Circuitos FIA</li>
-                    <li style="opacity: 0.4;"><i class="fa-solid fa-xmark" style="color: var(--accent-red);"></i> Telemetría de Carrera</li>
-                    <li style="opacity: 0.4;"><i class="fa-solid fa-xmark" style="color: var(--accent-red);"></i> Soporte de Prácticas y Sprint</li>
-                </ul>
-                <button class="btn-saas" onclick="authenticateUser('Free')">Acceso Básico</button>
-            </div>
+// ==========================================
+// 2. VISTAS DEL SISTEMA (Inyectables)
+// ==========================================
 
-            <!-- Plan Pro -->
-            <div class="pricing-card pro-tier">
-                <div class="tier-name">Plan Ingeniero</div>
-                <div class="tier-price">$29<span>/mes</span></div>
-                <ul class="tier-features">
-                    <li><i class="fa-solid fa-check"></i> Acceso Total a Estadísticas</li>
-                    <li><i class="fa-solid fa-check"></i> <b>Telemetría Dinámica de Carrera</b></li>
-                    <li><i class="fa-solid fa-check"></i> Filtro por Sesiones (FP1, Sprint, Qualy)</li>
-                    <li><i class="fa-solid fa-check"></i> Motor Conectado a AWS EC2</li>
-                </ul>
-                <button class="btn-saas primary" onclick="authenticateUser('Pro')">Iniciar Sesión Pro</button>
+// VISTA A: Login y Registro
+const LOGIN_UI = `
+    <div class="auth-wrapper">
+        <div class="auth-box">
+            <div class="auth-header">
+                <h2>F1 <span>Telemetry</span></h2>
+                <p>Ingresa para acceder a la plataforma</p>
             </div>
-
-            <!-- Plan Enterprise -->
-            <div class="pricing-card">
-                <div class="tier-name">Plan Escudería</div>
-                <div class="tier-price">Custom</div>
-                <ul class="tier-features">
-                    <li><i class="fa-solid fa-check"></i> Todo lo del Plan Ingeniero</li>
-                    <li><i class="fa-solid fa-check"></i> Conexión API Directa (JSON)</li>
-                    <li><i class="fa-solid fa-check"></i> SLA de 99.9% de Disponibilidad</li>
-                    <li><i class="fa-solid fa-check"></i> Autenticación JWT Dedicada</li>
-                </ul>
-                <button class="btn-saas" onclick="alert('Contactando al departamento de ventas...')">Contactar Ventas</button>
+            <div class="input-group">
+                <label>Correo Electrónico</label>
+                <input type="email" placeholder="usuario@ejemplo.com" id="login-email">
             </div>
-        </div>
-        <div class="saas-footer">
-            <i class="fa-solid fa-lock"></i> Conexión Segura cifrada por SSL. Sistema de Autenticación de Usuario Requerido.
+            <div class="input-group">
+                <label>Contraseña</label>
+                <input type="password" placeholder="••••••••" id="login-pass">
+            </div>
+            <div class="auth-actions">
+                <button class="btn-primary" onclick="simulateLogin('Free')">Iniciar Sesión</button>
+                <button class="btn-secondary" onclick="renderPricing()">Crear Cuenta / Ver Planes</button>
+            </div>
         </div>
     </div>
 `;
 
-// ==========================================
-// 2. INTERFAZ DEL DASHBOARD CORE (ENCRIPTADA)
-// ==========================================
+// VISTA B: Tabla de Planes (Sin mencionar SaaS)
+const PRICING_UI = `
+    <div class="pricing-wrapper">
+        <h1>Planes de Acceso</h1>
+        <p>Selecciona el nivel de análisis de datos que necesitas.</p>
+        
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="tier-name">Plan Gratuito</div>
+                <div class="tier-price">$0<span>/mes</span></div>
+                <ul class="tier-features">
+                    <li><i class="fa-solid fa-check"></i> Rankings Mundiales Históricos</li>
+                    <li><i class="fa-solid fa-check"></i> Catálogo Completo de Circuitos</li>
+                    <li style="opacity:0.4"><i class="fa-solid fa-xmark" style="color:var(--accent-red)"></i> Telemetría de Carrera</li>
+                </ul>
+                <button class="btn-secondary" onclick="simulateLogin('Free')">Continuar Gratis</button>
+            </div>
+            
+            <div class="pricing-card pro-tier">
+                <div class="tier-name">Plan Pro</div>
+                <div class="tier-price">$19<span>/mes</span></div>
+                <ul class="tier-features">
+                    <li><i class="fa-solid fa-check"></i> Acceso Total a Estadísticas</li>
+                    <li><i class="fa-solid fa-check"></i> <b>Telemetría Dinámica en Vivo</b></li>
+                    <li><i class="fa-solid fa-check"></i> Análisis por Sesiones (Qualy, Sprint)</li>
+                </ul>
+                <button class="btn-primary" onclick="simulateLogin('Pro')">Obtener Acceso Pro</button>
+            </div>
+        </div>
+        <button class="btn-secondary" style="margin-top: 20px; border: none;" onclick="renderLogin()"><i class="fa-solid fa-arrow-left"></i> Volver al Login</button>
+    </div>
+`;
+
+// VISTA C: Dashboard Principal
 const APP_UI = `
-    <div class="dashboard" style="animation: fadeIn 0.5s ease;">
+    <div class="dashboard">
         <header class="main-header">
             <div class="title-area">
                 <h1>F1 <span>Telemetry</span> Analytics</h1>
@@ -69,7 +77,8 @@ const APP_UI = `
                     <div class="pulse-dot"></div>
                     <span id="aws-status-text">Conectando con AWS...</span>
                 </div>
-                <button class="btn-saas" style="padding: 10px 15px; width: auto; font-size:12px;" onclick="logoutUser()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+                <div id="user-badge" style="font-size: 12px; font-weight: bold; background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 5px;"></div>
+                <button class="btn-secondary" style="padding: 8px 12px; font-size:12px; border:none;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
             </div>
         </header>
 
@@ -106,7 +115,16 @@ const APP_UI = `
                 </div>
                 <div class="info-badge" id="circuit-meta">Estableciendo canal...</div>
             </div>
+            
             <div id="telemetry-table-container" class="table-container">
+                <!-- Overlay de Bloqueo Premium (Solo visible para Free) -->
+                <div id="premium-lock" class="locked-overlay" style="display: none;">
+                    <i class="fa-solid fa-lock"></i>
+                    <h3>Función Exclusiva Pro</h3>
+                    <p>La ingesta de telemetría y tiempos por sector requiere conexión directa a los servidores. Actualiza tu plan para desbloquear esta herramienta.</p>
+                    <button class="btn-upgrade" onclick="renderPricing()">Ver Planes</button>
+                </div>
+                
                 <table>
                     <thead>
                         <tr>
@@ -153,25 +171,39 @@ const APP_UI = `
     </div>
 `;
 
+
 // ==========================================
-// 3. LÓGICA DE AUTENTICACIÓN Y NEGOCIO SaaS
+// 3. FUNCIONES DE NAVEGACIÓN Y AUTENTICACIÓN
 // ==========================================
-function authenticateUser(plan) {
-    if(plan === 'Free') {
-        alert("El plan Aficionado no incluye acceso al Dashboard de Telemetría. Por favor inicia sesión con una cuenta Pro.");
-        return;
-    }
-    // Simulamos un inicio de sesión exitoso inyectando el Dashboard
+function renderLogin() {
+    document.getElementById('app-root').innerHTML = LOGIN_UI;
+}
+
+function renderPricing() {
+    document.getElementById('app-root').innerHTML = PRICING_UI;
+}
+
+function simulateLogin(tier) {
+    currentAccountTier = tier;
     document.getElementById('app-root').innerHTML = APP_UI;
     
-    // Inicializamos las funciones del core
+    // Etiqueta de usuario en la esquina superior
+    const badge = document.getElementById('user-badge');
+    if(tier === 'Pro') {
+        badge.innerHTML = '<i class="fa-solid fa-star" style="color:var(--accent-blue)"></i> Cuenta Pro';
+        badge.style.color = 'var(--accent-blue)';
+    } else {
+        badge.innerHTML = 'Cuenta Gratuita';
+        badge.style.color = 'var(--text-muted)';
+    }
+
     populateCircuits();
     fetchTelemetryData();
 }
 
-function logoutUser() {
-    // Destruimos el dashboard y volvemos al paywall
-    document.getElementById('app-root').innerHTML = SAAS_PORTAL_UI;
+function logout() {
+    currentAccountTier = null;
+    renderLogin();
 }
 
 // ==========================================
@@ -213,7 +245,8 @@ function updateStatus(isOnline) {
         statusDiv.style.color = 'var(--accent-green)';
         pulse.style.backgroundColor = 'var(--accent-green)';
         pulse.style.boxShadow = '0 0 12px var(--accent-green)';
-        statusText.innerText = "SaaS Token Activo (AWS)";
+        // Aquí ajustamos el texto tal cual lo pediste
+        statusText.innerText = "Conectado al Servidor AWS";
     } else {
         statusDiv.style.background = 'rgba(244, 63, 94, 0.08)';
         statusDiv.style.borderColor = 'rgba(244, 63, 94, 0.2)';
@@ -235,13 +268,27 @@ function switchTab(viewId) {
 }
 
 async function fetchTelemetryData() {
+    const lockOverlay = document.getElementById('premium-lock');
+    const tbody = document.getElementById('telemetry-table-body');
+    const meta = document.getElementById('circuit-meta');
+    const msgDiv = document.getElementById('telemetry-future-msg');
+    
+    // Control de Paywall: Si es cuenta gratis, bloqueamos la tabla y detenemos la ejecución
+    if(currentAccountTier === 'Free') {
+        lockOverlay.style.display = 'flex';
+        tbody.innerHTML = '';
+        meta.innerHTML = `<i class="fa-solid fa-lock"></i> Acceso Restringido`;
+        msgDiv.style.display = "none";
+        updateStatus(true);
+        return;
+    } else {
+        lockOverlay.style.display = 'none';
+    }
+
     const season = document.getElementById('tel-season').value;
     const circuit = document.getElementById('tel-circuit').value;
     const session = document.getElementById('tel-session').value;
-    const tbody = document.getElementById('telemetry-table-body');
-    const meta = document.getElementById('circuit-meta');
     const tableDiv = document.getElementById('telemetry-table-container');
-    const msgDiv = document.getElementById('telemetry-future-msg');
     
     try {
         const res = await fetch(`${SECURE_AWS_URL}/api/telemetry?season=${season}&circuit=${circuit}&session=${session}`);
@@ -270,6 +317,7 @@ async function fetchTelemetryData() {
         meta.innerHTML = `<i class="fa-solid fa-location-dot"></i> Laps: ${data.laps} &bull; ${data.circuit}`;
         tbody.innerHTML = "";
         
+        // Simular un poco de carga para que se vea real
         data.data.forEach(row => {
             let posBadge = row.pos === 1 ? `<span class="rank-gold">P1</span>` : 
                            row.pos === "DNF" ? `<span class="rank-dnf">DNF</span>` : 
@@ -364,9 +412,9 @@ document.onkeydown = function(e) {
 };
 
 // ==========================================
-// 6. INICIALIZADOR DEL SISTEMA (PAYWALL PRIMERO)
+// 6. INICIALIZADOR DEL SISTEMA 
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Al cargar la página, inyectamos primero el portal SaaS en lugar del Dashboard
-    document.getElementById('app-root').innerHTML = SAAS_PORTAL_UI;
+    // Al cargar la página, inyectamos la pantalla de Login
+    renderLogin();
 });
