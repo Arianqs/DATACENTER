@@ -10,14 +10,13 @@ let inactivityTimer;
 function resetTimer() {
     clearTimeout(inactivityTimer);
     if (currentUserTier) {
-        // Cierre silencioso tras 5 min de inactividad
         inactivityTimer = setTimeout(() => { logout(); }, 5 * 60 * 1000); 
     }
 }
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (FOTOS OFICIALES FIA)
+// VISTAS HTML PRINCIPALES (Landing intacta, Dashboard Mejorado)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -30,97 +29,43 @@ const UI_LANDING = `
     </nav>
     <main class="hero-section">
         <h1>Domina la pista con datos precisos</h1>
-        
         <p>La suite definitiva para analistas de Fórmula 1. Accede a datos en tiempo real, compara rendimientos por sector y domina la estrategia de carrera con información directa de la pista.</p>
-        
         <button class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
-        
         <div class="hero-features">
-            <div class="feature-item">
-                <i class="fa-solid fa-chart-line"></i>
-                <h3>Análisis Histórico</h3>
-                <p>Accede a todos los campeonatos y clasificaciones desde la temporada 2023 en adelante.</p>
-            </div>
-            <div class="feature-item">
-                <i class="fa-solid fa-stopwatch"></i>
-                <h3>Tiempos por Sector</h3>
-                <p>Desglose milimétrico de sectores S1, S2, S3 y comparativas de velocidad punta.</p>
-            </div>
-            <div class="feature-item">
-                <i class="fa-solid fa-flag-checkered"></i>
-                <h3>Estrategia de Carrera</h3>
-                <p>Monitoreo detallado de paradas en pits, selección de compuestos (neumáticos) y ventajas tácticas.</p>
-            </div>
+            <div class="feature-item"><i class="fa-solid fa-chart-line"></i><h3>Análisis Histórico</h3><p>Accede a todos los campeonatos y clasificaciones desde la temporada 2023 en adelante.</p></div>
+            <div class="feature-item"><i class="fa-solid fa-stopwatch"></i><h3>Tiempos por Sector</h3><p>Desglose milimétrico de sectores S1, S2, S3 y comparativas de velocidad punta.</p></div>
+            <div class="feature-item"><i class="fa-solid fa-flag-checkered"></i><h3>Estrategia de Carrera</h3><p>Monitoreo detallado de paradas en pits, selección de compuestos (neumáticos) y ventajas tácticas.</p></div>
         </div>
     </main>
 
     <section>
         <h2 class="section-title">Pilotos <span>Destacados 2026</span></h2>
         <div class="drivers-grid">
-            <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img">
-                <div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div>
-            </div>
-            <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img">
-                <div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div>
-            </div>
-            <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img">
-                <div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div>
-            </div>
-            <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img">
-                <div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div>
-            </div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img" crossorigin="anonymous"><div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img" crossorigin="anonymous"><div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img" crossorigin="anonymous"><div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img" crossorigin="anonymous"><div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div></div>
         </div>
     </section>
 
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS PANORÁMICAS OFICIALES DE LA FIA (RACE HUB) -->
-            <div class="circuit-item">
-                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Monaco.jpg">
-                <div class="circuit-overlay"><h4>GP Mónaco</h4></div>
-            </div>
-            <div class="circuit-item">
-                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Italy.jpg">
-                <div class="circuit-overlay"><h4>GP Monza</h4></div>
-            </div>
-            <div class="circuit-item">
-                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Belgium.jpg">
-                <div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div>
-            </div>
-            <div class="circuit-item">
-                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Singapore.jpg">
-                <div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div>
-            </div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Monaco_Grand_Prix_2010.jpg/800px-Monaco_Grand_Prix_2010.jpg" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Monza_start_2003.jpg/800px-Monza_start_2003.jpg" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/F1_2013_Spa_start.jpg/800px-F1_2013_Spa_start.jpg" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
         </div>
     </section>
 
     <footer class="full-footer">
         <div class="footer-grid">
-            <div class="footer-col">
-                <div class="brand-logo" style="margin-bottom:15px;"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg"> <span>Telemetry</span></div>
-                <p style="color:var(--text-muted); font-size:13px; line-height:1.6;">Plataforma líder en análisis de datos y tiempos por sector de la máxima categoría del automovilismo.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Plataforma</h4>
-                <ul><li><a onclick="renderPricing()">Precios y Planes</a></li><li><a onclick="openAuthModal('register')">Crear Cuenta Gratis</a></li><li><a onclick="openAuthModal('login')">Ingresar al Sistema</a></li></ul>
-            </div>
-            <div class="footer-col">
-                <h4>Soporte Técnico</h4>
-                <ul><li><a>Documentación API</a></li><li><a>Estado del Servidor (AWS)</a></li><li><a>Contacto Ingeniería</a></li></ul>
-            </div>
-            <div class="footer-col">
-                <h4>Legal</h4>
-                <ul><li><a>Términos de Servicio</a></li><li><a>Política de Privacidad</a></li><li><a>Uso de Cookies</a></li></ul>
-            </div>
+            <div class="footer-col"><div class="brand-logo" style="margin-bottom:15px;"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg"> <span>Telemetry</span></div><p style="color:var(--text-muted); font-size:13px; line-height:1.6;">Plataforma líder en análisis de datos y tiempos por sector de la máxima categoría del automovilismo.</p></div>
+            <div class="footer-col"><h4>Plataforma</h4><ul><li><a onclick="renderPricing()">Precios y Planes</a></li><li><a onclick="openAuthModal('register')">Crear Cuenta Gratis</a></li><li><a onclick="openAuthModal('login')">Ingresar al Sistema</a></li></ul></div>
+            <div class="footer-col"><h4>Soporte Técnico</h4><ul><li><a>Documentación API</a></li><li><a>Estado del Servidor (AWS)</a></li><li><a>Contacto Ingeniería</a></li></ul></div>
+            <div class="footer-col"><h4>Legal</h4><ul><li><a>Términos de Servicio</a></li><li><a>Política de Privacidad</a></li><li><a>Uso de Cookies</a></li></ul></div>
         </div>
-        <div class="footer-bottom">
-            &copy; 2026 F1 Telemetry Analytics. Proyecto Académico Multi-Cloud (Render + AWS EC2). Todos los derechos reservados.
-        </div>
+        <div class="footer-bottom">&copy; 2026 F1 Telemetry Analytics. Proyecto Académico Multi-Cloud (Render + AWS EC2). Todos los derechos reservados.</div>
     </footer>
 `;
 
@@ -170,20 +115,26 @@ const UI_DASHBOARD = `
         <header class="dash-header" style="margin-top:20px;">
             <div class="dash-title"><h2>F1 <span>Dashboard</span></h2><p>Sesión activa: <span id="user-name-display" style="color:var(--text-main); font-weight:bold;"></span></p></div>
         </header>
+        
+        <!-- Pestañas mejoradas con AJUSTES -->
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('telemetry-view')"><i class="fa-solid fa-gauge-high"></i> Telemetría</button>
             <button class="tab-btn" onclick="switchTab('standings-view')"><i class="fa-solid fa-trophy"></i> Mundial</button>
             <button class="tab-btn" onclick="switchTab('circuits-view')"><i class="fa-solid fa-map"></i> Circuitos</button>
+            <button class="tab-btn" onclick="switchTab('settings-view')"><i class="fa-solid fa-gear"></i> Ajustes</button>
         </div>
 
         <div id="telemetry-view" class="view-content active">
             <div class="filters">
-                <select id="tel-season" onchange="if(checkProAccess(this)) fetchTelemetryData();">
-                    <option value="2026">Temporada 2026</option><option value="2025">Temporada 2025 (PRO)</option><option value="2024">Temporada 2024 (PRO)</option><option value="2023">Temporada 2023 (PRO)</option>
-                </select>
+                <i class="fa-solid fa-filter" style="color:var(--text-muted); margin-right:5px;"></i>
+                <select id="tel-season" onchange="if(checkProAccess(this)) fetchTelemetryData();"></select>
                 <select id="tel-circuit" onchange="fetchTelemetryData();" class="circuits-dropdown"></select>
                 <select id="tel-session" onchange="fetchTelemetryData();">
-                    <option value="race">Carrera</option><option value="qualifying">Clasificación</option><option value="sprint">Sprint</option><option value="fp2">Prácticas 2</option><option value="fp1">Prácticas 1</option>
+                    <option value="race">🏁 Carrera</option>
+                    <option value="qualifying">⏱️ Clasificación</option>
+                    <option value="sprint">⚡ Sprint</option>
+                    <option value="fp2">🔧 Prácticas 2</option>
+                    <option value="fp1">🔧 Prácticas 1</option>
                 </select>
             </div>
             <div class="table-container">
@@ -197,9 +148,8 @@ const UI_DASHBOARD = `
 
         <div id="standings-view" class="view-content">
             <div class="filters">
-                <select id="standings-season" onchange="if(checkProAccess(this)) fetchStandingsData();">
-                    <option value="2026">Mundial 2026</option><option value="2025">Mundial 2025 (PRO)</option><option value="2024">Mundial 2024 (PRO)</option><option value="2023">Mundial 2023 (PRO)</option>
-                </select>
+                <i class="fa-solid fa-filter" style="color:var(--text-muted); margin-right:5px;"></i>
+                <select id="standings-season" onchange="if(checkProAccess(this)) fetchStandingsData();"></select>
             </div>
             <div class="table-container">
                 <table>
@@ -208,12 +158,36 @@ const UI_DASHBOARD = `
                 </table>
             </div>
         </div>
+        
         <div id="circuits-view" class="view-content"><div class="grid-container" id="circuits-grid-container"></div></div>
+
+        <!-- NUEVO PANEL DE AJUSTES -->
+        <div id="settings-view" class="view-content">
+            <div class="settings-card">
+                <h3 style="margin-top:0; font-size:20px; border-bottom:1px solid var(--border-color); padding-bottom:15px;"><i class="fa-solid fa-user"></i> Mi Perfil F1</h3>
+                
+                <div class="settings-row"><span class="settings-label">Titular de la cuenta:</span><span class="settings-value" id="set-name"></span></div>
+                <div class="settings-row"><span class="settings-label">Correo asociado:</span><span class="settings-value" id="set-email"></span></div>
+                <div class="settings-row"><span class="settings-label">Tipo de Licencia:</span><span class="settings-value" id="set-tier" style="color:var(--accent-blue)"></span></div>
+                
+                <div id="pro-details-panel" style="display:none;">
+                    <div class="settings-row"><span class="settings-label">Fecha de Vencimiento:</span><span class="settings-value">Renovación Automática</span></div>
+                    <div class="settings-row" style="border-bottom:none; margin-top:15px; padding-bottom:0;">
+                        <button class="btn btn-outline" style="color:var(--f1-red); border-color:var(--f1-red); margin-left:auto;" onclick="cancelProPlan()"><i class="fa-solid fa-triangle-exclamation"></i> Cancelar Suscripción PRO</button>
+                    </div>
+                </div>
+                
+                <div id="free-details-panel" style="display:none; margin-top:20px; text-align:center;">
+                    <p style="color:var(--text-muted); font-size:13px; margin-bottom:15px;">Estás en el plan limitado. Mejora para desbloquear toda la telemetría.</p>
+                    <button class="btn btn-primary" onclick="renderPricing()">Ver Paquetes PRO</button>
+                </div>
+            </div>
+        </div>
     </div>
 `;
 
 // ==========================================
-// SISTEMA DE MODALES FLOTANTES
+// MODALES FLOTANTES
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
 
@@ -233,60 +207,16 @@ function openAuthModal(type) {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-function getLoginForm() {
-    return `
-        <h2>Iniciar Sesión</h2><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Ingresa a tu panel de control</p>
-        <form onsubmit="handleLogin(event)">
-            <div class="form-group"><label>Correo</label><input type="email" id="log-email" required></div>
-            <div class="form-group"><label>Contraseña</label><input type="password" id="log-pass" required></div>
-            <div id="auth-error" style="color:var(--f1-red); font-size:12px; margin-bottom:10px; display:none;"></div>
-            <button type="submit" class="btn btn-primary" style="width:100%;">Ingresar</button>
-        </form>
-        <p style="text-align:center; font-size:12px; margin-top:15px;">¿Nuevo? <a href="#" style="color:var(--accent-blue);" onclick="openAuthModal('register')">Regístrate</a></p>
-    `;
-}
+function getLoginForm() { return `<h2>Iniciar Sesión</h2><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Ingresa a tu panel de control</p><form onsubmit="handleLogin(event)"><div class="form-group"><label>Correo</label><input type="email" id="log-email" required></div><div class="form-group"><label>Contraseña</label><input type="password" id="log-pass" required></div><div id="auth-error" style="color:var(--f1-red); font-size:12px; margin-bottom:10px; display:none;"></div><button type="submit" class="btn btn-primary" style="width:100%;">Ingresar</button></form><p style="text-align:center; font-size:12px; margin-top:15px;">¿Nuevo? <a href="#" style="color:var(--accent-blue);" onclick="openAuthModal('register')">Regístrate</a></p>`; }
+function getRegisterForm() { return `<h2>Crear Cuenta</h2><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Únete a la plataforma</p><form onsubmit="handleRegister(event)"><div style="display:flex; gap:10px;"><div class="form-group" style="width:50%;"><label>Nombre</label><input type="text" id="reg-nombre" required></div><div class="form-group" style="width:50%;"><label>Apellido</label><input type="text" id="reg-apellido" required></div></div><div class="form-group"><label>Correo</label><input type="email" id="reg-email" required></div><div class="form-group"><label>Contraseña</label><input type="password" id="reg-pass" required></div><div id="auth-error" style="font-size:12px; margin-bottom:10px; display:none;"></div><button type="submit" class="btn btn-primary" style="width:100%;">Registrarse</button></form><p style="text-align:center; font-size:12px; margin-top:15px;">¿Ya tienes cuenta? <a href="#" style="color:var(--accent-blue);" onclick="openAuthModal('login')">Ingresa aquí</a></p>`; }
 
-function getRegisterForm() {
-    return `
-        <h2>Crear Cuenta</h2><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Únete a la plataforma</p>
-        <form onsubmit="handleRegister(event)">
-            <div style="display:flex; gap:10px;">
-                <div class="form-group" style="width:50%;"><label>Nombre</label><input type="text" id="reg-nombre" required></div>
-                <div class="form-group" style="width:50%;"><label>Apellido</label><input type="text" id="reg-apellido" required></div>
-            </div>
-            <div class="form-group"><label>Correo</label><input type="email" id="reg-email" required></div>
-            <div class="form-group"><label>Contraseña</label><input type="password" id="reg-pass" required></div>
-            <div id="auth-error" style="font-size:12px; margin-bottom:10px; display:none;"></div>
-            <button type="submit" class="btn btn-primary" style="width:100%;">Registrarse</button>
-        </form>
-        <p style="text-align:center; font-size:12px; margin-top:15px;">¿Ya tienes cuenta? <a href="#" style="color:var(--accent-blue);" onclick="openAuthModal('login')">Ingresa aquí</a></p>
-    `;
-}
-
-function closeModal() {
-    const modal = document.getElementById('dynamic-modal');
-    if(modal) modal.remove();
-}
-
-function closeModalOnOutside(e) {
-    if(e.target.id === 'dynamic-modal') closeModal();
-}
-
+function closeModal() { const modal = document.getElementById('dynamic-modal'); if(modal) modal.remove(); }
+function closeModalOnOutside(e) { if(e.target.id === 'dynamic-modal') closeModal(); }
 function showCustomAlert(title, message, type="error") {
     closeModal();
     let icon = type === "error" ? "fa-circle-xmark" : "fa-circle-check";
     let iconColor = type === "error" ? "var(--f1-red)" : "var(--accent-green)";
-    const modalHtml = `
-        <div id="dynamic-modal" class="modal-overlay" onclick="closeModalOnOutside(event)">
-            <div class="modal-box custom-alert">
-                <i class="fa-solid fa-xmark modal-close" onclick="closeModal()"></i>
-                <i class="fa-solid ${icon}" style="color:${iconColor}"></i>
-                <h2>${title}</h2>
-                <p>${message}</p>
-                <button class="btn btn-primary" style="width:100%;" onclick="closeModal()">Aceptar</button>
-            </div>
-        </div>
-    `;
+    const modalHtml = `<div id="dynamic-modal" class="modal-overlay" onclick="closeModalOnOutside(event)"><div class="modal-box custom-alert"><i class="fa-solid fa-xmark modal-close" onclick="closeModal()"></i><i class="fa-solid ${icon}" style="color:${iconColor}"></i><h2>${title}</h2><p>${message}</p><button class="btn btn-primary" style="width:100%;" onclick="closeModal()">Aceptar</button></div></div>`;
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
@@ -332,20 +262,45 @@ async function handleLogin(e) {
     } catch(err) { errBox.style.display = "block"; errBox.style.color = "var(--f1-red)"; errBox.innerText = "Servidor AWS inalcanzable."; btn.innerText = "Ingresar"; }
 }
 
+function generateDynamicSelectors() {
+    // Si eres gratis, sale (PRO). Si ya eres PRO, desaparece la palabra PRO.
+    const telSeason = document.getElementById('tel-season');
+    const stSeason = document.getElementById('standings-season');
+    
+    let tag = currentUserTier === 'Free' ? " (PRO)" : "";
+    let html = `<option value="2026">📅 Mundial 2026</option>
+                <option value="2025">📅 Mundial 2025${tag}</option>
+                <option value="2024">📅 Mundial 2024${tag}</option>
+                <option value="2023">📅 Mundial 2023${tag}</option>`;
+                
+    telSeason.innerHTML = html;
+    stSeason.innerHTML = html;
+}
+
 function loadDashboard() {
     resetTimer(); 
     appRoot().innerHTML = UI_DASHBOARD;
+    
     document.getElementById('user-name-display').innerText = currentUserName;
+    generateDynamicSelectors(); // Inyectamos opciones dinámicas
     
     const badge = document.getElementById('tier-badge');
     const upgrade = document.getElementById('upgrade-btn-container');
 
+    // Llenar panel de ajustes
+    document.getElementById('set-name').innerText = currentUserName;
+    document.getElementById('set-email').innerText = currentUserEmail;
+
     if (currentUserTier === 'Free') {
         badge.innerHTML = 'Plan Gratuito';
         upgrade.innerHTML = `<button class="btn-upgrade" onclick="renderPricing()">Mejorar a PRO</button>`;
+        document.getElementById('set-tier').innerText = "Licencia Aficionado (Gratis)";
+        document.getElementById('free-details-panel').style.display = 'block';
     } else {
         badge.innerHTML = '<i class="fa-solid fa-crown" style="color:var(--f1-red)"></i> Plan PRO';
         upgrade.innerHTML = '';
+        document.getElementById('set-tier').innerHTML = `<i class="fa-solid fa-crown" style="color:var(--f1-red)"></i> Ingeniero PRO`;
+        document.getElementById('pro-details-panel').style.display = 'block';
     }
     
     const select = document.querySelector('.circuits-dropdown');
@@ -358,14 +313,13 @@ function loadDashboard() {
         {val: "interlagos", txt: "São Paulo GP"}, {val: "vegas", txt: "Las Vegas GP"}, {val: "qatar", txt: "Qatar GP"}, {val: "abudhabi", txt: "Abu Dhabi GP"}
     ];
     select.innerHTML = "";
-    allRaces.forEach(c => select.innerHTML += `<option value="${c.val}">${c.txt}</option>`);
+    allRaces.forEach(c => select.innerHTML += `<option value="${c.val}">📍 ${c.txt}</option>`);
 
     fetchTelemetryData();
 }
 
 async function processUpgrade() {
     if(!currentUserTier) { openAuthModal('login'); return; }
-    
     if(currentUserTier === 'Free') { 
         try {
             const res = await fetch(`${SECURE_AWS_URL}/api/upgrade`, {
@@ -374,12 +328,27 @@ async function processUpgrade() {
             const data = await res.json();
             if(data.status === 'success') {
                 showCustomAlert("¡Plan Mejorado!", "Tu cuenta ha sido actualizada a PRO en la base de datos de AWS.", "success");
-                currentUserTier = 'Pro'; 
-                sessionStorage.setItem('f1_tier', 'Pro');
+                currentUserTier = 'Pro'; sessionStorage.setItem('f1_tier', 'Pro');
                 setTimeout(() => { loadDashboard(); }, 2000);
             } else { showCustomAlert("Error", "No se pudo actualizar la cuenta.", "error"); }
         } catch(err) { showCustomAlert("Error AWS", "No se pudo contactar con el servidor.", "error"); }
     } 
+}
+
+async function cancelProPlan() {
+    if(confirm("¿Estás seguro que deseas cancelar tu suscripción PRO y perder el acceso al historial?")) {
+        try {
+            const res = await fetch(`${SECURE_AWS_URL}/api/cancel`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email: currentUserEmail})
+            });
+            const data = await res.json();
+            if(data.status === 'success') {
+                showCustomAlert("Plan Cancelado", "Has vuelto a la versión gratuita de Aficionado.", "success");
+                currentUserTier = 'Free'; sessionStorage.setItem('f1_tier', 'Free');
+                setTimeout(() => { loadDashboard(); }, 2000);
+            } else { showCustomAlert("Error", "Fallo al procesar la cancelación en BD.", "error"); }
+        } catch(err) { showCustomAlert("Error de Red", "AWS no responde.", "error"); }
+    }
 }
 
 function logout() { 
