@@ -14,7 +14,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes Unsplash Infalibles)
+// VISTAS HTML PRINCIPALES (Imágenes 100% Seguras)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -49,10 +49,10 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- 100% IMÁGENES DE UNSPLASH DIRECTAS (No se bloquean) -->
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1533050487297-09b45013190a?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1516483638261-f40828590c66?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1511252619047-920f01eb0d59?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
+            <!-- FOTOS PANORÁMICAS 100% UNSPLASH (Garantizadas contra bloqueos en la nube) -->
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1580828362624-912f20dc00cb?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1614028059850-8b1717be08e2?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
             <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
         </div>
     </section>
@@ -181,7 +181,7 @@ function openSettingsModal() {
     let lockAttr = isPro ? "" : "disabled title='Función exclusiva del Plan PRO'";
     let lockIcon = isPro ? "" : `<i class="fa-solid fa-lock" style="color:var(--f1-red); font-size:10px; margin-left:5px;"></i>`;
     
-    // Recuperamos los datos cosméticos de la sesión actual
+    // Recuperamos los datos de la sesión actual
     let savedLastName = sessionStorage.getItem('f1_lastname') || "Usuario";
     let savedCel = sessionStorage.getItem('f1_cel') || "";
     let savedUser = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
@@ -212,7 +212,9 @@ function openSettingsModal() {
                     </div>
                     <div class="form-group"><label>Correo Electrónico (Fijo)</label><input type="email" value="${currentUserEmail}" disabled></div>
                     <div class="form-group"><label>Nueva Contraseña</label><input type="password" id="set-pass" placeholder="Dejar en blanco para no cambiar"></div>
-                    <button type="submit" id="btn-save-settings" class="btn btn-primary" style="width:100%; margin-top:10px;">Guardar en Base de Datos</button>
+                    
+                    <!-- BOTÓN CON EL TEXTO CORREGIDO -->
+                    <button type="submit" id="btn-save-settings" class="btn btn-primary" style="width:100%; margin-top:10px;">Guardar Cambios</button>
                 </form>
                 ${subInfo}
             </div>
@@ -221,11 +223,11 @@ function openSettingsModal() {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-// FUNCIÓN PARA GUARDAR EN LA BD REAL
+// FUNCIÓN PARA GUARDAR EN LA BD REAL Y ACTUALIZAR LA PANTALLA
 async function saveSettings(e) {
     e.preventDefault();
     const btn = document.getElementById('btn-save-settings');
-    btn.innerText = "Guardando en AWS...";
+    btn.innerText = "Guardando...";
     
     let newName = document.getElementById('set-name').value;
     let newLastname = document.getElementById('set-lastname').value;
@@ -249,18 +251,28 @@ async function saveSettings(e) {
             currentUserName = newName; 
             sessionStorage.setItem('f1_name', currentUserName);
             sessionStorage.setItem('f1_lastname', newLastname);
-            showCustomAlert("¡Actualizado!", "Tus datos y contraseña se actualizaron en el servidor AWS exitosamente.", "success");
-            loadDashboard();
+            
+            closeModal(); // Cerramos la ventana de ajustes
+            
+            // ACTUALIZAMOS EL TEXTO DE LA CABECERA EN TIEMPO REAL
+            const displaySpan = document.getElementById('user-name-display');
+            if(displaySpan) {
+                let userTag = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
+                displaySpan.innerText = `${currentUserName} ${newLastname} (${userTag})`;
+            }
+            
+            showCustomAlert("¡Actualizado!", "Tus datos y contraseña se actualizaron exitosamente.", "success");
         } else {
             showCustomAlert("Error", "No se pudo actualizar en BD.", "error");
-            btn.innerText = "Guardar en Base de Datos";
+            btn.innerText = "Guardar Cambios";
         }
     } catch(err) {
         showCustomAlert("Error AWS", "No hay conexión con el servidor.", "error");
-        btn.innerText = "Guardar en Base de Datos";
+        btn.innerText = "Guardar Cambios";
     }
 }
 
+// MODAL DE CANCELACIÓN ELEGANTE
 function confirmCancelPlan() {
     closeModal();
     const modalHtml = `
@@ -338,7 +350,11 @@ async function handleLogin(e) {
 
 function loadDashboard() {
     resetTimer(); appRoot().innerHTML = UI_DASHBOARD;
-    document.getElementById('user-name-display').innerText = currentUserName;
+    
+    // CARGAR LOS DATOS EN LA CABECERA
+    let savedLast = sessionStorage.getItem('f1_lastname') || "";
+    let savedUser = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
+    document.getElementById('user-name-display').innerText = `${currentUserName} ${savedLast} (${savedUser})`.trim();
     
     let tag = currentUserTier === 'Free' ? " (PRO)" : "";
     let dynHtml = `<option value="2026">📅 Mundial 2026</option><option value="2025">📅 Mundial 2025${tag}</option><option value="2024">📅 Mundial 2024${tag}</option><option value="2023">📅 Mundial 2023${tag}</option>`;
@@ -383,6 +399,7 @@ async function processUpgrade() {
 function logout() { 
     currentUserTier = null; currentUserName = ""; currentUserEmail = "";
     sessionStorage.removeItem('f1_tier'); sessionStorage.removeItem('f1_name'); sessionStorage.removeItem('f1_email');
+    sessionStorage.removeItem('f1_lastname'); sessionStorage.removeItem('f1_username'); sessionStorage.removeItem('f1_cel');
     clearTimeout(inactivityTimer); renderLanding(); 
 }
 
