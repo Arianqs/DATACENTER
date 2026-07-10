@@ -11,9 +11,7 @@ function resetTimer() {
     clearTimeout(inactivityTimer);
     if (currentUserTier) {
         // Cierre de sesión silencioso a los 5 minutos (300,000 ms)
-        inactivityTimer = setTimeout(() => {
-            logout();
-        }, 5 * 60 * 1000); 
+        inactivityTimer = setTimeout(() => { logout(); }, 5 * 60 * 1000); 
     }
 }
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
@@ -34,14 +32,77 @@ const UI_LANDING = `
         <h1>Domina la pista con datos precisos</h1>
         <p>Plataforma SaaS de grado de ingeniería. Telemetría directa, tiempos por sector y estadísticas de la FIA conectadas a un clúster AWS EC2 de alta disponibilidad.</p>
         <button class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
-        
-        <div class="hero-features">
-            <div class="feature-item"><i class="fa-solid fa-chart-line"></i><h3>Análisis Histórico</h3><p>Accede a todos los campeonatos y clasificaciones desde 2023.</p></div>
-            <div class="feature-item"><i class="fa-solid fa-stopwatch"></i><h3>Tiempos por Sector</h3><p>Desglose milimétrico de sectores S1, S2, S3 y telemetría de velocidad.</p></div>
-            <div class="feature-item"><i class="fa-solid fa-server"></i><h3>Core AWS Integrado</h3><p>Arquitectura Cloud con SQLite para un flujo de datos en tiempo real.</p></div>
-        </div>
     </main>
-    <footer style="text-align:center; padding: 40px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 12px;">&copy; 2026 F1 Telemetry Analytics. Arquitectura Multi-Cloud.</footer>
+
+    <!-- NUEVAS SECCIONES DE LA LANDING -->
+    <section>
+        <h2 class="section-title">Pilotos <span>Destacados 2026</span></h2>
+        <div class="drivers-grid">
+            <div class="driver-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Max_Verstappen_2017_Malaysia_3.jpg/800px-Max_Verstappen_2017_Malaysia_3.jpg" class="driver-img">
+                <div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div>
+            </div>
+            <div class="driver-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Charles_Leclerc_2019.jpg/800px-Charles_Leclerc_2019.jpg" class="driver-img">
+                <div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div>
+            </div>
+            <div class="driver-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Lando_Norris_2019.jpg/800px-Lando_Norris_2019.jpg" class="driver-img">
+                <div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div>
+            </div>
+            <div class="driver-card">
+                <!-- Usamos una foto genérica de Mercedes para Kimi Antonelli ya que es novato -->
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Lewis_Hamilton_2016_Malaysia_2.jpg/800px-Lewis_Hamilton_2016_Malaysia_2.jpg" class="driver-img">
+                <div class="driver-info"><h3>Kimi Antonelli</h3><p>Mercedes AMG</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section style="margin-top: 50px;">
+        <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
+        <div class="circuits-preview">
+            <div class="circuit-item">
+                <img src="https://images.unsplash.com/photo-1580828362624-912f20dc00cb?q=80&w=800&auto=format&fit=crop">
+                <div class="circuit-overlay"><h4>GP Mónaco</h4></div>
+            </div>
+            <div class="circuit-item">
+                <img src="https://images.unsplash.com/photo-1614028059850-8b1717be08e2?q=80&w=800&auto=format&fit=crop">
+                <div class="circuit-overlay"><h4>GP Monza</h4></div>
+            </div>
+            <div class="circuit-item">
+                <img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?q=80&w=800&auto=format&fit=crop">
+                <div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div>
+            </div>
+            <div class="circuit-item">
+                <img src="https://images.unsplash.com/photo-1504116246416-d352b21cd68b?q=80&w=800&auto=format&fit=crop">
+                <div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="full-footer">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="brand-logo" style="margin-bottom:15px;"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg"> <span>Telemetry</span></div>
+                <p style="color:var(--text-muted); font-size:13px; line-height:1.6;">Plataforma líder en análisis de datos y tiempos por sector de la máxima categoría del automovilismo.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Plataforma</h4>
+                <ul><li><a onclick="renderPricing()">Precios y Planes</a></li><li><a onclick="openAuthModal('register')">Crear Cuenta Gratis</a></li><li><a onclick="openAuthModal('login')">Ingresar al Sistema</a></li></ul>
+            </div>
+            <div class="footer-col">
+                <h4>Soporte Técnico</h4>
+                <ul><li><a>Documentación API</a></li><li><a>Estado del Servidor (AWS)</a></li><li><a>Contacto Ingeniería</a></li></ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul><li><a>Términos de Servicio</a></li><li><a>Política de Privacidad</a></li><li><a>Uso de Cookies</a></li></ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 F1 Telemetry Analytics. Proyecto Académico Multi-Cloud (Render + AWS EC2). Todos los derechos reservados.
+        </div>
+    </footer>
 `;
 
 const UI_PRICING = `
@@ -50,7 +111,7 @@ const UI_PRICING = `
         <button class="btn btn-outline" onclick="currentUserTier ? loadDashboard() : openAuthModal('login')">${currentUserTier ? 'Ir al Dashboard' : 'Ingresar'}</button>
     </nav>
     <main class="hero-section" style="padding-top: 120px; min-height: 80vh; background:none;">
-        <h1 style="font-size: 36px;">Paquetes</h1>
+        <h1 style="font-size: 36px;">Paquetes de Suscripción</h1>
         <div class="grid-container" style="max-width: 900px; margin: 0 auto; text-align:left;">
             <div class="pricing-card">
                 <h3>Aficionado</h3><div class="price">$0<span>/mes</span></div>
@@ -133,7 +194,7 @@ const UI_DASHBOARD = `
 `;
 
 // ==========================================
-// CONTROL DE MODALES
+// SISTEMA DE MODALES FLOTANTES (Pop-ups)
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
 
@@ -141,7 +202,7 @@ function renderLanding() { appRoot().innerHTML = UI_LANDING; }
 function renderPricing() { appRoot().innerHTML = UI_PRICING; }
 
 function openAuthModal(type) {
-    closeModal();
+    closeModal(); // Cierra cualquier modal abierto
     const modalHtml = `
         <div id="dynamic-modal" class="modal-overlay" onclick="closeModalOnOutside(event)">
             <div class="modal-box">
@@ -150,7 +211,8 @@ function openAuthModal(type) {
             </div>
         </div>
     `;
-    appRoot().insertAdjacentHTML('beforeend', modalHtml);
+    // Insertamos el modal al final del body sin borrar la landing page
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
 function getLoginForm() {
@@ -192,6 +254,7 @@ function closeModalOnOutside(e) {
     if(e.target.id === 'dynamic-modal') closeModal();
 }
 
+// Ventana de error visual bonita (reemplaza a los feos "alerts" del navegador)
 function showCustomAlert(title, message, type="error") {
     closeModal();
     let icon = type === "error" ? "fa-circle-xmark" : "fa-circle-check";
@@ -207,7 +270,7 @@ function showCustomAlert(title, message, type="error") {
             </div>
         </div>
     `;
-    appRoot().insertAdjacentHTML('beforeend', modalHtml);
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
 // ==========================================
@@ -293,7 +356,7 @@ async function processUpgrade() {
             });
             const data = await res.json();
             if(data.status === 'success') {
-                showCustomAlert("¡Plan Mejorado!", "Tu cuenta ha sido actualizada a PRO en la base de datos exitosamente.", "success");
+                showCustomAlert("¡Plan Mejorado!", "Tu cuenta ha sido actualizada a PRO en la base de datos de AWS.", "success");
                 currentUserTier = 'Pro'; 
                 sessionStorage.setItem('f1_tier', 'Pro');
                 setTimeout(() => { loadDashboard(); }, 2000);
