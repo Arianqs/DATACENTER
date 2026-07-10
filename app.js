@@ -1,3 +1,103 @@
+// ==========================================
+// 1. MOTOR DE RENDERIZADO DINÁMICO (SPA)
+// Oculta el HTML real del código fuente (Ctrl + U)
+// ==========================================
+const APP_UI = `
+    <div class="dashboard">
+        <header class="main-header">
+            <div class="title-area">
+                <h1>F1 <span>Telemetry</span> Analytics</h1>
+                <p><i class="fa-solid fa-cloud"></i> Producción Multi-Cloud &bull; Frontend: Render &bull; Backend: AWS</p>
+            </div>
+            <div class="system-status" id="aws-status">
+                <div class="pulse-dot"></div>
+                <span id="aws-status-text">Conectando con AWS...</span>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('telemetry-view')"><i class="fa-solid fa-gauge-high"></i> Telemetría de Carrera</button>
+            <button class="tab-btn" onclick="switchTab('standings-view')"><i class="fa-solid fa-trophy"></i> Estadísticas Mundiales</button>
+            <button class="tab-btn" onclick="switchTab('circuits-view')"><i class="fa-solid fa-map-location-dot"></i> Base de Circuitos</button>
+        </div>
+
+        <div id="telemetry-view" class="view-content active">
+            <div class="filter-panel">
+                <div class="filter-group">
+                    <label>Temporada</label>
+                    <select id="tel-season" onchange="fetchTelemetryData();">
+                        <option value="2026">2026</option>
+                        <option value="2025">2025</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Circuito</label>
+                    <select id="tel-circuit" onchange="fetchTelemetryData();"></select>
+                </div>
+                <div class="filter-group">
+                    <label>Sesión</label>
+                    <select id="tel-session" onchange="fetchTelemetryData();">
+                        <option value="race">Gran Premio (Carrera)</option>
+                        <option value="qualifying">Clasificatoria</option>
+                        <option value="sprint">Sprint Shootout</option>
+                        <option value="fp2">Prácticas 2</option>
+                        <option value="fp1">Prácticas 1</option>
+                    </select>
+                </div>
+                <div class="info-badge" id="circuit-meta">Estableciendo canal...</div>
+            </div>
+            <div id="telemetry-table-container" class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pos</th><th>Piloto / Escudería</th><th>Mejor Vuelta</th><th>Vel. Punta</th><th>Neumático</th><th>Pits</th><th>S1</th><th>S2</th><th>S3</th>
+                        </tr>
+                    </thead>
+                    <tbody id="telemetry-table-body"></tbody>
+                </table>
+            </div>
+            <div id="telemetry-future-msg" style="display:none;" class="future-alert"></div>
+        </div>
+
+        <div id="standings-view" class="view-content">
+            <div class="filter-panel">
+                <div class="filter-group">
+                    <label>Campeonato Histórico</label>
+                    <select id="standings-season" onchange="fetchStandingsData();">
+                        <option value="2026">Temporada 2026 (Estado Actual)</option>
+                        <option value="2025">Temporada 2025 (Cierre Oficial)</option>
+                        <option value="2024">Temporada 2024 (Cierre Oficial)</option>
+                        <option value="2023">Temporada 2023 (Cierre Oficial)</option>
+                    </select>
+                </div>
+                <div class="info-badge"><i class="fa-solid fa-chart-line"></i> Core IaaS AWS</div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rango</th><th>Piloto / Escudería</th><th>Puntos Totales</th><th>Victorias</th><th>Podios</th><th>Vueltas Rápidas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="standings-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="circuits-view" class="view-content">
+            <div class="filter-panel">
+                <div class="info-badge" style="margin-left:0; text-align: left;"><i class="fa-solid fa-layer-group"></i> Catálogo Mundial de la FIA (24 Circuitos)</div>
+            </div>
+            <div class="circuits-grid" id="circuits-grid-container"></div>
+        </div>
+    </div>
+`;
+
+// ==========================================
+// 2. LÓGICA CORE DE LA APLICACIÓN
+// ==========================================
 const SECURE_AWS_URL = "https://telemetria-f1.duckdns.org";
 
 const allRaces = [
@@ -17,6 +117,7 @@ const allRaces = [
 
 function populateCircuits() {
     const circuitSelect = document.getElementById('tel-circuit');
+    if(!circuitSelect) return;
     circuitSelect.innerHTML = "";
     allRaces.forEach(c => { circuitSelect.innerHTML += `<option value="${c.val}">${c.txt}</option>`; });
 }
@@ -24,7 +125,8 @@ function populateCircuits() {
 function updateStatus(isOnline) {
     const statusDiv = document.getElementById('aws-status');
     const statusText = document.getElementById('aws-status-text');
-    const pulse = statusDiv.querySelector('.pulse-dot');
+    const pulse = document.querySelector('.pulse-dot');
+    if(!statusDiv) return;
     
     if(isOnline) {
         statusDiv.style.background = 'rgba(16, 185, 129, 0.08)';
@@ -61,8 +163,7 @@ async function fetchTelemetryData() {
     const meta = document.getElementById('circuit-meta');
     const tableDiv = document.getElementById('telemetry-table-container');
     const msgDiv = document.getElementById('telemetry-future-msg');
-    if(!circuit) return;
-
+    
     try {
         const res = await fetch(`${SECURE_AWS_URL}/api/telemetry?season=${season}&circuit=${circuit}&session=${session}`);
         if (!res.ok) throw new Error("Fallo de red");
@@ -70,18 +171,17 @@ async function fetchTelemetryData() {
         
         updateStatus(true);
 
-        // Control dinámico de respuestas lógicas
         if(data.status === "FUTURE") {
             tableDiv.style.display = "none";
             msgDiv.style.display = "block";
-            msgDiv.innerHTML = `<i class="fa-solid fa-calendar-days"></i> El evento seleccionado se encuentra programado para el calendario oficial 2026. Los datos por sesión se habilitarán al concluir las jornadas de pista oficiales.`;
+            msgDiv.innerHTML = `<i class="fa-solid fa-calendar-days"></i> El evento seleccionado se encuentra programado. Datos disponibles al concluir la jornada oficial.`;
             meta.innerHTML = `<i class="fa-solid fa-clock"></i> Próximamente`;
             return;
         }
         if(data.status === "NO_SPRINT") {
             tableDiv.style.display = "none";
             msgDiv.style.display = "block";
-            msgDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Formato No Válido: La FIA no programó fines de semana con formato Sprint para este circuito en la temporada histórica seleccionada.`;
+            msgDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Formato No Válido: Sin Sprint histórico programado.`;
             meta.innerHTML = `<i class="fa-solid fa-ban"></i> Sin Sprint`;
             return;
         }
@@ -92,15 +192,10 @@ async function fetchTelemetryData() {
         tbody.innerHTML = "";
         
         data.data.forEach(row => {
-            let posBadge;
-            let opacityStyle = "";
-            
-            if (row.pos === 1) posBadge = `<span class="rank-gold">P1</span>`;
-            else if (row.pos === "DNF") { 
-                posBadge = `<span class="rank-dnf">DNF</span>`; 
-                opacityStyle = "opacity: 0.35;"; 
-            }
-            else posBadge = `<span class="rank-normal">P${row.pos}</span>`;
+            let posBadge = row.pos === 1 ? `<span class="rank-gold">P1</span>` : 
+                           row.pos === "DNF" ? `<span class="rank-dnf">DNF</span>` : 
+                           `<span class="rank-normal">P${row.pos}</span>`;
+            let opacityStyle = row.pos === "DNF" ? "opacity: 0.35;" : "";
 
             tbody.innerHTML += `
                 <tr style="${opacityStyle}">
@@ -118,7 +213,7 @@ async function fetchTelemetryData() {
         });
     } catch (err) {
         updateStatus(false);
-        tbody.innerHTML = `<tr><td colspan="9"><div class="error-alert">Error de sincronización con el Core de AWS.</div></td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9"><div class="error-alert">Error de sincronización con AWS.</div></td></tr>`;
     }
 }
 
@@ -147,7 +242,7 @@ async function fetchStandingsData() {
         });
     } catch (err) {
         updateStatus(false);
-        tbody.innerHTML = `<tr><td colspan="6"><div class="error-alert">Error al procesar el ranking histórico.</div></td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6"><div class="error-alert">Error al procesar ranking.</div></td></tr>`;
     }
 }
 
@@ -175,38 +270,26 @@ async function fetchCircuitsData() {
         });
     } catch (err) {
         updateStatus(false);
-        grid.innerHTML = `<div class="error-alert" style="grid-column: 1 / -1;">Fallo al cargar la base de circuitos. AWS Inaccesible.</div>`;
+        grid.innerHTML = `<div class="error-alert" style="grid-column: 1 / -1;">Fallo de AWS.</div>`;
     }
 }
 
-// Inicialización de la aplicación
-populateCircuits();
-fetchTelemetryData();
-// 1. Bloquear el Clic Derecho (Menú contextual)
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-});
-
-// 2. Bloquear atajos de teclado para herramientas de desarrollador
+// ==========================================
+// 3. SEGURIDAD EXTREMA (ANTI-INSPECCIÓN)
+// ==========================================
+document.addEventListener('contextmenu', e => e.preventDefault()); // Clic derecho
 document.onkeydown = function(e) {
-    // Bloquear F12
-    if (e.keyCode === 123) {
-        return false;
-    }
-    // Bloquear Ctrl + Shift + I (Abrir DevTools)
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-        return false;
-    }
-    // Bloquear Ctrl + Shift + C (Inspeccionar Elemento)
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
-        return false;
-    }
-    // Bloquear Ctrl + Shift + J (Consola)
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
-        return false;
-    }
-    // Bloquear Ctrl + U (Ver código fuente)
-    if (e.ctrlKey && e.keyCode === 85) {
-        return false;
-    }
+    if (e.keyCode === 123) return false; // F12
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 67 || e.keyCode === 74)) return false; // Ctrl+Shift+I/C/J
+    if (e.ctrlKey && e.keyCode === 85) return false; // Ctrl+U (Ver código)
 };
+
+// ==========================================
+// 4. INICIALIZADOR DEL SISTEMA
+// Inyecta el HTML solo cuando el navegador está listo
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('app-root').innerHTML = APP_UI;
+    populateCircuits();
+    fetchTelemetryData();
+});
