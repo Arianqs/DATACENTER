@@ -10,14 +10,13 @@ let inactivityTimer;
 function resetTimer() {
     clearTimeout(inactivityTimer);
     if (currentUserTier) {
-        // Cierre silencioso tras 5 min de inactividad
         inactivityTimer = setTimeout(() => { logout(); }, 5 * 60 * 1000); 
     }
 }
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes Reales)
+// VISTAS HTML PRINCIPALES
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -32,6 +31,12 @@ const UI_LANDING = `
         <h1>Domina la pista con datos precisos</h1>
         <p>Plataforma SaaS de grado de ingeniería. Telemetría directa, tiempos por sector y estadísticas de la FIA conectadas a un clúster AWS EC2 de alta disponibilidad.</p>
         <button class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
+        
+        <div class="hero-features">
+            <div class="feature-item"><i class="fa-solid fa-chart-line"></i><h3>Análisis Histórico</h3><p>Accede a todos los campeonatos y clasificaciones desde 2023.</p></div>
+            <div class="feature-item"><i class="fa-solid fa-stopwatch"></i><h3>Tiempos por Sector</h3><p>Desglose milimétrico de sectores S1, S2, S3 y telemetría de velocidad.</p></div>
+            <div class="feature-item"><i class="fa-solid fa-server"></i><h3>Core AWS Integrado</h3><p>Arquitectura Cloud con SQLite para un flujo de datos en tiempo real.</p></div>
+        </div>
     </main>
 
     <section>
@@ -59,21 +64,22 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
+            <!-- FOTOS PANORÁMICAS REALES DE LOS CIRCUITOS -->
             <div class="circuit-item">
-                <img src="https://images.unsplash.com/photo-1580828362624-912f20dc00cb?q=80&w=800&auto=format&fit=crop">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Monaco_Grand_Prix_2018_%2842368940021%29.jpg/1024px-Monaco_Grand_Prix_2018_%2842368940021%29.jpg">
                 <div class="circuit-overlay"><h4>GP Mónaco</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://images.unsplash.com/photo-1614028059850-8b1717be08e2?q=80&w=800&auto=format&fit=crop">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/F1_2018_Italy_-_2.jpg/1024px-F1_2018_Italy_-_2.jpg">
                 <div class="circuit-overlay"><h4>GP Monza</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?q=80&w=800&auto=format&fit=crop">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg/1024px-Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg">
                 <div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://images.unsplash.com/photo-1504116246416-d352b21cd68b?q=80&w=800&auto=format&fit=crop">
-                <div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Singapore_Grand_Prix_2008.jpg/1024px-Singapore_Grand_Prix_2008.jpg">
+                <div class="circuit-overlay"><h4>GP Singapur</h4></div>
             </div>
         </div>
     </section>
@@ -192,7 +198,7 @@ const UI_DASHBOARD = `
 `;
 
 // ==========================================
-// SISTEMA DE MODALES FLOTANTES (Pop-ups)
+// SISTEMA DE MODALES FLOTANTES
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
 
@@ -469,12 +475,11 @@ async function fetchCircuitsData() {
         let data = await res.json();
         handleNetError(false);
         
-        // El Dashboard del usuario gratis sigue mostrando solo 3 mapas técnicos
         if (currentUserTier === 'Free') { data = data.slice(0, 3); }
 
         grid.innerHTML = "";
         data.forEach(c => {
-            grid.innerHTML += `<div class="card"><img src="${c.image}" style="object-fit:contain;"><h3>${c.name}</h3><p>${c.location}</p></div>`;
+            grid.innerHTML += `<div class="card"><img src="${c.image}" style="object-fit:contain; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;"><h3>${c.name}</h3><p>${c.location}</p></div>`;
         });
 
         if (currentUserTier === 'Free') {

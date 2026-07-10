@@ -35,19 +35,29 @@ body {
 .nav-link { color: var(--text-main); text-decoration: none; font-weight: 500; font-size: 14px; cursor: pointer; transition: color 0.3s; }
 .nav-link:hover { color: var(--f1-red); }
 
+/* SECCIÓN PRINCIPAL (Fondo Restaurado y Cajas Alineadas) */
 .hero-section {
     padding: 160px 20px 100px 20px; text-align: center; 
+    /* El fondo espectacular restaurado */
     background: linear-gradient(to bottom, rgba(5,5,5,0.4) 0%, rgba(5,5,5,1) 100%), url('https://images.unsplash.com/photo-1538582709238-0a503bd5ae04?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
     background-size: cover; min-height: 75vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
 }
 .hero-section h1 { font-size: 52px; font-weight: 900; margin-bottom: 15px; text-transform: uppercase; letter-spacing: -1px; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }
 .hero-section p { font-size: 18px; color: #ddd; max-width: 650px; margin: 0 auto 40px auto; line-height: 1.6; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
 
-/* SECCIONES DE LA LANDING */
+.hero-features { display: flex; flex-direction: row; justify-content: center; gap: 40px; margin-top: 60px; flex-wrap: wrap; width: 100%; max-width: 1000px; }
+.feature-item { background: rgba(17, 17, 18, 0.7); backdrop-filter: blur(10px); border: 1px solid var(--border-color); padding: 30px; border-radius: 12px; width: 250px; text-align: left; transition: transform 0.3s ease; }
+.feature-item:hover { transform: translateY(-5px); border-color: var(--f1-red); }
+.feature-item i { font-size: 28px; color: var(--f1-red); margin-bottom: 15px; }
+.feature-item h3 { margin: 0 0 10px 0; font-size: 16px; font-weight: 700; color: #fff; }
+.feature-item p { margin: 0; font-size: 13px; color: var(--text-muted); }
+
+/* ==========================================
+   OTRAS SECCIONES DE LA LANDING
+   ========================================== */
 .section-title { text-align: center; font-size: 32px; font-weight: 900; margin: 80px 0 40px 0; text-transform: uppercase; }
 .section-title span { color: var(--f1-red); }
 
-/* Pilotos */
 .drivers-grid { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 .driver-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; width: 260px; text-align: center; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
 .driver-card:hover { transform: translateY(-10px); border-color: var(--accent-blue); }
@@ -56,7 +66,6 @@ body {
 .driver-info h3 { margin: 0 0 5px 0; font-size: 18px; }
 .driver-info p { margin: 0; color: var(--text-muted); font-size: 13px; text-transform: uppercase; font-weight: 600; }
 
-/* Circuitos (Fotos Reales) */
 .circuits-preview { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 .circuit-item { position: relative; border-radius: 12px; overflow: hidden; height: 220px; border: 1px solid var(--border-color); }
 .circuit-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
@@ -64,7 +73,6 @@ body {
 .circuit-overlay { position: absolute; bottom: 0; left: 0; width: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.9)); padding: 20px; box-sizing: border-box; }
 .circuit-overlay h4 { margin: 0; font-size: 18px; color: #fff; text-transform: uppercase; }
 
-/* Footer Completo */
 .full-footer { background: #0a0a0a; border-top: 1px solid var(--border-color); padding: 60px 20px 20px 20px; margin-top: 100px; }
 .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto 40px auto; }
 .footer-col h4 { color: #fff; font-size: 16px; margin-bottom: 20px; text-transform: uppercase; }
@@ -134,7 +142,7 @@ body {
 .filters { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
 .filters select { background: var(--panel-bg); color: #fff; border: 1px solid var(--border-color); padding: 12px; border-radius: 6px; font-size: 13px; font-weight: 600; outline: none; min-width: 150px; cursor: pointer; }
 
-/* TABLAS Y GRID DE CIRCUITOS */
+/* TABLAS Y GRID DE CIRCUITOS DEL DASHBOARD */
 .table-container { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; text-align: left; }
 th { background: rgba(255,255,255,0.02); color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 15px 20px; border-bottom: 1px solid var(--border-color); }
@@ -151,7 +159,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
 .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
 .card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; text-align: center; }
-.card img { width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; }
+.card img { width: 100%; height: 120px; object-fit: contain; margin-bottom: 15px; }
 .card h3 { margin: 0 0 5px 0; font-size: 16px; text-transform: uppercase; }
 
 /* PRICING */
