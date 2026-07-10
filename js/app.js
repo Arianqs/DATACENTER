@@ -17,7 +17,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes y Textos Perfeccionados)
+// VISTAS HTML PRINCIPALES (FOTOS OFICIALES FIA)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -31,7 +31,6 @@ const UI_LANDING = `
     <main class="hero-section">
         <h1>Domina la pista con datos precisos</h1>
         
-        <!-- TEXTO PRINCIPAL COMERCIAL Y ELEGANTE -->
         <p>La suite definitiva para analistas de Fórmula 1. Accede a datos en tiempo real, compara rendimientos por sector y domina la estrategia de carrera con información directa de la pista.</p>
         
         <button class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
@@ -59,19 +58,19 @@ const UI_LANDING = `
         <h2 class="section-title">Pilotos <span>Destacados 2026</span></h2>
         <div class="drivers-grid">
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img" crossorigin="anonymous">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img">
                 <div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img" crossorigin="anonymous">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img">
                 <div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img" crossorigin="anonymous">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img">
                 <div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img" crossorigin="anonymous">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img">
                 <div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div>
             </div>
         </div>
@@ -80,22 +79,21 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS PANORÁMICAS 100% UNSPLASH (Garantizadas contra bloqueos) -->
+            <!-- FOTOS PANORÁMICAS OFICIALES DE LA FIA (RACE HUB) -->
             <div class="circuit-item">
-                <img src="https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?auto=format&fit=crop&w=800&q=80" crossorigin="anonymous">
+                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Monaco.jpg">
                 <div class="circuit-overlay"><h4>GP Mónaco</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" crossorigin="anonymous">
+                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Italy.jpg">
                 <div class="circuit-overlay"><h4>GP Monza</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80" crossorigin="anonymous">
+                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Belgium.jpg">
                 <div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div>
             </div>
             <div class="circuit-item">
-                <!-- Singapur (La que siempre funcionó) -->
-                <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80" crossorigin="anonymous">
+                <img src="https://media.formula1.com/image/upload/f_auto/q_auto/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Singapore.jpg">
                 <div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div>
             </div>
         </div>
