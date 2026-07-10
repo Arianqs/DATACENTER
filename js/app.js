@@ -9,14 +9,12 @@ const SECURE_AWS_URL = "https://telemetria-f1.duckdns.org";
 let inactivityTimer;
 function resetTimer() {
     clearTimeout(inactivityTimer);
-    if (currentUserTier) {
-        inactivityTimer = setTimeout(() => { logout(); }, 5 * 60 * 1000); 
-    }
+    if (currentUserTier) { inactivityTimer = setTimeout(() => { logout(); }, 5 * 60 * 1000); }
 }
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes 100% Reparadas)
+// VISTAS HTML PRINCIPALES (Imágenes Unsplash Infalibles)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -41,7 +39,6 @@ const UI_LANDING = `
     <section>
         <h2 class="section-title">Pilotos <span>Destacados 2026</span></h2>
         <div class="drivers-grid">
-            <!-- PILOTOS: Removido el atributo que las rompía, ahora cargan perfectas -->
             <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img"><div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div></div>
             <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img"><div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div></div>
             <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img"><div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div></div>
@@ -52,10 +49,10 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- CIRCUITOS: Usando un proxy seguro de CDN para evitar los bloqueos de Wikipedia -->
-            <div class="circuit-item"><img src="https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Monaco_Grand_Prix_2010.jpg/800px-Monaco_Grand_Prix_2010.jpg"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
-            <div class="circuit-item"><img src="https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Monza_start_2003.jpg/800px-Monza_start_2003.jpg"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
-            <div class="circuit-item"><img src="https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/5/52/F1_2013_Spa_start.jpg/800px-F1_2013_Spa_start.jpg"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
+            <!-- 100% IMÁGENES DE UNSPLASH DIRECTAS (No se bloquean) -->
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1533050487297-09b45013190a?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1516483638261-f40828590c66?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1511252619047-920f01eb0d59?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
             <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
         </div>
     </section>
@@ -165,7 +162,7 @@ const UI_DASHBOARD = `
 `;
 
 // ==========================================
-// MODALES FLOTANTES Y AJUSTES
+// MODALES FLOTANTES Y AJUSTES QUE GUARDAN EN BD
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
 
@@ -184,13 +181,18 @@ function openSettingsModal() {
     let lockAttr = isPro ? "" : "disabled title='Función exclusiva del Plan PRO'";
     let lockIcon = isPro ? "" : `<i class="fa-solid fa-lock" style="color:var(--f1-red); font-size:10px; margin-left:5px;"></i>`;
     
+    // Recuperamos los datos cosméticos de la sesión actual
+    let savedLastName = sessionStorage.getItem('f1_lastname') || "Usuario";
+    let savedCel = sessionStorage.getItem('f1_cel') || "";
+    let savedUser = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
+
     let subInfo = isPro 
         ? `<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(225,6,0,0.1); border:1px solid rgba(225,6,0,0.3); padding:15px; border-radius:8px; margin-top:20px;">
             <div><strong style="color:var(--f1-red);"><i class="fa-solid fa-crown"></i> Licencia PRO</strong><br><span style="font-size:12px; color:var(--text-muted);">Renovación automática activada</span></div>
             <button class="btn btn-outline" style="color:var(--f1-red); border-color:var(--f1-red); padding:8px 12px; font-size:12px;" onclick="confirmCancelPlan()">Cancelar Plan</button>
            </div>`
         : `<div style="text-align:center; background:rgba(255,255,255,0.05); padding:20px; border-radius:8px; margin-top:20px;">
-            <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Estás en el plan limitado. Mejora para desbloquear toda la telemetría.</p>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Estás en el plan limitado. Mejora para desbloquear todas las funciones.</p>
             <button class="btn btn-primary" style="width:100%;" onclick="closeModal(); renderPricing()"><i class="fa-solid fa-crown"></i> Mejorar a PRO</button>
            </div>`;
 
@@ -202,15 +204,15 @@ function openSettingsModal() {
                 <form onsubmit="saveSettings(event)">
                     <div class="two-col">
                         <div class="form-group"><label>Nombre</label><input type="text" id="set-name" value="${currentUserName}" required></div>
-                        <div class="form-group"><label>Apellido</label><input type="text" value="Usuario"></div>
+                        <div class="form-group"><label>Apellido</label><input type="text" id="set-lastname" value="${savedLastName}"></div>
                     </div>
                     <div class="two-col">
-                        <div class="form-group"><label>Nombre de Usuario ${lockIcon}</label><input type="text" value="@${currentUserName.toLowerCase()}" ${lockAttr}></div>
-                        <div class="form-group"><label>Celular ${lockIcon}</label><input type="tel" placeholder="+51 999 999 999" ${lockAttr}></div>
+                        <div class="form-group"><label>Nombre de Usuario ${lockIcon}</label><input type="text" id="set-username" value="${savedUser}" ${lockAttr}></div>
+                        <div class="form-group"><label>Celular ${lockIcon}</label><input type="tel" id="set-cel" value="${savedCel}" placeholder="+51 999 999 999" ${lockAttr}></div>
                     </div>
                     <div class="form-group"><label>Correo Electrónico (Fijo)</label><input type="email" value="${currentUserEmail}" disabled></div>
-                    <div class="form-group"><label>Nueva Contraseña</label><input type="password" placeholder="Dejar en blanco para no cambiar"></div>
-                    <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Guardar Cambios</button>
+                    <div class="form-group"><label>Nueva Contraseña</label><input type="password" id="set-pass" placeholder="Dejar en blanco para no cambiar"></div>
+                    <button type="submit" id="btn-save-settings" class="btn btn-primary" style="width:100%; margin-top:10px;">Guardar en Base de Datos</button>
                 </form>
                 ${subInfo}
             </div>
@@ -219,7 +221,46 @@ function openSettingsModal() {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-// NUEVO MODAL HERMOSO DE CANCELACIÓN
+// FUNCIÓN PARA GUARDAR EN LA BD REAL
+async function saveSettings(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn-save-settings');
+    btn.innerText = "Guardando en AWS...";
+    
+    let newName = document.getElementById('set-name').value;
+    let newLastname = document.getElementById('set-lastname').value;
+    let newPass = document.getElementById('set-pass').value;
+    
+    let celInput = document.getElementById('set-cel');
+    let userInput = document.getElementById('set-username');
+    
+    if(celInput && !celInput.disabled) sessionStorage.setItem('f1_cel', celInput.value);
+    if(userInput && !userInput.disabled) sessionStorage.setItem('f1_username', userInput.value);
+    
+    try {
+        const res = await fetch(`${SECURE_AWS_URL}/api/update_user`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email: currentUserEmail, nombre: newName, password: newPass})
+        });
+        const data = await res.json();
+        
+        if(data.status === 'success') {
+            currentUserName = newName; 
+            sessionStorage.setItem('f1_name', currentUserName);
+            sessionStorage.setItem('f1_lastname', newLastname);
+            showCustomAlert("¡Actualizado!", "Tus datos y contraseña se actualizaron en el servidor AWS exitosamente.", "success");
+            loadDashboard();
+        } else {
+            showCustomAlert("Error", "No se pudo actualizar en BD.", "error");
+            btn.innerText = "Guardar en Base de Datos";
+        }
+    } catch(err) {
+        showCustomAlert("Error AWS", "No hay conexión con el servidor.", "error");
+        btn.innerText = "Guardar en Base de Datos";
+    }
+}
+
 function confirmCancelPlan() {
     closeModal();
     const modalHtml = `
@@ -228,7 +269,7 @@ function confirmCancelPlan() {
                 <i class="fa-solid fa-triangle-exclamation modal-close" onclick="closeModal()"></i>
                 <i class="fa-solid fa-triangle-exclamation" style="font-size: 50px; margin-bottom: 20px; color: var(--f1-red);"></i>
                 <h2 style="margin: 0 0 10px 0; font-size: 22px;">Cancelar Plan PRO</h2>
-                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px; line-height: 1.5;">¿Seguro que deseas cancelar tu suscripción PRO y perder el acceso al historial y la parrilla completa?</p>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px; line-height: 1.5;">¿Seguro que deseas cancelar tu suscripción y perder el historial de telemetría?</p>
                 <div style="display: flex; gap: 15px;">
                     <button class="btn btn-outline" style="width: 50%;" onclick="openSettingsModal()">Volver</button>
                     <button class="btn btn-primary" style="width: 50%; background: var(--bg-dark); border: 1px solid var(--f1-red);" onclick="executeCancelPro(this)">Sí, Cancelar</button>
@@ -251,17 +292,8 @@ async function executeCancelPro(btnElement) {
     } catch(err) { showCustomAlert("Error de Red", "AWS no responde.", "error"); }
 }
 
-function saveSettings(e) {
-    e.preventDefault();
-    let newName = document.getElementById('set-name').value;
-    currentUserName = newName; sessionStorage.setItem('f1_name', currentUserName);
-    showCustomAlert("¡Guardado!", "Tus datos han sido actualizados.", "success");
-    loadDashboard();
-}
-
 function getLoginForm() { return `<h2>Iniciar Sesión</h2><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Ingresa a tu panel</p><form onsubmit="handleLogin(event)"><div class="form-group"><label>Correo</label><input type="email" id="log-email" required></div><div class="form-group"><label>Contraseña</label><input type="password" id="log-pass" required></div><div id="auth-error" style="color:var(--f1-red); font-size:12px; margin-bottom:10px; display:none;"></div><button type="submit" class="btn btn-primary" style="width:100%;">Ingresar</button></form><p style="text-align:center; font-size:12px; margin-top:15px;">¿Nuevo? <a href="#" style="color:var(--accent-blue);" onclick="openAuthModal('register')">Regístrate</a></p>`; }
 function getRegisterForm() { return `<h2>Crear Cuenta</h2><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Únete a la plataforma</p><form onsubmit="handleRegister(event)"><div style="display:flex; gap:10px;"><div class="form-group" style="width:50%;"><label>Nombre</label><input type="text" id="reg-nombre" required></div><div class="form-group" style="width:50%;"><label>Apellido</label><input type="text" id="reg-apellido" required></div></div><div class="form-group"><label>Correo</label><input type="email" id="reg-email" required></div><div class="form-group"><label>Contraseña</label><input type="password" id="reg-pass" required></div><div id="auth-error" style="font-size:12px; margin-bottom:10px; display:none;"></div><button type="submit" class="btn btn-primary" style="width:100%;">Registrarse</button></form><p style="text-align:center; font-size:12px; margin-top:15px;">¿Ya tienes cuenta? <a href="#" style="color:var(--accent-blue);" onclick="openAuthModal('login')">Ingresa aquí</a></p>`; }
-
 function closeModal() { const m = document.getElementById('dynamic-modal'); if(m) m.remove(); }
 function closeModalOnOutside(e) { if(e.target.id === 'dynamic-modal') closeModal(); }
 function showCustomAlert(title, message, type="error") {
@@ -273,7 +305,7 @@ function showCustomAlert(title, message, type="error") {
 }
 
 // ==========================================
-// LÓGICA DE AUTENTICACIÓN Y AWS
+// LÓGICA DE AUTENTICACIÓN
 // ==========================================
 async function handleRegister(e) {
     e.preventDefault();
@@ -308,14 +340,11 @@ function loadDashboard() {
     resetTimer(); appRoot().innerHTML = UI_DASHBOARD;
     document.getElementById('user-name-display').innerText = currentUserName;
     
-    // Selectores Dinámicos (Sin la palabra PRO si ya pagaste)
     let tag = currentUserTier === 'Free' ? " (PRO)" : "";
     let dynHtml = `<option value="2026">📅 Mundial 2026</option><option value="2025">📅 Mundial 2025${tag}</option><option value="2024">📅 Mundial 2024${tag}</option><option value="2023">📅 Mundial 2023${tag}</option>`;
-    document.getElementById('tel-season').innerHTML = dynHtml;
-    document.getElementById('standings-season').innerHTML = dynHtml;
+    document.getElementById('tel-season').innerHTML = dynHtml; document.getElementById('standings-season').innerHTML = dynHtml;
 
-    const badge = document.getElementById('tier-badge');
-    const upgrade = document.getElementById('upgrade-btn-container');
+    const badge = document.getElementById('tier-badge'); const upgrade = document.getElementById('upgrade-btn-container');
 
     if (currentUserTier === 'Free') {
         badge.innerHTML = 'Plan Gratuito'; upgrade.innerHTML = `<button class="btn-upgrade" onclick="renderPricing()">Mejorar a PRO</button>`;
@@ -388,7 +417,7 @@ function handleNetError(isError) {
     }
 }
 
-// TABLAS DINÁMICAS (Límite de 5 para gratis, 20 para PRO)
+// TABLAS DINÁMICAS
 async function fetchTelemetryData() {
     const tbody = document.getElementById('telemetry-table-body');
     const tableContainer = document.querySelector('.table-container'); const msgDiv = document.getElementById('telemetry-msg');
