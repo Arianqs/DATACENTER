@@ -14,7 +14,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes 100% Seguras)
+// VISTAS HTML PRINCIPALES (Imágenes Limpias de Google/Wiki)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -49,11 +49,11 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS PANORÁMICAS 100% UNSPLASH (Garantizadas contra bloqueos en la nube) -->
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1580828362624-912f20dc00cb?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1614028059850-8b1717be08e2?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
+            <!-- FOTOS LIMPIAS (Sacadas directamente de Google/Wikipedia sin etiquetas problemáticas) -->
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Monaco_Grand_Prix_2018_%2842368940021%29.jpg/640px-Monaco_Grand_Prix_2018_%2842368940021%29.jpg"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/F1_2018_Italy_-_2.jpg/640px-F1_2018_Italy_-_2.jpg"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg/640px-Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
         </div>
     </section>
 
@@ -113,6 +113,7 @@ const UI_DASHBOARD = `
     </nav>
     <div class="dashboard-wrapper">
         <header class="dash-header" style="margin-top:20px;">
+            <!-- AQUÍ SOLO APARECERÁ EL @USUARIO -->
             <div class="dash-title"><h2>F1 <span>Dashboard</span></h2><p>Sesión activa: <span id="user-name-display" style="color:var(--text-main); font-weight:bold;"></span></p></div>
         </header>
         
@@ -181,7 +182,6 @@ function openSettingsModal() {
     let lockAttr = isPro ? "" : "disabled title='Función exclusiva del Plan PRO'";
     let lockIcon = isPro ? "" : `<i class="fa-solid fa-lock" style="color:var(--f1-red); font-size:10px; margin-left:5px;"></i>`;
     
-    // Recuperamos los datos de la sesión actual
     let savedLastName = sessionStorage.getItem('f1_lastname') || "Usuario";
     let savedCel = sessionStorage.getItem('f1_cel') || "";
     let savedUser = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
@@ -207,13 +207,17 @@ function openSettingsModal() {
                         <div class="form-group"><label>Apellido</label><input type="text" id="set-lastname" value="${savedLastName}"></div>
                     </div>
                     <div class="two-col">
-                        <div class="form-group"><label>Nombre de Usuario ${lockIcon}</label><input type="text" id="set-username" value="${savedUser}" ${lockAttr}></div>
+                        <!-- EL INPUT BLOQUEA EL BORRADO DEL '@' EN TIEMPO REAL -->
+                        <div class="form-group">
+                            <label>Nombre de Usuario ${lockIcon}</label>
+                            <input type="text" id="set-username" value="${savedUser}" ${lockAttr} 
+                                   oninput="if(!this.value.startsWith('@')) this.value = '@' + this.value.replace(/@/g, '');">
+                        </div>
                         <div class="form-group"><label>Celular ${lockIcon}</label><input type="tel" id="set-cel" value="${savedCel}" placeholder="+51 999 999 999" ${lockAttr}></div>
                     </div>
                     <div class="form-group"><label>Correo Electrónico (Fijo)</label><input type="email" value="${currentUserEmail}" disabled></div>
                     <div class="form-group"><label>Nueva Contraseña</label><input type="password" id="set-pass" placeholder="Dejar en blanco para no cambiar"></div>
                     
-                    <!-- BOTÓN CON EL TEXTO CORREGIDO -->
                     <button type="submit" id="btn-save-settings" class="btn btn-primary" style="width:100%; margin-top:10px;">Guardar Cambios</button>
                 </form>
                 ${subInfo}
@@ -223,7 +227,7 @@ function openSettingsModal() {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-// FUNCIÓN PARA GUARDAR EN LA BD REAL Y ACTUALIZAR LA PANTALLA
+// FUNCIÓN PARA GUARDAR EN LA BD Y ACTUALIZAR SOLO EL @USUARIO
 async function saveSettings(e) {
     e.preventDefault();
     const btn = document.getElementById('btn-save-settings');
@@ -252,16 +256,16 @@ async function saveSettings(e) {
             sessionStorage.setItem('f1_name', currentUserName);
             sessionStorage.setItem('f1_lastname', newLastname);
             
-            closeModal(); // Cerramos la ventana de ajustes
+            closeModal(); 
             
-            // ACTUALIZAMOS EL TEXTO DE LA CABECERA EN TIEMPO REAL
+            // ACTUALIZAMOS LA CABECERA: AHORA MUESTRA ESTRICTAMENTE EL @USUARIO NADA MÁS
             const displaySpan = document.getElementById('user-name-display');
             if(displaySpan) {
                 let userTag = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
-                displaySpan.innerText = `${currentUserName} ${newLastname} (${userTag})`;
+                displaySpan.innerText = userTag;
             }
             
-            showCustomAlert("¡Actualizado!", "Tus datos y contraseña se actualizaron exitosamente.", "success");
+            showCustomAlert("¡Actualizado!", "Tus datos se actualizaron exitosamente.", "success");
         } else {
             showCustomAlert("Error", "No se pudo actualizar en BD.", "error");
             btn.innerText = "Guardar Cambios";
@@ -351,10 +355,9 @@ async function handleLogin(e) {
 function loadDashboard() {
     resetTimer(); appRoot().innerHTML = UI_DASHBOARD;
     
-    // CARGAR LOS DATOS EN LA CABECERA
-    let savedLast = sessionStorage.getItem('f1_lastname') || "";
+    // CABECERA: MOSTRAR SOLO EL @USUARIO
     let savedUser = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
-    document.getElementById('user-name-display').innerText = `${currentUserName} ${savedLast} (${savedUser})`.trim();
+    document.getElementById('user-name-display').innerText = savedUser;
     
     let tag = currentUserTier === 'Free' ? " (PRO)" : "";
     let dynHtml = `<option value="2026">📅 Mundial 2026</option><option value="2025">📅 Mundial 2025${tag}</option><option value="2024">📅 Mundial 2024${tag}</option><option value="2023">📅 Mundial 2023${tag}</option>`;
