@@ -17,7 +17,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes Reales)
+// VISTAS HTML PRINCIPALES (Imágenes Reales Reparadas)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -65,17 +65,17 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS PANORÁMICAS REALES DESDE LEJOS (Unsplash Premium) -->
+            <!-- FOTOS PANORÁMICAS REALES (Fuentes seguras de Wikipedia + Unsplash) -->
             <div class="circuit-item">
-                <img src="https://images.unsplash.com/photo-1533050487297-09b45013190a?auto=format&fit=crop&w=800&q=80">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Monaco_Grand_Prix_2018_%2842368940021%29.jpg/800px-Monaco_Grand_Prix_2018_%2842368940021%29.jpg">
                 <div class="circuit-overlay"><h4>GP Mónaco</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://images.unsplash.com/photo-1614028059850-8b1717be08e2?auto=format&fit=crop&w=800&q=80">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/F1_2018_Italy_-_2.jpg/800px-F1_2018_Italy_-_2.jpg">
                 <div class="circuit-overlay"><h4>GP Monza</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?auto=format&fit=crop&w=800&q=80">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg/800px-Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg">
                 <div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div>
             </div>
             <div class="circuit-item">
