@@ -182,3 +182,31 @@ async function fetchCircuitsData() {
 // Inicialización de la aplicación
 populateCircuits();
 fetchTelemetryData();
+// 1. Bloquear el Clic Derecho (Menú contextual)
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+});
+
+// 2. Bloquear atajos de teclado para herramientas de desarrollador
+document.onkeydown = function(e) {
+    // Bloquear F12
+    if (e.keyCode === 123) {
+        return false;
+    }
+    // Bloquear Ctrl + Shift + I (Abrir DevTools)
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+        return false;
+    }
+    // Bloquear Ctrl + Shift + C (Inspeccionar Elemento)
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+        return false;
+    }
+    // Bloquear Ctrl + Shift + J (Consola)
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+        return false;
+    }
+    // Bloquear Ctrl + U (Ver código fuente)
+    if (e.ctrlKey && e.keyCode === 85) {
+        return false;
+    }
+};
