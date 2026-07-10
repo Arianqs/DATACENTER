@@ -16,7 +16,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES
+// VISTAS HTML PRINCIPALES (Imágenes 100% Reparadas)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -41,21 +41,22 @@ const UI_LANDING = `
     <section>
         <h2 class="section-title">Pilotos <span>Destacados 2026</span></h2>
         <div class="drivers-grid">
-            <div class="driver-card"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Max_Verstappen_2017_Malaysia_3.jpg/400px-Max_Verstappen_2017_Malaysia_3.jpg" class="driver-img" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div></div>
-            <div class="driver-card"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Charles_Leclerc_2019_Test.jpg/400px-Charles_Leclerc_2019_Test.jpg" class="driver-img" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div></div>
-            <div class="driver-card"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Lando_Norris_2019_Test.jpg/400px-Lando_Norris_2019_Test.jpg" class="driver-img" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div></div>
-            <div class="driver-card"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/George_Russell_2019_Test.jpg/400px-George_Russell_2019_Test.jpg" class="driver-img" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div></div>
+            <!-- PILOTOS: Removido el atributo que las rompía, ahora cargan perfectas -->
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img"><div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img"><div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img"><div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img"><div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div></div>
         </div>
     </section>
 
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS PANORÁMICAS GARANTIZADAS Y DE ALTA CALIDAD -->
-            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Monaco_Grand_Prix_2010.jpg/800px-Monaco_Grand_Prix_2010.jpg" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
-            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Monza_start_2003.jpg/800px-Monza_start_2003.jpg" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
-            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/F1_2013_Spa_start.jpg/800px-F1_2013_Spa_start.jpg" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
-            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Singapore_Grand_Prix_2011.jpg/800px-Singapore_Grand_Prix_2011.jpg" crossorigin="anonymous" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
+            <!-- CIRCUITOS: Usando un proxy seguro de CDN para evitar los bloqueos de Wikipedia -->
+            <div class="circuit-item"><img src="https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Monaco_Grand_Prix_2010.jpg/800px-Monaco_Grand_Prix_2010.jpg"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
+            <div class="circuit-item"><img src="https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Monza_start_2003.jpg/800px-Monza_start_2003.jpg"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
+            <div class="circuit-item"><img src="https://wsrv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/5/52/F1_2013_Spa_start.jpg/800px-F1_2013_Spa_start.jpg"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
         </div>
     </section>
 
@@ -66,7 +67,7 @@ const UI_LANDING = `
             <div class="footer-col"><h4>Soporte Técnico</h4><ul><li><a>Documentación API</a></li><li><a>Estado del Servidor (AWS)</a></li><li><a>Contacto Ingeniería</a></li></ul></div>
             <div class="footer-col"><h4>Legal</h4><ul><li><a>Términos de Servicio</a></li><li><a>Política de Privacidad</a></li><li><a>Uso de Cookies</a></li></ul></div>
         </div>
-        <div class="footer-bottom">&copy; 2026 F1 Telemetry Analytics. Proyecto Académico Multi-Cloud.</div>
+        <div class="footer-bottom">&copy; 2026 F1 Telemetry Analytics. Proyecto Académico Multi-Cloud (Render + AWS EC2). Todos los derechos reservados.</div>
     </footer>
 `;
 
@@ -109,7 +110,6 @@ const UI_DASHBOARD = `
             <div class="status-badge" id="aws-status"><div class="dot"></div><span id="aws-status-text">Conectando...</span></div>
             <div id="tier-badge" style="font-size: 12px; font-weight: 700; color: var(--text-muted); background: var(--bg-dark); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color);"></div>
             <div id="upgrade-btn-container"></div>
-            <!-- BOTÓN DE AJUSTES MOVIDO ARRIBA -->
             <button class="btn btn-outline" style="padding: 8px 15px;" onclick="openSettingsModal()" title="Ajustes de Perfil"><i class="fa-solid fa-gear"></i></button>
             <button class="btn btn-outline" style="padding: 8px 15px;" onclick="logout()" title="Salir"><i class="fa-solid fa-right-from-bracket"></i></button>
         </div>
@@ -118,6 +118,7 @@ const UI_DASHBOARD = `
         <header class="dash-header" style="margin-top:20px;">
             <div class="dash-title"><h2>F1 <span>Dashboard</span></h2><p>Sesión activa: <span id="user-name-display" style="color:var(--text-main); font-weight:bold;"></span></p></div>
         </header>
+        
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('telemetry-view')"><i class="fa-solid fa-gauge-high"></i> Telemetría</button>
             <button class="tab-btn" onclick="switchTab('standings-view')"><i class="fa-solid fa-trophy"></i> Mundial</button>
@@ -158,12 +159,13 @@ const UI_DASHBOARD = `
                 </table>
             </div>
         </div>
+        
         <div id="circuits-view" class="view-content"><div class="grid-container" id="circuits-grid-container"></div></div>
     </div>
 `;
 
 // ==========================================
-// SISTEMA DE MODALES Y AJUSTES SAAS
+// MODALES FLOTANTES Y AJUSTES
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
 
@@ -176,7 +178,6 @@ function openAuthModal(type) {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-// PANEL DE AJUSTES INTERACTIVO Y LIMITADO
 function openSettingsModal() {
     closeModal();
     let isPro = currentUserTier === 'Pro';
@@ -186,10 +187,10 @@ function openSettingsModal() {
     let subInfo = isPro 
         ? `<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(225,6,0,0.1); border:1px solid rgba(225,6,0,0.3); padding:15px; border-radius:8px; margin-top:20px;">
             <div><strong style="color:var(--f1-red);"><i class="fa-solid fa-crown"></i> Licencia PRO</strong><br><span style="font-size:12px; color:var(--text-muted);">Renovación automática activada</span></div>
-            <button class="btn btn-outline" style="color:var(--f1-red); border-color:var(--f1-red); padding:8px 12px; font-size:12px;" onclick="cancelProPlan()">Cancelar Plan</button>
+            <button class="btn btn-outline" style="color:var(--f1-red); border-color:var(--f1-red); padding:8px 12px; font-size:12px;" onclick="confirmCancelPlan()">Cancelar Plan</button>
            </div>`
         : `<div style="text-align:center; background:rgba(255,255,255,0.05); padding:20px; border-radius:8px; margin-top:20px;">
-            <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Estás en el plan gratuito limitado.</p>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Estás en el plan limitado. Mejora para desbloquear toda la telemetría.</p>
             <button class="btn btn-primary" style="width:100%;" onclick="closeModal(); renderPricing()"><i class="fa-solid fa-crown"></i> Mejorar a PRO</button>
            </div>`;
 
@@ -207,7 +208,7 @@ function openSettingsModal() {
                         <div class="form-group"><label>Nombre de Usuario ${lockIcon}</label><input type="text" value="@${currentUserName.toLowerCase()}" ${lockAttr}></div>
                         <div class="form-group"><label>Celular ${lockIcon}</label><input type="tel" placeholder="+51 999 999 999" ${lockAttr}></div>
                     </div>
-                    <div class="form-group"><label>Correo Electrónico (No editable)</label><input type="email" value="${currentUserEmail}" disabled></div>
+                    <div class="form-group"><label>Correo Electrónico (Fijo)</label><input type="email" value="${currentUserEmail}" disabled></div>
                     <div class="form-group"><label>Nueva Contraseña</label><input type="password" placeholder="Dejar en blanco para no cambiar"></div>
                     <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">Guardar Cambios</button>
                 </form>
@@ -216,6 +217,38 @@ function openSettingsModal() {
         </div>
     `;
     document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+// NUEVO MODAL HERMOSO DE CANCELACIÓN
+function confirmCancelPlan() {
+    closeModal();
+    const modalHtml = `
+        <div id="dynamic-modal" class="modal-overlay" onclick="closeModalOnOutside(event)">
+            <div class="modal-box custom-alert" style="max-width: 350px;">
+                <i class="fa-solid fa-triangle-exclamation modal-close" onclick="closeModal()"></i>
+                <i class="fa-solid fa-triangle-exclamation" style="font-size: 50px; margin-bottom: 20px; color: var(--f1-red);"></i>
+                <h2 style="margin: 0 0 10px 0; font-size: 22px;">Cancelar Plan PRO</h2>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 25px; line-height: 1.5;">¿Seguro que deseas cancelar tu suscripción PRO y perder el acceso al historial y la parrilla completa?</p>
+                <div style="display: flex; gap: 15px;">
+                    <button class="btn btn-outline" style="width: 50%;" onclick="openSettingsModal()">Volver</button>
+                    <button class="btn btn-primary" style="width: 50%; background: var(--bg-dark); border: 1px solid var(--f1-red);" onclick="executeCancelPro(this)">Sí, Cancelar</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+async function executeCancelPro(btnElement) {
+    btnElement.innerText = "Cancelando...";
+    try {
+        const res = await fetch(`${SECURE_AWS_URL}/api/cancel`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email: currentUserEmail}) });
+        const data = await res.json();
+        if(data.status === 'success') {
+            showCustomAlert("Plan Cancelado", "Has vuelto a la versión Gratuita de Aficionado.", "success");
+            currentUserTier = 'Free'; sessionStorage.setItem('f1_tier', 'Free'); setTimeout(() => { loadDashboard(); }, 2000);
+        }
+    } catch(err) { showCustomAlert("Error de Red", "AWS no responde.", "error"); }
 }
 
 function saveSettings(e) {
@@ -275,7 +308,7 @@ function loadDashboard() {
     resetTimer(); appRoot().innerHTML = UI_DASHBOARD;
     document.getElementById('user-name-display').innerText = currentUserName;
     
-    // Si eres gratis sale "(PRO)", si eres PRO desaparece.
+    // Selectores Dinámicos (Sin la palabra PRO si ya pagaste)
     let tag = currentUserTier === 'Free' ? " (PRO)" : "";
     let dynHtml = `<option value="2026">📅 Mundial 2026</option><option value="2025">📅 Mundial 2025${tag}</option><option value="2024">📅 Mundial 2024${tag}</option><option value="2023">📅 Mundial 2023${tag}</option>`;
     document.getElementById('tel-season').innerHTML = dynHtml;
@@ -318,19 +351,6 @@ async function processUpgrade() {
     } 
 }
 
-async function cancelProPlan() {
-    if(confirm("¿Seguro que deseas cancelar tu suscripción PRO y perder el acceso al historial y la parrilla completa?")) {
-        try {
-            const res = await fetch(`${SECURE_AWS_URL}/api/cancel`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email: currentUserEmail}) });
-            const data = await res.json();
-            if(data.status === 'success') {
-                showCustomAlert("Plan Cancelado", "Has vuelto a la versión Gratuita.", "success");
-                currentUserTier = 'Free'; sessionStorage.setItem('f1_tier', 'Free'); setTimeout(() => { loadDashboard(); }, 2000);
-            }
-        } catch(err) { showCustomAlert("Error de Red", "AWS no responde.", "error"); }
-    }
-}
-
 function logout() { 
     currentUserTier = null; currentUserName = ""; currentUserEmail = "";
     sessionStorage.removeItem('f1_tier'); sessionStorage.removeItem('f1_name'); sessionStorage.removeItem('f1_email');
@@ -368,7 +388,7 @@ function handleNetError(isError) {
     }
 }
 
-// TABLAS LIMITADAS PARA USUARIOS FREE (Solo Top 5)
+// TABLAS DINÁMICAS (Límite de 5 para gratis, 20 para PRO)
 async function fetchTelemetryData() {
     const tbody = document.getElementById('telemetry-table-body');
     const tableContainer = document.querySelector('.table-container'); const msgDiv = document.getElementById('telemetry-msg');
@@ -412,7 +432,7 @@ async function fetchStandingsData() {
         });
         
         if(currentUserTier === 'Free') {
-            tbody.innerHTML += `<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--f1-red); font-weight:bold; cursor:pointer; background:rgba(225,6,0,0.05);" onclick="renderPricing()"><i class="fa-solid fa-lock"></i> Hazte PRO para ver la clasificación completa</td></tr>`;
+            tbody.innerHTML += `<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--f1-red); font-weight:bold; cursor:pointer; background:rgba(225,6,0,0.05);" onclick="renderPricing()"><i class="fa-solid fa-lock"></i> Hazte PRO para ver la clasificación de la parrilla completa</td></tr>`;
         }
     } catch (err) { handleNetError(true); }
 }
