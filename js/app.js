@@ -56,19 +56,19 @@ const UI_LANDING = `
         <h2 class="section-title">Pilotos <span>Destacados 2026</span></h2>
         <div class="drivers-grid">
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img" referrerpolicy="no-referrer">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img">
                 <div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img" referrerpolicy="no-referrer">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img">
                 <div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img" referrerpolicy="no-referrer">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img">
                 <div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img" referrerpolicy="no-referrer">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img">
                 <div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div>
             </div>
         </div>
@@ -77,21 +77,21 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS CON REFERRERPOLICY PARA EVITAR BLOQUEOS DE SEGURIDAD -->
+            <!-- FOTOS PANORÁMICAS 100% DESDE UNSPLASH PARA EVITAR BLOQUEOS -->
             <div class="circuit-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Monaco_Grand_Prix_2018_%2842368940021%29.jpg" referrerpolicy="no-referrer">
+                <img src="https://images.unsplash.com/photo-1580828362624-912f20dc00cb?auto=format&fit=crop&w=800&q=80">
                 <div class="circuit-overlay"><h4>GP Mónaco</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/F1_2018_Italy_-_2.jpg" referrerpolicy="no-referrer">
+                <img src="https://images.unsplash.com/photo-1614028059850-8b1717be08e2?auto=format&fit=crop&w=800&q=80">
                 <div class="circuit-overlay"><h4>GP Monza</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg" referrerpolicy="no-referrer">
+                <img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?auto=format&fit=crop&w=800&q=80">
                 <div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80" referrerpolicy="no-referrer">
+                <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80">
                 <div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div>
             </div>
         </div>
