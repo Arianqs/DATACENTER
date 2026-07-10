@@ -14,7 +14,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes definitivas de Unsplash)
+// VISTAS HTML PRINCIPALES (Imágenes Refereciales Infalibles)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -49,9 +49,9 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS GARANTIZADAS DE UNSPLASH (Nunca fallan) -->
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1580828362624-912f20dc00cb?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1614028059850-8b1717be08e2?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
+            <!-- 100% IMÁGENES DE UNSPLASH DIRECTAS (No se bloquean nunca) -->
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1533050487297-09b45013190a?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1516483638261-f40828590c66?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
             <div class="circuit-item"><img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
             <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
         </div>
@@ -113,6 +113,7 @@ const UI_DASHBOARD = `
     </nav>
     <div class="dashboard-wrapper">
         <header class="dash-header" style="margin-top:20px;">
+            <!-- AQUÍ SOLO MUESTRA EL @USUARIO NADA MÁS -->
             <div class="dash-title"><h2>F1 <span>Dashboard</span></h2><p>Sesión activa: <span id="user-name-display" style="color:var(--text-main); font-weight:bold;"></span></p></div>
         </header>
         
@@ -259,7 +260,7 @@ async function saveSettings(e) {
             closeModal(); 
             
             const displaySpan = document.getElementById('user-name-display');
-            if(displaySpan) { displaySpan.innerText = finalUser; }
+            if(displaySpan) { displaySpan.innerText = finalUser; } // Solo muestra el @Usuario
             
             showCustomAlert("¡Actualizado!", "Tus datos se actualizaron exitosamente en la base de datos.", "success");
         } else {
