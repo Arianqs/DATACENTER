@@ -100,3 +100,51 @@ tr:hover td { background: rgba(255,255,255,0.01); }
     .info-badge { margin-left: 0; text-align: center; width: 100%; margin-top: 10px; }
     .tab-btn { flex: 1 1 100%; }
 }
+/* ==========================================
+   DISEÑO DEL PORTAL SaaS (PAYWALL & LOGIN)
+   ========================================== */
+.saas-portal {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 80vh; text-align: center; animation: fadeIn 0.8s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+.saas-header h1 { font-size: 38px; font-weight: 900; margin-bottom: 10px; text-transform: uppercase; letter-spacing: -1px; }
+.saas-header h1 span { color: var(--accent-red); }
+.saas-header p { color: var(--text-muted); font-size: 16px; max-width: 600px; margin: 0 auto 40px auto; line-height: 1.6; }
+
+.pricing-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px; max-width: 1000px; width: 100%; margin-bottom: 40px;
+}
+.pricing-card {
+    background: var(--panel-bg); border: 1px solid var(--border-color);
+    border-radius: 16px; padding: 40px 30px; transition: all 0.3s ease;
+    backdrop-filter: blur(10px); display: flex; flex-direction: column;
+}
+.pricing-card:hover { transform: translateY(-10px); border-color: var(--accent-blue); box-shadow: 0 10px 30px rgba(56, 189, 248, 0.1); }
+.pricing-card.pro-tier { border-color: var(--accent-blue); position: relative; overflow: hidden; }
+.pricing-card.pro-tier::before {
+    content: 'MÁS POPULAR'; position: absolute; top: 15px; right: -35px;
+    background: var(--accent-blue); color: #000; font-size: 10px; font-weight: 900;
+    padding: 5px 40px; transform: rotate(45deg); letter-spacing: 1px;
+}
+
+.tier-name { color: var(--text-muted); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+.tier-price { font-size: 42px; font-weight: 900; color: #fff; margin-bottom: 25px; font-family: 'JetBrains Mono', monospace; }
+.tier-price span { font-size: 16px; color: var(--text-muted); font-weight: 500; font-family: 'Inter', sans-serif; }
+
+.tier-features { list-style: none; padding: 0; margin: 0 0 30px 0; text-align: left; flex-grow: 1; }
+.tier-features li { margin-bottom: 15px; font-size: 14px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+.tier-features li i { color: var(--accent-green); }
+
+.btn-saas {
+    background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-color);
+    padding: 15px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; width: 100%;
+}
+.btn-saas:hover { background: #fff; color: #000; }
+.btn-saas.primary { background: var(--accent-blue); color: #000; border: none; }
+.btn-saas.primary:hover { background: #0ea5e9; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+
+.saas-footer { font-size: 12px; color: var(--text-muted); margin-top: 20px; }

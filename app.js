@@ -1,17 +1,75 @@
 // ==========================================
-// 1. MOTOR DE RENDERIZADO DINÁMICO (SPA)
-// Oculta el HTML real del código fuente (Ctrl + U)
+// 1. INTERFAZ DEL PORTAL SaaS (PAYWALL)
+// ==========================================
+const SAAS_PORTAL_UI = `
+    <div class="saas-portal">
+        <div class="saas-header">
+            <h1>F1 Telemetry <span>Pro</span></h1>
+            <p>Plataforma SaaS de análisis de datos, telemetría y tiempos de la Fórmula 1 en tiempo real. Selecciona tu plan de acceso a nuestra infraestructura Multi-Cloud.</p>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Plan Free -->
+            <div class="pricing-card">
+                <div class="tier-name">Plan Aficionado</div>
+                <div class="tier-price">$0<span>/mes</span></div>
+                <ul class="tier-features">
+                    <li><i class="fa-solid fa-check"></i> Clasificación Mundial Histórica</li>
+                    <li><i class="fa-solid fa-check"></i> Catálogo de Circuitos FIA</li>
+                    <li style="opacity: 0.4;"><i class="fa-solid fa-xmark" style="color: var(--accent-red);"></i> Telemetría de Carrera</li>
+                    <li style="opacity: 0.4;"><i class="fa-solid fa-xmark" style="color: var(--accent-red);"></i> Soporte de Prácticas y Sprint</li>
+                </ul>
+                <button class="btn-saas" onclick="authenticateUser('Free')">Acceso Básico</button>
+            </div>
+
+            <!-- Plan Pro -->
+            <div class="pricing-card pro-tier">
+                <div class="tier-name">Plan Ingeniero</div>
+                <div class="tier-price">$29<span>/mes</span></div>
+                <ul class="tier-features">
+                    <li><i class="fa-solid fa-check"></i> Acceso Total a Estadísticas</li>
+                    <li><i class="fa-solid fa-check"></i> <b>Telemetría Dinámica de Carrera</b></li>
+                    <li><i class="fa-solid fa-check"></i> Filtro por Sesiones (FP1, Sprint, Qualy)</li>
+                    <li><i class="fa-solid fa-check"></i> Motor Conectado a AWS EC2</li>
+                </ul>
+                <button class="btn-saas primary" onclick="authenticateUser('Pro')">Iniciar Sesión Pro</button>
+            </div>
+
+            <!-- Plan Enterprise -->
+            <div class="pricing-card">
+                <div class="tier-name">Plan Escudería</div>
+                <div class="tier-price">Custom</div>
+                <ul class="tier-features">
+                    <li><i class="fa-solid fa-check"></i> Todo lo del Plan Ingeniero</li>
+                    <li><i class="fa-solid fa-check"></i> Conexión API Directa (JSON)</li>
+                    <li><i class="fa-solid fa-check"></i> SLA de 99.9% de Disponibilidad</li>
+                    <li><i class="fa-solid fa-check"></i> Autenticación JWT Dedicada</li>
+                </ul>
+                <button class="btn-saas" onclick="alert('Contactando al departamento de ventas...')">Contactar Ventas</button>
+            </div>
+        </div>
+        <div class="saas-footer">
+            <i class="fa-solid fa-lock"></i> Conexión Segura cifrada por SSL. Sistema de Autenticación de Usuario Requerido.
+        </div>
+    </div>
+`;
+
+// ==========================================
+// 2. INTERFAZ DEL DASHBOARD CORE (ENCRIPTADA)
 // ==========================================
 const APP_UI = `
-    <div class="dashboard">
+    <div class="dashboard" style="animation: fadeIn 0.5s ease;">
         <header class="main-header">
             <div class="title-area">
                 <h1>F1 <span>Telemetry</span> Analytics</h1>
                 <p><i class="fa-solid fa-cloud"></i> Producción Multi-Cloud &bull; Frontend: Render &bull; Backend: AWS</p>
             </div>
-            <div class="system-status" id="aws-status">
-                <div class="pulse-dot"></div>
-                <span id="aws-status-text">Conectando con AWS...</span>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <div class="system-status" id="aws-status">
+                    <div class="pulse-dot"></div>
+                    <span id="aws-status-text">Conectando con AWS...</span>
+                </div>
+                <button class="btn-saas" style="padding: 10px 15px; width: auto; font-size:12px;" onclick="logoutUser()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
             </div>
         </header>
 
@@ -96,7 +154,28 @@ const APP_UI = `
 `;
 
 // ==========================================
-// 2. LÓGICA CORE DE LA APLICACIÓN
+// 3. LÓGICA DE AUTENTICACIÓN Y NEGOCIO SaaS
+// ==========================================
+function authenticateUser(plan) {
+    if(plan === 'Free') {
+        alert("El plan Aficionado no incluye acceso al Dashboard de Telemetría. Por favor inicia sesión con una cuenta Pro.");
+        return;
+    }
+    // Simulamos un inicio de sesión exitoso inyectando el Dashboard
+    document.getElementById('app-root').innerHTML = APP_UI;
+    
+    // Inicializamos las funciones del core
+    populateCircuits();
+    fetchTelemetryData();
+}
+
+function logoutUser() {
+    // Destruimos el dashboard y volvemos al paywall
+    document.getElementById('app-root').innerHTML = SAAS_PORTAL_UI;
+}
+
+// ==========================================
+// 4. LÓGICA CORE DE DATOS (AWS)
 // ==========================================
 const SECURE_AWS_URL = "https://telemetria-f1.duckdns.org";
 
@@ -134,7 +213,7 @@ function updateStatus(isOnline) {
         statusDiv.style.color = 'var(--accent-green)';
         pulse.style.backgroundColor = 'var(--accent-green)';
         pulse.style.boxShadow = '0 0 12px var(--accent-green)';
-        statusText.innerText = "Conectado al Servidor AWS";
+        statusText.innerText = "SaaS Token Activo (AWS)";
     } else {
         statusDiv.style.background = 'rgba(244, 63, 94, 0.08)';
         statusDiv.style.borderColor = 'rgba(244, 63, 94, 0.2)';
@@ -275,21 +354,19 @@ async function fetchCircuitsData() {
 }
 
 // ==========================================
-// 3. SEGURIDAD EXTREMA (ANTI-INSPECCIÓN)
+// 5. SEGURIDAD EXTREMA (ANTI-INSPECCIÓN)
 // ==========================================
-document.addEventListener('contextmenu', e => e.preventDefault()); // Clic derecho
+document.addEventListener('contextmenu', e => e.preventDefault()); 
 document.onkeydown = function(e) {
-    if (e.keyCode === 123) return false; // F12
-    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 67 || e.keyCode === 74)) return false; // Ctrl+Shift+I/C/J
-    if (e.ctrlKey && e.keyCode === 85) return false; // Ctrl+U (Ver código)
+    if (e.keyCode === 123) return false; 
+    if (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 67 || e.keyCode === 74)) return false; 
+    if (e.ctrlKey && e.keyCode === 85) return false; 
 };
 
 // ==========================================
-// 4. INICIALIZADOR DEL SISTEMA
-// Inyecta el HTML solo cuando el navegador está listo
+// 6. INICIALIZADOR DEL SISTEMA (PAYWALL PRIMERO)
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('app-root').innerHTML = APP_UI;
-    populateCircuits();
-    fetchTelemetryData();
+    // Al cargar la página, inyectamos primero el portal SaaS en lugar del Dashboard
+    document.getElementById('app-root').innerHTML = SAAS_PORTAL_UI;
 });
