@@ -14,7 +14,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes Refereciales Infalibles)
+// VISTAS HTML PRINCIPALES (Imágenes idénticas a tu captura)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -39,21 +39,21 @@ const UI_LANDING = `
     <section>
         <h2 class="section-title">Pilotos <span>Destacados 2026</span></h2>
         <div class="drivers-grid">
-            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img"><div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div></div>
-            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img"><div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div></div>
-            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img"><div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div></div>
-            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img"><div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img" referrerpolicy="no-referrer"><div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img" referrerpolicy="no-referrer"><div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img" referrerpolicy="no-referrer"><div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img" referrerpolicy="no-referrer"><div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div></div>
         </div>
     </section>
 
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- 100% IMÁGENES DE UNSPLASH DIRECTAS (No se bloquean nunca) -->
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1533050487297-09b45013190a?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1516483638261-f40828590c66?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
+            <!-- AQUÍ ESTÁN LAS 4 FOTOS EXACTAS (Sin la etiqueta crossorigin que las bloqueaba) -->
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Monaco_Grand_Prix_2018_%2842368940021%29.jpg/800px-Monaco_Grand_Prix_2018_%2842368940021%29.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/F1_2018_Italy_-_2.jpg/800px-F1_2018_Italy_-_2.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg/800px-Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
         </div>
     </section>
 
@@ -113,7 +113,6 @@ const UI_DASHBOARD = `
     </nav>
     <div class="dashboard-wrapper">
         <header class="dash-header" style="margin-top:20px;">
-            <!-- AQUÍ SOLO MUESTRA EL @USUARIO NADA MÁS -->
             <div class="dash-title"><h2>F1 <span>Dashboard</span></h2><p>Sesión activa: <span id="user-name-display" style="color:var(--text-main); font-weight:bold;"></span></p></div>
         </header>
         
@@ -260,7 +259,7 @@ async function saveSettings(e) {
             closeModal(); 
             
             const displaySpan = document.getElementById('user-name-display');
-            if(displaySpan) { displaySpan.innerText = finalUser; } // Solo muestra el @Usuario
+            if(displaySpan) { displaySpan.innerText = finalUser; }
             
             showCustomAlert("¡Actualizado!", "Tus datos se actualizaron exitosamente en la base de datos.", "success");
         } else {
@@ -273,6 +272,7 @@ async function saveSettings(e) {
     }
 }
 
+// MODAL DE CANCELACIÓN
 function confirmCancelPlan() {
     closeModal();
     const modalHtml = `
