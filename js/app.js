@@ -17,7 +17,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES
+// VISTAS HTML PRINCIPALES (Imágenes y Textos Perfeccionados)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -31,8 +31,8 @@ const UI_LANDING = `
     <main class="hero-section">
         <h1>Domina la pista con datos precisos</h1>
         
-        <!-- TEXTO PRINCIPAL CORREGIDO (Más comercial) -->
-        <p>La suite definitiva para analistas de Fórmula 1. Accede a datos en tiempo real, compara rendimientos por sector y domina la estrategia con información directa de la pista.</p>
+        <!-- TEXTO PRINCIPAL COMERCIAL Y ELEGANTE -->
+        <p>La suite definitiva para analistas de Fórmula 1. Accede a datos en tiempo real, compara rendimientos por sector y domina la estrategia de carrera con información directa de la pista.</p>
         
         <button class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
         
@@ -80,22 +80,22 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS GARANTIZADAS DE WIKIMEDIA COMMONS Y UNSPLASH -->
+            <!-- FOTOS PANORÁMICAS 100% UNSPLASH (Garantizadas contra bloqueos) -->
             <div class="circuit-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Monaco_Grand_Prix_2010.jpg/800px-Monaco_Grand_Prix_2010.jpg" crossorigin="anonymous" referrerpolicy="no-referrer">
+                <img src="https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?auto=format&fit=crop&w=800&q=80" crossorigin="anonymous">
                 <div class="circuit-overlay"><h4>GP Mónaco</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Monza_start_2003.jpg/800px-Monza_start_2003.jpg" crossorigin="anonymous" referrerpolicy="no-referrer">
+                <img src="https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=800&q=80" crossorigin="anonymous">
                 <div class="circuit-overlay"><h4>GP Monza</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/F1_2013_Spa_start.jpg/800px-F1_2013_Spa_start.jpg" crossorigin="anonymous" referrerpolicy="no-referrer">
+                <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=800&q=80" crossorigin="anonymous">
                 <div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div>
             </div>
             <div class="circuit-item">
                 <!-- Singapur (La que siempre funcionó) -->
-                <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80" crossorigin="anonymous" referrerpolicy="no-referrer">
+                <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80" crossorigin="anonymous">
                 <div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div>
             </div>
         </div>
