@@ -3,141 +3,74 @@
 // ==========================================
 let currentUserTier = sessionStorage.getItem('f1_tier') || null; 
 let currentUserName = sessionStorage.getItem('f1_name') || "";
+let currentUserEmail = sessionStorage.getItem('f1_email') || ""; 
 const SECURE_AWS_URL = "https://telemetria-f1.duckdns.org"; 
 
-// TEMPORIZADOR DE INACTIVIDAD (5 Minutos)
 let inactivityTimer;
 function resetTimer() {
     clearTimeout(inactivityTimer);
-    // Si hay usuario logueado, a los 5 min (300,000 ms) se cierra la sesión por seguridad
     if (currentUserTier) {
+        // Cierre de sesión silencioso a los 5 minutos (300,000 ms)
         inactivityTimer = setTimeout(() => {
-            alert("Tu sesión ha expirado por inactividad (5 minutos).");
             logout();
         }, 5 * 60 * 1000); 
     }
 }
-// Detectar actividad para reiniciar el reloj
-window.onload = resetTimer;
-document.onmousemove = resetTimer;
-document.onkeypress = resetTimer;
-document.ontouchstart = resetTimer;
+window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML INYECTADAS
+// VISTAS HTML PRINCIPALES
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
-        <div class="brand-logo" onclick="renderLanding()">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg" alt="F1 Logo">
-            <span>Telemetry</span>
-        </div>
+        <div class="brand-logo" onclick="renderLanding()"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg"> <span>Telemetry</span></div>
         <div class="nav-links">
             <a class="nav-link" onclick="renderPricing()">Paquetes</a>
-            <button class="btn btn-outline" onclick="renderAuth('login')">Ingresar</button>
-            <button class="btn btn-primary" onclick="renderAuth('register')">Registrarse</button>
+            <button class="btn btn-outline" style="padding: 8px 16px;" onclick="openAuthModal('login')">Ingresar</button>
+            <button class="btn btn-primary" style="padding: 8px 16px;" onclick="openAuthModal('register')">Registrarse</button>
         </div>
     </nav>
     <main class="hero-section">
         <h1>Domina la pista con datos precisos</h1>
         <p>Plataforma SaaS de grado de ingeniería. Telemetría directa, tiempos por sector y estadísticas de la FIA conectadas a un clúster AWS EC2 de alta disponibilidad.</p>
-        <button class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;" onclick="renderAuth('register')">Comenzar Gratis</button>
+        <button class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
         
         <div class="hero-features">
-            <div class="feature-item">
-                <i class="fa-solid fa-chart-line"></i>
-                <h3>Análisis Histórico</h3>
-                <p>Accede a todos los campeonatos y clasificaciones desde 2023.</p>
-            </div>
-            <div class="feature-item">
-                <i class="fa-solid fa-stopwatch"></i>
-                <h3>Tiempos por Sector</h3>
-                <p>Desglose milimétrico de sectores S1, S2, S3 y telemetría de velocidad.</p>
-            </div>
-            <div class="feature-item">
-                <i class="fa-solid fa-server"></i>
-                <h3>Core AWS Integrado</h3>
-                <p>Arquitectura Cloud con SQLite para un flujo de datos en tiempo real.</p>
-            </div>
+            <div class="feature-item"><i class="fa-solid fa-chart-line"></i><h3>Análisis Histórico</h3><p>Accede a todos los campeonatos y clasificaciones desde 2023.</p></div>
+            <div class="feature-item"><i class="fa-solid fa-stopwatch"></i><h3>Tiempos por Sector</h3><p>Desglose milimétrico de sectores S1, S2, S3 y telemetría de velocidad.</p></div>
+            <div class="feature-item"><i class="fa-solid fa-server"></i><h3>Core AWS Integrado</h3><p>Arquitectura Cloud con SQLite para un flujo de datos en tiempo real.</p></div>
         </div>
     </main>
-    <footer style="text-align:center; padding: 40px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 12px;">
-        &copy; 2026 F1 Telemetry Analytics. Arquitectura Multi-Cloud (Render + AWS).
-    </footer>
-`;
-
-const UI_AUTH_LOGIN = `
-    <nav class="landing-navbar">
-        <div class="brand-logo" onclick="renderLanding()"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg"> <span>Telemetry</span></div>
-        <button class="btn btn-outline" onclick="renderLanding()">Inicio</button>
-    </nav>
-    <div class="auth-container">
-        <div class="auth-box">
-            <h2>Iniciar Sesión</h2>
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group"><label>Correo Electrónico</label><input type="email" id="log-email" required></div>
-                <div class="form-group"><label>Contraseña</label><input type="password" id="log-pass" required></div>
-                <div id="login-error" style="color:var(--f1-red); font-size:12px; margin-bottom:10px; display:none;"></div>
-                <button type="submit" class="btn btn-primary" style="width:100%;">Ingresar</button>
-            </form>
-            <p style="text-align:center; font-size:12px; margin-top:15px;">¿Nuevo? <a href="#" style="color:var(--accent-blue);" onclick="renderAuth('register')">Regístrate</a></p>
-        </div>
-    </div>
-`;
-
-const UI_AUTH_REGISTER = `
-    <nav class="landing-navbar">
-        <div class="brand-logo" onclick="renderLanding()"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg"> <span>Telemetry</span></div>
-        <button class="btn btn-outline" onclick="renderLanding()">Inicio</button>
-    </nav>
-    <div class="auth-container">
-        <div class="auth-box">
-            <h2>Crear Cuenta</h2>
-            <form onsubmit="handleRegister(event)">
-                <div style="display:flex; gap:10px;">
-                    <div class="form-group" style="width:50%;"><label>Nombre</label><input type="text" id="reg-nombre" required></div>
-                    <div class="form-group" style="width:50%;"><label>Apellido</label><input type="text" id="reg-apellido" required></div>
-                </div>
-                <div class="form-group"><label>Correo</label><input type="email" id="reg-email" required></div>
-                <div class="form-group"><label>Contraseña</label><input type="password" id="reg-pass" required></div>
-                <div id="reg-msg" style="font-size:12px; margin-bottom:10px;"></div>
-                <button type="submit" class="btn btn-primary" style="width:100%;">Registrarse</button>
-            </form>
-            <p style="text-align:center; font-size:12px; margin-top:15px;">¿Ya tienes cuenta? <a href="#" style="color:var(--accent-blue);" onclick="renderAuth('login')">Ingresa aquí</a></p>
-        </div>
-    </div>
+    <footer style="text-align:center; padding: 40px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 12px;">&copy; 2026 F1 Telemetry Analytics. Arquitectura Multi-Cloud.</footer>
 `;
 
 const UI_PRICING = `
     <nav class="landing-navbar">
         <div class="brand-logo" onclick="renderLanding()"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg"> <span>Telemetry</span></div>
-        <button class="btn btn-outline" onclick="currentUserTier ? loadDashboard() : renderAuth('login')">
-            ${currentUserTier ? 'Ir al Dashboard' : 'Ingresar'}
-        </button>
+        <button class="btn btn-outline" onclick="currentUserTier ? loadDashboard() : openAuthModal('login')">${currentUserTier ? 'Ir al Dashboard' : 'Ingresar'}</button>
     </nav>
-    <main class="hero-section" style="padding-top: 120px; min-height: 80vh;">
+    <main class="hero-section" style="padding-top: 120px; min-height: 80vh; background:none;">
         <h1 style="font-size: 36px;">Paquetes</h1>
         <div class="grid-container" style="max-width: 900px; margin: 0 auto; text-align:left;">
             <div class="pricing-card">
-                <h3>Aficionado</h3>
-                <div class="price">$0<span>/mes</span></div>
+                <h3>Aficionado</h3><div class="price">$0<span>/mes</span></div>
                 <ul>
                     <li><i class="fa-solid fa-check"></i> Temporada Actual (2026)</li>
                     <li><i class="fa-solid fa-check"></i> Muestra de Circuitos (3)</li>
-                    <li><i class="fa-solid fa-xmark"></i> Sin Análisis Histórico</li>
-                    <li><i class="fa-solid fa-xmark"></i> Sin Telemetría por Sectores</li>
+                    <li><i class="fa-solid fa-xmark" style="color:var(--f1-red)"></i> Sin Análisis Histórico</li>
+                    <li><i class="fa-solid fa-xmark" style="color:var(--f1-red)"></i> Sin Telemetría por Sectores</li>
                 </ul>
             </div>
             <div class="pricing-card pro">
-                <h3>PRO</h3>
-                <div class="price">$15<span>/mes</span></div>
+                <div style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); background:var(--f1-red); color:#fff; font-size:11px; font-weight:700; padding:5px 15px; border-radius:20px;">MÁS ELEGIDO</div>
+                <h3>PRO</h3><div class="price">$15<span>/mes</span></div>
                 <ul>
                     <li><i class="fa-solid fa-check"></i> Todo lo gratuito</li>
                     <li><i class="fa-solid fa-check"></i> Catálogo Completo (24 Circuitos)</li>
                     <li><i class="fa-solid fa-check"></i> Telemetría S1, S2, S3</li>
                     <li><i class="fa-solid fa-check"></i> Viaje en el tiempo (2023-2026)</li>
                 </ul>
-                <button class="btn btn-primary" style="width: 100%;" onclick="upgradeToPro()">Adquirir Plan PRO</button>
+                <button class="btn btn-primary" style="width: 100%;" onclick="processUpgrade()">Adquirir Plan PRO</button>
             </div>
         </div>
     </main>
@@ -153,12 +86,10 @@ const UI_DASHBOARD = `
             <button class="btn btn-outline" style="padding: 8px 15px;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
         </div>
     </nav>
-
     <div class="dashboard-wrapper">
         <header class="dash-header" style="margin-top:20px;">
             <div class="dash-title"><h2>F1 <span>Dashboard</span></h2><p>Sesión activa: <span id="user-name-display" style="color:var(--text-main); font-weight:bold;"></span></p></div>
         </header>
-
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('telemetry-view')"><i class="fa-solid fa-gauge-high"></i> Telemetría</button>
             <button class="tab-btn" onclick="switchTab('standings-view')"><i class="fa-solid fa-trophy"></i> Mundial</button>
@@ -168,17 +99,13 @@ const UI_DASHBOARD = `
         <div id="telemetry-view" class="view-content active">
             <div class="filters">
                 <select id="tel-season" onchange="if(checkProAccess(this)) fetchTelemetryData();">
-                    <option value="2026">Temporada 2026</option>
-                    <option value="2025">Temporada 2025 (PRO)</option>
-                    <option value="2024">Temporada 2024 (PRO)</option>
-                    <option value="2023">Temporada 2023 (PRO)</option>
+                    <option value="2026">Temporada 2026</option><option value="2025">Temporada 2025 (PRO)</option><option value="2024">Temporada 2024 (PRO)</option><option value="2023">Temporada 2023 (PRO)</option>
                 </select>
                 <select id="tel-circuit" onchange="fetchTelemetryData();" class="circuits-dropdown"></select>
                 <select id="tel-session" onchange="fetchTelemetryData();">
                     <option value="race">Carrera</option><option value="qualifying">Clasificación</option><option value="sprint">Sprint</option><option value="fp2">Prácticas 2</option><option value="fp1">Prácticas 1</option>
                 </select>
             </div>
-            
             <div class="table-container">
                 <table>
                     <thead><tr><th>Pos</th><th>Piloto</th><th>Mejor Vuelta</th><th>Pits</th><th>Goma</th><th>Vel. Punta</th><th>S1</th><th>S2</th><th>S3</th></tr></thead>
@@ -191,10 +118,7 @@ const UI_DASHBOARD = `
         <div id="standings-view" class="view-content">
             <div class="filters">
                 <select id="standings-season" onchange="if(checkProAccess(this)) fetchStandingsData();">
-                    <option value="2026">Mundial 2026</option>
-                    <option value="2025">Mundial 2025 (PRO)</option>
-                    <option value="2024">Mundial 2024 (PRO)</option>
-                    <option value="2023">Mundial 2023 (PRO)</option>
+                    <option value="2026">Mundial 2026</option><option value="2025">Mundial 2025 (PRO)</option><option value="2024">Mundial 2024 (PRO)</option><option value="2023">Mundial 2023 (PRO)</option>
                 </select>
             </div>
             <div class="table-container">
@@ -209,59 +133,127 @@ const UI_DASHBOARD = `
 `;
 
 // ==========================================
-// CONTROL DE VISTAS Y AUTENTICACIÓN
+// CONTROL DE MODALES
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
+
 function renderLanding() { appRoot().innerHTML = UI_LANDING; }
 function renderPricing() { appRoot().innerHTML = UI_PRICING; }
-function renderAuth(type) { appRoot().innerHTML = (type === 'login' ? UI_AUTH_LOGIN : UI_AUTH_REGISTER); }
 
+function openAuthModal(type) {
+    closeModal();
+    const modalHtml = `
+        <div id="dynamic-modal" class="modal-overlay" onclick="closeModalOnOutside(event)">
+            <div class="modal-box">
+                <i class="fa-solid fa-xmark modal-close" onclick="closeModal()"></i>
+                ${type === 'login' ? getLoginForm() : getRegisterForm()}
+            </div>
+        </div>
+    `;
+    appRoot().insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function getLoginForm() {
+    return `
+        <h2>Iniciar Sesión</h2><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Ingresa a tu panel de control</p>
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group"><label>Correo</label><input type="email" id="log-email" required></div>
+            <div class="form-group"><label>Contraseña</label><input type="password" id="log-pass" required></div>
+            <div id="auth-error" style="color:var(--f1-red); font-size:12px; margin-bottom:10px; display:none;"></div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Ingresar</button>
+        </form>
+        <p style="text-align:center; font-size:12px; margin-top:15px;">¿Nuevo? <a href="#" style="color:var(--accent-blue);" onclick="openAuthModal('register')">Regístrate</a></p>
+    `;
+}
+
+function getRegisterForm() {
+    return `
+        <h2>Crear Cuenta</h2><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Únete a la plataforma de telemetría</p>
+        <form onsubmit="handleRegister(event)">
+            <div style="display:flex; gap:10px;">
+                <div class="form-group" style="width:50%;"><label>Nombre</label><input type="text" id="reg-nombre" required></div>
+                <div class="form-group" style="width:50%;"><label>Apellido</label><input type="text" id="reg-apellido" required></div>
+            </div>
+            <div class="form-group"><label>Correo</label><input type="email" id="reg-email" required></div>
+            <div class="form-group"><label>Contraseña</label><input type="password" id="reg-pass" required></div>
+            <div id="auth-error" style="font-size:12px; margin-bottom:10px; display:none;"></div>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Registrarse</button>
+        </form>
+        <p style="text-align:center; font-size:12px; margin-top:15px;">¿Ya tienes cuenta? <a href="#" style="color:var(--accent-blue);" onclick="openAuthModal('login')">Ingresa aquí</a></p>
+    `;
+}
+
+function closeModal() {
+    const modal = document.getElementById('dynamic-modal');
+    if(modal) modal.remove();
+}
+
+function closeModalOnOutside(e) {
+    if(e.target.id === 'dynamic-modal') closeModal();
+}
+
+function showCustomAlert(title, message, type="error") {
+    closeModal();
+    let icon = type === "error" ? "fa-circle-xmark" : "fa-circle-check";
+    let iconColor = type === "error" ? "var(--f1-red)" : "var(--accent-green)";
+    const modalHtml = `
+        <div id="dynamic-modal" class="modal-overlay" onclick="closeModalOnOutside(event)">
+            <div class="modal-box custom-alert">
+                <i class="fa-solid fa-xmark modal-close" onclick="closeModal()"></i>
+                <i class="fa-solid ${icon}" style="color:${iconColor}"></i>
+                <h2>${title}</h2>
+                <p>${message}</p>
+                <button class="btn btn-primary" style="width:100%;" onclick="closeModal()">Aceptar</button>
+            </div>
+        </div>
+    `;
+    appRoot().insertAdjacentHTML('beforeend', modalHtml);
+}
+
+// ==========================================
+// LÓGICA DE AUTENTICACIÓN
+// ==========================================
 async function handleRegister(e) {
     e.preventDefault();
     const btn = e.target.querySelector('button');
-    const msg = document.getElementById('reg-msg');
+    const msg = document.getElementById('auth-error');
     btn.innerText = "Procesando...";
     const payload = { nombre: document.getElementById('reg-nombre').value, apellido: document.getElementById('reg-apellido').value, email: document.getElementById('reg-email').value, password: document.getElementById('reg-pass').value };
     try {
         const res = await fetch(`${SECURE_AWS_URL}/api/register`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
         const data = await res.json();
+        msg.style.display = "block";
         if(data.status === 'success') {
             msg.style.color = "var(--accent-green)"; msg.innerText = "¡Cuenta creada! Entrando...";
             setTimeout(() => { 
-                currentUserName = payload.nombre; 
-                currentUserTier = "Free"; 
-                // Guardar en Session Storage
-                sessionStorage.setItem('f1_name', currentUserName);
-                sessionStorage.setItem('f1_tier', currentUserTier);
-                loadDashboard(); 
+                currentUserName = payload.nombre; currentUserEmail = payload.email; currentUserTier = "Free"; 
+                sessionStorage.setItem('f1_name', currentUserName); sessionStorage.setItem('f1_email', currentUserEmail); sessionStorage.setItem('f1_tier', currentUserTier);
+                closeModal(); loadDashboard(); 
             }, 1000);
         } else { msg.style.color = "var(--f1-red)"; msg.innerText = data.message; btn.innerText = "Registrarse"; }
-    } catch(err) { msg.style.color = "var(--f1-red)"; msg.innerText = "Error AWS DB."; btn.innerText = "Registrarse"; }
+    } catch(err) { msg.style.display = "block"; msg.style.color = "var(--f1-red)"; msg.innerText = "Error AWS DB."; btn.innerText = "Registrarse"; }
 }
 
 async function handleLogin(e) {
     e.preventDefault();
     const btn = e.target.querySelector('button');
-    const errBox = document.getElementById('login-error');
+    const errBox = document.getElementById('auth-error');
     btn.innerText = "Validando...";
     const payload = { email: document.getElementById('log-email').value, password: document.getElementById('log-pass').value };
     try {
         const res = await fetch(`${SECURE_AWS_URL}/api/login`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
         const data = await res.json();
         if(data.status === 'success') { 
-            currentUserName = data.nombre; 
-            currentUserTier = data.tier; 
-            // Guardar en Session Storage para persistencia al F5
-            sessionStorage.setItem('f1_name', currentUserName);
-            sessionStorage.setItem('f1_tier', currentUserTier);
-            loadDashboard(); 
+            currentUserName = data.nombre; currentUserEmail = payload.email; currentUserTier = data.tier; 
+            sessionStorage.setItem('f1_name', currentUserName); sessionStorage.setItem('f1_email', currentUserEmail); sessionStorage.setItem('f1_tier', currentUserTier);
+            closeModal(); loadDashboard(); 
         } 
-        else { errBox.style.display = "block"; errBox.innerText = data.message; btn.innerText = "Ingresar"; }
-    } catch(err) { errBox.style.display = "block"; errBox.innerText = "Servidor AWS inalcanzable."; btn.innerText = "Ingresar"; }
+        else { errBox.style.display = "block"; errBox.style.color = "var(--f1-red)"; errBox.innerText = data.message; btn.innerText = "Ingresar"; }
+    } catch(err) { errBox.style.display = "block"; errBox.style.color = "var(--f1-red)"; errBox.innerText = "Servidor AWS inalcanzable."; btn.innerText = "Ingresar"; }
 }
 
 function loadDashboard() {
-    resetTimer(); // Inicia el reloj de 5 min al entrar
+    resetTimer(); 
     appRoot().innerHTML = UI_DASHBOARD;
     document.getElementById('user-name-display').innerText = currentUserName;
     
@@ -291,24 +283,29 @@ function loadDashboard() {
     fetchTelemetryData();
 }
 
-function upgradeToPro() {
+async function processUpgrade() {
+    if(!currentUserTier) { openAuthModal('login'); return; }
+    
     if(currentUserTier === 'Free') { 
-        alert("¡Plan mejorado a PRO en base de datos!"); 
-        currentUserTier = 'Pro'; 
-        sessionStorage.setItem('f1_tier', 'Pro');
-        loadDashboard(); 
+        try {
+            const res = await fetch(`${SECURE_AWS_URL}/api/upgrade`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email: currentUserEmail})
+            });
+            const data = await res.json();
+            if(data.status === 'success') {
+                showCustomAlert("¡Plan Mejorado!", "Tu cuenta ha sido actualizada a PRO en la base de datos exitosamente.", "success");
+                currentUserTier = 'Pro'; 
+                sessionStorage.setItem('f1_tier', 'Pro');
+                setTimeout(() => { loadDashboard(); }, 2000);
+            } else { showCustomAlert("Error", "No se pudo actualizar la cuenta.", "error"); }
+        } catch(err) { showCustomAlert("Error AWS", "No se pudo contactar con el servidor.", "error"); }
     } 
-    else renderAuth('register');
 }
 
 function logout() { 
-    currentUserTier = null; 
-    currentUserName = ""; 
-    // Limpiar variables de sesión
-    sessionStorage.removeItem('f1_tier');
-    sessionStorage.removeItem('f1_name');
-    clearTimeout(inactivityTimer);
-    renderLanding(); 
+    currentUserTier = null; currentUserName = ""; currentUserEmail = "";
+    sessionStorage.removeItem('f1_tier'); sessionStorage.removeItem('f1_name'); sessionStorage.removeItem('f1_email');
+    clearTimeout(inactivityTimer); renderLanding(); 
 }
 
 function switchTab(viewId) {
@@ -322,11 +319,11 @@ function switchTab(viewId) {
 }
 
 // ==========================================
-// LÓGICA DE NEGOCIO Y PETICIONES A AWS
+// LÓGICA AWS Y SEGURIDAD
 // ==========================================
 function checkProAccess(selectElement) {
     if (currentUserTier === 'Free' && selectElement.value !== '2026') {
-        alert("El análisis histórico (2023-2025) es exclusivo del Plan PRO. Mejora tu cuenta para viajar en el tiempo.");
+        showCustomAlert("Función Bloqueada", "El análisis histórico (2023-2025) es exclusivo del Plan PRO. Mejora tu cuenta para viajar en el tiempo.", "error");
         selectElement.value = '2026';
         return false;
     }
@@ -373,7 +370,7 @@ async function fetchTelemetryData() {
         tbody.innerHTML = "";
         
         const isFree = (currentUserTier === 'Free');
-        const lock = `<span style="color:var(--f1-red); font-size:11px;"><i class="fa-solid fa-lock"></i> PRO</span>`;
+        const lock = `<span style="color:var(--f1-red); font-size:11px; cursor:pointer;" onclick="renderPricing()" title="Mejora a PRO"><i class="fa-solid fa-lock"></i> PRO</span>`;
 
         data.data.forEach(row => {
             let pb = row.pos === 1 ? `<span class="rank-gold">1</span>` : `<span class="rank-normal">${row.pos}</span>`;
@@ -391,11 +388,7 @@ async function fetchTelemetryData() {
                 </tr>
             `;
         });
-    } catch (err) {
-        handleNetError(true);
-        tableContainer.style.display = "block"; msgDiv.style.display = "none";
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:var(--f1-red);">Fallo EC2</td></tr>`;
-    }
+    } catch (err) { handleNetError(true); }
 }
 
 async function fetchStandingsData() {
@@ -444,11 +437,6 @@ async function fetchCircuitsData() {
 document.addEventListener('contextmenu', e => e.preventDefault()); 
 document.onkeydown = function(e) { if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey) || (e.ctrlKey && e.keyCode === 85)) return false; };
 
-// INICIALIZADOR: Revisa si ya estabas logueado antes de presionar F5
 document.addEventListener('DOMContentLoaded', () => {
-    if (currentUserTier && currentUserName) {
-        loadDashboard(); // Si apretaste F5, vuelve a meterte al Dashboard
-    } else {
-        renderLanding(); // Si es la primera vez, muestra la Landing Page
-    }
+    if (currentUserTier && currentUserName) { loadDashboard(); } else { renderLanding(); }
 });
