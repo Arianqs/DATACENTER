@@ -1,27 +1,75 @@
-let currentUserTier = null; 
-let currentUserName = "";
+// ==========================================
+// ESTADO DE LA APLICACIÓN Y SESIÓN
+// ==========================================
+let currentUserTier = sessionStorage.getItem('f1_tier') || null; 
+let currentUserName = sessionStorage.getItem('f1_name') || "";
 const SECURE_AWS_URL = "https://telemetria-f1.duckdns.org"; 
 
+// TEMPORIZADOR DE INACTIVIDAD (5 Minutos)
+let inactivityTimer;
+function resetTimer() {
+    clearTimeout(inactivityTimer);
+    // Si hay usuario logueado, a los 5 min (300,000 ms) se cierra la sesión por seguridad
+    if (currentUserTier) {
+        inactivityTimer = setTimeout(() => {
+            alert("Tu sesión ha expirado por inactividad (5 minutos).");
+            logout();
+        }, 5 * 60 * 1000); 
+    }
+}
+// Detectar actividad para reiniciar el reloj
+window.onload = resetTimer;
+document.onmousemove = resetTimer;
+document.onkeypress = resetTimer;
+document.ontouchstart = resetTimer;
+
+// ==========================================
+// VISTAS HTML INYECTADAS
+// ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
-        <div class="brand-logo" onclick="renderLanding()">F1 <span>Telemetry</span></div>
+        <div class="brand-logo" onclick="renderLanding()">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg" alt="F1 Logo">
+            <span>Telemetry</span>
+        </div>
         <div class="nav-links">
             <a class="nav-link" onclick="renderPricing()">Paquetes</a>
-            <button class="btn btn-outline" style="padding: 8px 16px;" onclick="renderAuth('login')">Ingresar</button>
-            <button class="btn btn-primary" style="padding: 8px 16px;" onclick="renderAuth('register')">Registrarse</button>
+            <button class="btn btn-outline" onclick="renderAuth('login')">Ingresar</button>
+            <button class="btn btn-primary" onclick="renderAuth('register')">Registrarse</button>
         </div>
     </nav>
     <main class="hero-section">
-        <h1>Domina la pista con datos en tiempo real</h1>
-        <p>Plataforma SaaS para ingenieros. Telemetría directa, tiempos por sector y estadísticas de la FIA en la nube AWS.</p>
+        <h1>Domina la pista con datos precisos</h1>
+        <p>Plataforma SaaS de grado de ingeniería. Telemetría directa, tiempos por sector y estadísticas de la FIA conectadas a un clúster AWS EC2 de alta disponibilidad.</p>
         <button class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;" onclick="renderAuth('register')">Comenzar Gratis</button>
+        
+        <div class="hero-features">
+            <div class="feature-item">
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>Análisis Histórico</h3>
+                <p>Accede a todos los campeonatos y clasificaciones desde 2023.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fa-solid fa-stopwatch"></i>
+                <h3>Tiempos por Sector</h3>
+                <p>Desglose milimétrico de sectores S1, S2, S3 y telemetría de velocidad.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fa-solid fa-server"></i>
+                <h3>Core AWS Integrado</h3>
+                <p>Arquitectura Cloud con SQLite para un flujo de datos en tiempo real.</p>
+            </div>
+        </div>
     </main>
+    <footer style="text-align:center; padding: 40px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 12px;">
+        &copy; 2026 F1 Telemetry Analytics. Arquitectura Multi-Cloud (Render + AWS).
+    </footer>
 `;
 
 const UI_AUTH_LOGIN = `
     <nav class="landing-navbar">
-        <div class="brand-logo" onclick="renderLanding()">F1 <span>Telemetry</span></div>
-        <button class="btn btn-outline" style="padding: 8px 16px;" onclick="renderLanding()">Inicio</button>
+        <div class="brand-logo" onclick="renderLanding()"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg"> <span>Telemetry</span></div>
+        <button class="btn btn-outline" onclick="renderLanding()">Inicio</button>
     </nav>
     <div class="auth-container">
         <div class="auth-box">
@@ -39,8 +87,8 @@ const UI_AUTH_LOGIN = `
 
 const UI_AUTH_REGISTER = `
     <nav class="landing-navbar">
-        <div class="brand-logo" onclick="renderLanding()">F1 <span>Telemetry</span></div>
-        <button class="btn btn-outline" style="padding: 8px 16px;" onclick="renderLanding()">Inicio</button>
+        <div class="brand-logo" onclick="renderLanding()"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg"> <span>Telemetry</span></div>
+        <button class="btn btn-outline" onclick="renderLanding()">Inicio</button>
     </nav>
     <div class="auth-container">
         <div class="auth-box">
@@ -62,12 +110,12 @@ const UI_AUTH_REGISTER = `
 
 const UI_PRICING = `
     <nav class="landing-navbar">
-        <div class="brand-logo" onclick="renderLanding()">F1 <span>Telemetry</span></div>
-        <button class="btn btn-outline" style="padding: 8px 16px;" onclick="currentUserTier ? loadDashboard() : renderAuth('login')">
+        <div class="brand-logo" onclick="renderLanding()"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg"> <span>Telemetry</span></div>
+        <button class="btn btn-outline" onclick="currentUserTier ? loadDashboard() : renderAuth('login')">
             ${currentUserTier ? 'Ir al Dashboard' : 'Ingresar'}
         </button>
     </nav>
-    <main class="hero-section" style="padding-top: 60px;">
+    <main class="hero-section" style="padding-top: 120px; min-height: 80vh;">
         <h1 style="font-size: 36px;">Paquetes</h1>
         <div class="grid-container" style="max-width: 900px; margin: 0 auto; text-align:left;">
             <div class="pricing-card">
@@ -96,15 +144,19 @@ const UI_PRICING = `
 `;
 
 const UI_DASHBOARD = `
+    <nav class="landing-navbar">
+        <div class="brand-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/3/33/F1.svg"> <span>Telemetry</span></div>
+        <div class="dash-controls">
+            <div class="status-badge" id="aws-status"><div class="dot"></div><span id="aws-status-text">Conectando...</span></div>
+            <div id="tier-badge" style="font-size: 12px; font-weight: 700; color: var(--text-muted); background: var(--bg-dark); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color);"></div>
+            <div id="upgrade-btn-container"></div>
+            <button class="btn btn-outline" style="padding: 8px 15px;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+        </div>
+    </nav>
+
     <div class="dashboard-wrapper">
-        <header class="dash-header">
-            <div class="dash-title"><h2>F1 <span>Dashboard</span></h2><p>Bienvenido, <span id="user-name-display" style="color:var(--text-main); font-weight:bold;"></span></p></div>
-            <div class="dash-controls">
-                <div class="status-badge" id="aws-status"><div class="dot"></div><span id="aws-status-text">Conectando...</span></div>
-                <div id="tier-badge" style="font-size: 12px; font-weight: 700; color: var(--text-muted); background: var(--bg-dark); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color);"></div>
-                <div id="upgrade-btn-container"></div>
-                <button class="btn btn-outline" style="padding: 8px 15px;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
-            </div>
+        <header class="dash-header" style="margin-top:20px;">
+            <div class="dash-title"><h2>F1 <span>Dashboard</span></h2><p>Sesión activa: <span id="user-name-display" style="color:var(--text-main); font-weight:bold;"></span></p></div>
         </header>
 
         <div class="tabs">
@@ -126,6 +178,7 @@ const UI_DASHBOARD = `
                     <option value="race">Carrera</option><option value="qualifying">Clasificación</option><option value="sprint">Sprint</option><option value="fp2">Prácticas 2</option><option value="fp1">Prácticas 1</option>
                 </select>
             </div>
+            
             <div class="table-container">
                 <table>
                     <thead><tr><th>Pos</th><th>Piloto</th><th>Mejor Vuelta</th><th>Pits</th><th>Goma</th><th>Vel. Punta</th><th>S1</th><th>S2</th><th>S3</th></tr></thead>
@@ -174,7 +227,14 @@ async function handleRegister(e) {
         const data = await res.json();
         if(data.status === 'success') {
             msg.style.color = "var(--accent-green)"; msg.innerText = "¡Cuenta creada! Entrando...";
-            setTimeout(() => { currentUserName = payload.nombre; currentUserTier = "Free"; loadDashboard(); }, 1000);
+            setTimeout(() => { 
+                currentUserName = payload.nombre; 
+                currentUserTier = "Free"; 
+                // Guardar en Session Storage
+                sessionStorage.setItem('f1_name', currentUserName);
+                sessionStorage.setItem('f1_tier', currentUserTier);
+                loadDashboard(); 
+            }, 1000);
         } else { msg.style.color = "var(--f1-red)"; msg.innerText = data.message; btn.innerText = "Registrarse"; }
     } catch(err) { msg.style.color = "var(--f1-red)"; msg.innerText = "Error AWS DB."; btn.innerText = "Registrarse"; }
 }
@@ -188,12 +248,20 @@ async function handleLogin(e) {
     try {
         const res = await fetch(`${SECURE_AWS_URL}/api/login`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
         const data = await res.json();
-        if(data.status === 'success') { currentUserName = data.nombre; currentUserTier = data.tier; loadDashboard(); } 
+        if(data.status === 'success') { 
+            currentUserName = data.nombre; 
+            currentUserTier = data.tier; 
+            // Guardar en Session Storage para persistencia al F5
+            sessionStorage.setItem('f1_name', currentUserName);
+            sessionStorage.setItem('f1_tier', currentUserTier);
+            loadDashboard(); 
+        } 
         else { errBox.style.display = "block"; errBox.innerText = data.message; btn.innerText = "Ingresar"; }
     } catch(err) { errBox.style.display = "block"; errBox.innerText = "Servidor AWS inalcanzable."; btn.innerText = "Ingresar"; }
 }
 
 function loadDashboard() {
+    resetTimer(); // Inicia el reloj de 5 min al entrar
     appRoot().innerHTML = UI_DASHBOARD;
     document.getElementById('user-name-display').innerText = currentUserName;
     
@@ -208,7 +276,6 @@ function loadDashboard() {
         upgrade.innerHTML = '';
     }
     
-    // Inyectar circuitos completos en el select
     const select = document.querySelector('.circuits-dropdown');
     const allRaces = [
         {val: "bahrain", txt: "Bahrain GP"}, {val: "saudi", txt: "Saudi Arabian GP"}, {val: "australia", txt: "Australian GP"}, {val: "japan", txt: "Japanese GP"},
@@ -225,10 +292,25 @@ function loadDashboard() {
 }
 
 function upgradeToPro() {
-    if(currentUserTier === 'Free') { alert("¡Plan mejorado a PRO en base de datos!"); currentUserTier = 'Pro'; loadDashboard(); } 
+    if(currentUserTier === 'Free') { 
+        alert("¡Plan mejorado a PRO en base de datos!"); 
+        currentUserTier = 'Pro'; 
+        sessionStorage.setItem('f1_tier', 'Pro');
+        loadDashboard(); 
+    } 
     else renderAuth('register');
 }
-function logout() { currentUserTier = null; currentUserName = ""; renderLanding(); }
+
+function logout() { 
+    currentUserTier = null; 
+    currentUserName = ""; 
+    // Limpiar variables de sesión
+    sessionStorage.removeItem('f1_tier');
+    sessionStorage.removeItem('f1_name');
+    clearTimeout(inactivityTimer);
+    renderLanding(); 
+}
+
 function switchTab(viewId) {
     document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -338,17 +420,13 @@ async function fetchCircuitsData() {
         let data = await res.json();
         handleNetError(false);
         
-        // RESTRICCIÓN COMERCIAL: El usuario Gratis solo ve los primeros 3 circuitos
-        if (currentUserTier === 'Free') {
-            data = data.slice(0, 3);
-        }
+        if (currentUserTier === 'Free') { data = data.slice(0, 3); }
 
         grid.innerHTML = "";
         data.forEach(c => {
             grid.innerHTML += `<div class="card"><img src="${c.image}"><h3>${c.name}</h3><p>${c.location}</p></div>`;
         });
 
-        // Inyectamos la tarjeta de promoción si es Gratis
         if (currentUserTier === 'Free') {
             grid.innerHTML += `
                 <div class="card" style="display:flex; flex-direction:column; justify-content:center; border-color:var(--f1-red); background:rgba(225,6,0,0.05);">
@@ -365,4 +443,12 @@ async function fetchCircuitsData() {
 
 document.addEventListener('contextmenu', e => e.preventDefault()); 
 document.onkeydown = function(e) { if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey) || (e.ctrlKey && e.keyCode === 85)) return false; };
-document.addEventListener('DOMContentLoaded', () => { renderLanding(); });
+
+// INICIALIZADOR: Revisa si ya estabas logueado antes de presionar F5
+document.addEventListener('DOMContentLoaded', () => {
+    if (currentUserTier && currentUserName) {
+        loadDashboard(); // Si apretaste F5, vuelve a meterte al Dashboard
+    } else {
+        renderLanding(); // Si es la primera vez, muestra la Landing Page
+    }
+});
