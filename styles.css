@@ -1,63 +1,76 @@
 /* ==========================================
-   CONFIGURACIÓN BASE (Fondo Negro Puro)
+   CONFIGURACIÓN BASE
    ========================================== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root { 
-    --bg-dark: #000000; 
-    --panel-bg: rgba(18, 18, 20, 0.85); 
-    --border-color: rgba(63, 63, 70, 0.5); 
-    --accent-blue: #38bdf8; 
-    --accent-red: #f43f5e; 
-    --accent-green: #10b981; 
-    --text-main: #f4f4f5; 
-    --text-muted: #9ca3af; 
+    --bg-dark: #000000; --panel-bg: rgba(18, 18, 20, 0.85); --border-color: rgba(63, 63, 70, 0.5); 
+    --accent-blue: #38bdf8; --accent-red: #f43f5e; --accent-green: #10b981; 
+    --text-main: #f4f4f5; --text-muted: #9ca3af; 
 }
 
 body { 
-    font-family: 'Inter', sans-serif; 
-    background-color: var(--bg-dark); 
-    color: var(--text-main); 
-    margin: 0; 
-    padding: 30px 15px; 
-    min-height: 100vh; 
+    font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); 
+    margin: 0; padding: 30px 15px; min-height: 100vh; 
 }
 
 /* ==========================================
-   DASHBOARD CORE (Panel Principal)
+   PANTALLA DE LOGIN / REGISTRO
    ========================================== */
-.dashboard { max-width: 1200px; margin: 0 auto; }
+.auth-wrapper {
+    display: flex; justify-content: center; align-items: center; min-height: 85vh; animation: fadeIn 0.5s ease;
+}
+.auth-box {
+    background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 16px;
+    padding: 40px; width: 100%; max-width: 400px; backdrop-filter: blur(10px); box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+.auth-header { text-align: center; margin-bottom: 30px; }
+.auth-header h2 { margin: 0 0 10px 0; font-weight: 900; font-size: 24px; text-transform: uppercase; }
+.auth-header h2 span { color: var(--accent-blue); }
+.auth-header p { color: var(--text-muted); font-size: 14px; margin: 0; }
+
+.input-group { margin-bottom: 20px; text-align: left; }
+.input-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
+.input-group input { 
+    width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.5); border: 1px solid var(--border-color); 
+    color: #fff; padding: 12px 15px; border-radius: 8px; font-family: 'Inter', sans-serif; outline: none; transition: border 0.3s;
+}
+.input-group input:focus { border-color: var(--accent-blue); }
+
+.auth-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 30px; }
+.btn-primary { 
+    background: var(--accent-blue); color: #000; border: none; padding: 14px; border-radius: 8px; 
+    font-weight: 700; cursor: pointer; text-transform: uppercase; transition: all 0.3s; 
+}
+.btn-primary:hover { background: #0ea5e9; box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
+.btn-secondary { 
+    background: transparent; color: var(--text-muted); border: 1px solid var(--border-color); 
+    padding: 14px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; 
+}
+.btn-secondary:hover { color: #fff; background: rgba(255,255,255,0.05); }
+
+/* ==========================================
+   DASHBOARD CORE
+   ========================================== */
+.dashboard { max-width: 1200px; margin: 0 auto; animation: fadeIn 0.5s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
 .main-header { 
-    background: var(--panel-bg); 
-    border: 1px solid var(--border-color); 
-    border-radius: 12px; 
-    padding: 20px 30px; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 25px; 
-    backdrop-filter: blur(10px); 
+    background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; 
+    padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; 
+    margin-bottom: 25px; backdrop-filter: blur(10px); 
 }
-
 .title-area h1 { font-size: 26px; font-weight: 900; margin: 0 0 5px 0; letter-spacing: -0.5px; text-transform: uppercase; }
 .title-area h1 span { color: var(--accent-blue); }
 .title-area p { margin: 0; font-size: 13px; color: var(--text-muted); font-weight: 500; }
 
 .system-status { 
-    display: flex; align-items: center; gap: 10px; 
-    background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.2); 
-    padding: 10px 18px; border-radius: 30px; font-family: 'JetBrains Mono', monospace; 
-    font-size: 13px; color: var(--accent-green); transition: all 0.3s ease; white-space: nowrap; 
+    display: flex; align-items: center; gap: 10px; background: rgba(16, 185, 129, 0.08); 
+    border: 1px solid rgba(16, 185, 129, 0.2); padding: 10px 18px; border-radius: 30px; 
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-green); white-space: nowrap; 
 }
-.pulse-dot { 
-    width: 8px; height: 8px; background-color: var(--accent-green); border-radius: 50%; 
-    box-shadow: 0 0 12px var(--accent-green); transition: all 0.3s ease; flex-shrink: 0; 
-}
+.pulse-dot { width: 8px; height: 8px; background-color: var(--accent-green); border-radius: 50%; box-shadow: 0 0 12px var(--accent-green); }
 
-/* ==========================================
-   PESTAÑAS Y FILTROS
-   ========================================== */
 .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; flex-wrap: wrap; }
 .tab-btn { background: none; border: 1px solid transparent; color: var(--text-muted); padding: 12px 20px; font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 8px; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; flex-grow: 1; justify-content: center; }
 .tab-btn:hover { color: var(--text-main); background: rgba(255,255,255,0.02); }
@@ -75,11 +88,10 @@ select { background-color: #121214; color: #fff; border: 1px solid var(--border-
 /* ==========================================
    TABLAS Y GRID
    ========================================== */
-.table-container { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow-x: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px); -webkit-overflow-scrolling: touch; }
+.table-container { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; overflow-x: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px); position: relative; }
 table { width: 100%; min-width: 850px; border-collapse: separate; border-spacing: 0; text-align: left; }
 th { background: rgba(255,255,255,0.02); color: var(--text-muted); font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 16px 20px; border-bottom: 1px solid var(--border-color); letter-spacing: 1px; white-space: nowrap; }
 td { padding: 16px 20px; font-size: 14px; border-bottom: 1px solid rgba(63, 63, 70, 0.2); white-space: nowrap; }
-tr:last-child td { border-bottom: none; }
 tr:hover td { background: rgba(255,255,255,0.01); }
 
 .driver-name { font-weight: 700; color: #fff; font-size: 15px; }
@@ -100,69 +112,44 @@ tr:hover td { background: rgba(255,255,255,0.01); }
 .stat-item span { display: block; font-size: 10px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
 .stat-item strong { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent-blue); }
 
-.future-alert { color: var(--accent-blue); background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.2); padding: 40px 20px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 15px; line-height: 1.5; }
-.error-alert { color: var(--accent-red); background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.2); padding: 25px; border-radius: 12px; text-align: center; font-weight: 600; }
+/* ==========================================
+   SISTEMA DE BLOQUEO PREMIUM (OVERLAY)
+   ========================================== */
+.locked-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(6px);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    border-radius: 12px; z-index: 10; text-align: center; padding: 20px; box-sizing: border-box;
+}
+.locked-overlay i { font-size: 40px; color: var(--accent-blue); margin-bottom: 15px; }
+.locked-overlay h3 { font-size: 22px; color: #fff; margin: 0 0 10px 0; }
+.locked-overlay p { color: var(--text-muted); font-size: 14px; max-width: 400px; margin-bottom: 20px; }
+.btn-upgrade { background: var(--accent-blue); color: #000; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+.btn-upgrade:hover { background: #0ea5e9; box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
 
 /* ==========================================
-   DISEÑO DEL PORTAL SaaS (PAYWALL & LOGIN)
+   PORTAL DE PRECIOS
    ========================================== */
-.saas-portal {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 80vh; text-align: center; animation: fadeIn 0.8s ease;
-}
-@keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-
-.saas-header h1 { font-size: 38px; font-weight: 900; margin-bottom: 10px; text-transform: uppercase; letter-spacing: -1px; }
-.saas-header h1 span { color: var(--accent-red); }
-.saas-header p { color: var(--text-muted); font-size: 16px; max-width: 600px; margin: 0 auto 40px auto; line-height: 1.6; }
-
-.pricing-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px; max-width: 1000px; width: 100%; margin-bottom: 40px;
-}
-.pricing-card {
-    background: var(--panel-bg); border: 1px solid var(--border-color);
-    border-radius: 16px; padding: 40px 30px; transition: all 0.3s ease;
-    backdrop-filter: blur(10px); display: flex; flex-direction: column;
-}
-.pricing-card:hover { transform: translateY(-10px); border-color: var(--accent-blue); box-shadow: 0 10px 30px rgba(56, 189, 248, 0.1); }
-.pricing-card.pro-tier { border-color: var(--accent-blue); position: relative; overflow: hidden; }
-.pricing-card.pro-tier::before {
-    content: 'MÁS POPULAR'; position: absolute; top: 15px; right: -35px;
-    background: var(--accent-blue); color: #000; font-size: 10px; font-weight: 900;
-    padding: 5px 40px; transform: rotate(45deg); letter-spacing: 1px;
-}
-
-.tier-name { color: var(--text-muted); font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-.tier-price { font-size: 42px; font-weight: 900; color: #fff; margin-bottom: 25px; font-family: 'JetBrains Mono', monospace; }
-.tier-price span { font-size: 16px; color: var(--text-muted); font-weight: 500; font-family: 'Inter', sans-serif; }
-
-.tier-features { list-style: none; padding: 0; margin: 0 0 30px 0; text-align: left; flex-grow: 1; }
-.tier-features li { margin-bottom: 15px; font-size: 14px; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+.pricing-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; text-align: center; animation: fadeIn 0.5s ease; }
+.pricing-wrapper h1 { font-size: 32px; font-weight: 900; margin-bottom: 10px; }
+.pricing-wrapper p { color: var(--text-muted); margin-bottom: 40px; }
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 700px; width: 100%; }
+.pricing-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 40px 30px; display: flex; flex-direction: column; text-align: left; }
+.pricing-card.pro-tier { border-color: var(--accent-blue); }
+.tier-name { font-size: 14px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px; }
+.tier-price { font-size: 38px; font-weight: 900; color: #fff; margin-bottom: 20px; }
+.tier-price span { font-size: 16px; color: var(--text-muted); font-weight: 500; }
+.tier-features { list-style: none; padding: 0; margin: 0 0 30px 0; flex-grow: 1; }
+.tier-features li { margin-bottom: 15px; font-size: 14px; color: var(--text-main); display: flex; gap: 10px; align-items: center; }
 .tier-features li i { color: var(--accent-green); }
 
-.btn-saas {
-    background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-color);
-    padding: 15px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer;
-    transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; width: 100%;
-}
-.btn-saas:hover { background: #fff; color: #000; }
-.btn-saas.primary { background: var(--accent-blue); color: #000; border: none; }
-.btn-saas.primary:hover { background: #0ea5e9; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+/* Alertas */
+.future-alert { color: var(--accent-blue); background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.2); padding: 40px 20px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 15px; }
 
-.saas-footer { font-size: 12px; color: var(--text-muted); margin-top: 20px; }
-
-/* ==========================================
-   RESPONSIVE DESIGN (MÓVILES)
-   ========================================== */
 @media (max-width: 768px) {
     body { padding: 15px 10px; }
-    .main-header { flex-direction: column; align-items: flex-start; gap: 15px; padding: 15px; }
-    .title-area h1 { font-size: 22px; }
-    .system-status { width: 100%; justify-content: center; box-sizing: border-box; }
-    .filter-panel { flex-direction: column; align-items: stretch; gap: 15px; padding: 15px; }
-    .filter-group { flex-direction: column; align-items: flex-start; gap: 5px; }
-    .info-badge { margin-left: 0; text-align: center; width: 100%; margin-top: 10px; }
+    .main-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+    .filter-panel { flex-direction: column; align-items: stretch; }
+    .filter-group { flex-direction: column; align-items: flex-start; }
     .tab-btn { flex: 1 1 100%; }
-    .pricing-grid { grid-template-columns: 1fr; }
 }
