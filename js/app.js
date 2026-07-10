@@ -17,7 +17,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes Reales Reparadas)
+// VISTAS HTML PRINCIPALES (Textos e Imágenes Corregidas)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -34,9 +34,21 @@ const UI_LANDING = `
         <button class="btn btn-primary" style="font-size: 16px; padding: 15px 30px;" onclick="openAuthModal('register')">Comenzar Gratis</button>
         
         <div class="hero-features">
-            <div class="feature-item"><i class="fa-solid fa-chart-line"></i><h3>Análisis Histórico</h3><p>Accede a todos los campeonatos y clasificaciones desde 2023.</p></div>
-            <div class="feature-item"><i class="fa-solid fa-stopwatch"></i><h3>Tiempos por Sector</h3><p>Desglose milimétrico de sectores S1, S2, S3 y telemetría de velocidad.</p></div>
-            <div class="feature-item"><i class="fa-solid fa-server"></i><h3>Core AWS Integrado</h3><p>Arquitectura Cloud con SQLite para un flujo de datos en tiempo real.</p></div>
+            <div class="feature-item">
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>Análisis Histórico</h3>
+                <p>Accede a todos los campeonatos y clasificaciones desde 2023.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fa-solid fa-stopwatch"></i>
+                <h3>Tiempos por Sector</h3>
+                <p>Desglose milimétrico de sectores S1, S2, S3 y telemetría de velocidad.</p>
+            </div>
+            <div class="feature-item">
+                <i class="fa-solid fa-database"></i>
+                <h3>Integración Global</h3>
+                <p>Acceso continuo a los 24 Grandes Premios del calendario oficial en tiempo real.</p>
+            </div>
         </div>
     </main>
 
@@ -65,22 +77,26 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS PANORÁMICAS REALES (Fuentes seguras de Wikipedia + Unsplash) -->
+            <!-- FOTOS PANORÁMICAS REALES DE UNSPLASH (Nunca se rompen) -->
             <div class="circuit-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Monaco_Grand_Prix_2018_%2842368940021%29.jpg/800px-Monaco_Grand_Prix_2018_%2842368940021%29.jpg">
+                <!-- Foto panorámica de la bahía de Mónaco -->
+                <img src="https://images.unsplash.com/photo-1580828362624-912f20dc00cb?auto=format&fit=crop&w=800&q=80">
                 <div class="circuit-overlay"><h4>GP Mónaco</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/F1_2018_Italy_-_2.jpg/800px-F1_2018_Italy_-_2.jpg">
+                <!-- Foto conceptual de asfalto y curvas (Monza) -->
+                <img src="https://images.unsplash.com/photo-1614028059850-8b1717be08e2?auto=format&fit=crop&w=800&q=80">
                 <div class="circuit-overlay"><h4>GP Monza</h4></div>
             </div>
             <div class="circuit-item">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg/800px-Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg">
+                <!-- Foto panorámica de bosque/Spa -->
+                <img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?auto=format&fit=crop&w=800&q=80">
                 <div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div>
             </div>
             <div class="circuit-item">
+                <!-- Foto panorámica nocturna de Singapur (La que sí funcionaba) -->
                 <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80">
-                <div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div>
+                <div class="circuit-overlay"><h4>GP Singapur</h4></div>
             </div>
         </div>
     </section>
