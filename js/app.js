@@ -17,7 +17,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Textos e Imágenes Corregidas)
+// VISTAS HTML PRINCIPALES
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -37,17 +37,17 @@ const UI_LANDING = `
             <div class="feature-item">
                 <i class="fa-solid fa-chart-line"></i>
                 <h3>Análisis Histórico</h3>
-                <p>Accede a todos los campeonatos y clasificaciones desde 2023.</p>
+                <p>Accede a todos los campeonatos y clasificaciones desde la temporada 2023 en adelante.</p>
             </div>
             <div class="feature-item">
                 <i class="fa-solid fa-stopwatch"></i>
                 <h3>Tiempos por Sector</h3>
-                <p>Desglose milimétrico de sectores S1, S2, S3 y telemetría de velocidad.</p>
+                <p>Desglose milimétrico de sectores S1, S2, S3 y comparativas de velocidad punta.</p>
             </div>
             <div class="feature-item">
-                <i class="fa-solid fa-database"></i>
-                <h3>Integración Global</h3>
-                <p>Acceso continuo a los 24 Grandes Premios del calendario oficial en tiempo real.</p>
+                <i class="fa-solid fa-flag-checkered"></i>
+                <h3>Estrategia de Carrera</h3>
+                <p>Monitoreo detallado de paradas en pits, selección de compuestos (neumáticos) y ventajas tácticas.</p>
             </div>
         </div>
     </main>
@@ -56,19 +56,19 @@ const UI_LANDING = `
         <h2 class="section-title">Pilotos <span>Destacados 2026</span></h2>
         <div class="drivers-grid">
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img" referrerpolicy="no-referrer">
                 <div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img" referrerpolicy="no-referrer">
                 <div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img" referrerpolicy="no-referrer">
                 <div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div>
             </div>
             <div class="driver-card">
-                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img">
+                <img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img" referrerpolicy="no-referrer">
                 <div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div>
             </div>
         </div>
@@ -77,26 +77,22 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS PANORÁMICAS REALES DE UNSPLASH (Nunca se rompen) -->
+            <!-- FOTOS CON REFERRERPOLICY PARA EVITAR BLOQUEOS DE SEGURIDAD -->
             <div class="circuit-item">
-                <!-- Foto panorámica de la bahía de Mónaco -->
-                <img src="https://images.unsplash.com/photo-1580828362624-912f20dc00cb?auto=format&fit=crop&w=800&q=80">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Monaco_Grand_Prix_2018_%2842368940021%29.jpg" referrerpolicy="no-referrer">
                 <div class="circuit-overlay"><h4>GP Mónaco</h4></div>
             </div>
             <div class="circuit-item">
-                <!-- Foto conceptual de asfalto y curvas (Monza) -->
-                <img src="https://images.unsplash.com/photo-1614028059850-8b1717be08e2?auto=format&fit=crop&w=800&q=80">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/65/F1_2018_Italy_-_2.jpg" referrerpolicy="no-referrer">
                 <div class="circuit-overlay"><h4>GP Monza</h4></div>
             </div>
             <div class="circuit-item">
-                <!-- Foto panorámica de bosque/Spa -->
-                <img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?auto=format&fit=crop&w=800&q=80">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg" referrerpolicy="no-referrer">
                 <div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div>
             </div>
             <div class="circuit-item">
-                <!-- Foto panorámica nocturna de Singapur (La que sí funcionaba) -->
-                <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80">
-                <div class="circuit-overlay"><h4>GP Singapur</h4></div>
+                <img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80" referrerpolicy="no-referrer">
+                <div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div>
             </div>
         </div>
     </section>
