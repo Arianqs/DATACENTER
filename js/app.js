@@ -14,7 +14,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes oficiales F1.com restauradas)
+// VISTAS HTML PRINCIPALES
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -49,7 +49,6 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS OFICIALES DE F1.COM (Las que te funcionaban y no deben moverse) -->
             <div class="circuit-item"><img src="https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Monaco.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
             <div class="circuit-item"><img src="https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Italy.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
             <div class="circuit-item"><img src="https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Belgium.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
@@ -162,7 +161,7 @@ const UI_DASHBOARD = `
 `;
 
 // ==========================================
-// MODALES FLOTANTES Y AJUSTES DE PERFIL (CON TARJETAS)
+// MODALES FLOTANTES Y AJUSTES
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
 
@@ -185,7 +184,6 @@ function openSettingsModal() {
     let savedCel = sessionStorage.getItem('f1_cel') || "";
     let savedUser = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
 
-    // LÓGICA PARA MOSTRAR TARJETA O YAPE EN EL PERFIL
     let paymentMethod = sessionStorage.getItem('f1_payment_method');
     let last4 = sessionStorage.getItem('f1_cc_last4') || "****";
     let paymentHtml = "";
@@ -328,7 +326,7 @@ async function executeCancelPro(btnElement) {
 }
 
 // ==========================================
-// PASARELA DE PAGOS (MOCKUP VISUAL)
+// PASARELA DE PAGOS (VISA / YAPE API)
 // ==========================================
 function processUpgrade() {
     if(!currentUserTier) { openAuthModal('login'); return; }
@@ -365,13 +363,10 @@ function openPaymentModal() {
                 <!-- FORMULARIO YAPE -->
                 <form id="form-yape" onsubmit="executePayment(event, 'yape')" style="display:none;">
                     <div style="text-align:center; margin-bottom:20px; background:rgba(116, 34, 132, 0.1); padding:15px; border-radius:8px; border: 1px solid rgba(116, 34, 132, 0.3);">
-                        <i class="fa-solid fa-building" style="font-size:24px; color:#742284; margin-bottom:10px;"></i>
-                        <h3 style="color:#742284; margin-bottom:5px;">Aprobación de Servicio</h3>
-                        <p style="font-size:13px; color:var(--text-main); font-weight:bold;">Empresa: F1 Telemetry Analytics SAC</p>
-                        <p style="font-size:12px; color:var(--text-muted);">Monto: $15.00 USD (Equivalente en moneda local)</p>
+                                                <p style="font-size:12px; color:var(--text-muted);">Empresa: F1 Telemetry Analytics SAC</p>
                     </div>
-                    <div class="form-group"><label>Tu número de Celular (Yape)</label><input type="tel" placeholder="Ingresa tu número" maxlength="9" pattern="[0-9]{9}" required></div>
-                    <div class="form-group"><label>Código de Aprobación de la App</label><input type="text" placeholder="Ej: 012345" maxlength="8" required></div>
+                    <div class="form-group"><label>Tu número de Celular (Desde donde Yapeas)</label><input type="tel" placeholder="Ingresa tu número" maxlength="9" pattern="[0-9]{9}" required></div>
+                    <div class="form-group"><label>Código de Aprobación de la App (6 dígitos)</label><input type="text" placeholder="Ej: 123456" maxlength="6" pattern="[0-9]{6}" required title="El código de Yape tiene exactamente 6 números"></div>
                     <button type="submit" id="btn-pay-yape" class="btn btn-primary" style="width:100%; margin-top:10px; background-color:#742284; border-color:#742284;"><i class="fa-solid fa-check-double"></i> Validar Transacción</button>
                 </form>
             </div>
@@ -403,7 +398,6 @@ async function executePayment(e, type) {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando pago con la pasarela...';
     btn.disabled = true;
 
-    // Guardar el método de pago localmente para mostrarlo en el panel
     sessionStorage.setItem('f1_payment_method', type);
     if(type === 'visa') {
         let ccInput = document.getElementById('cc-num').value;
@@ -411,7 +405,6 @@ async function executePayment(e, type) {
         sessionStorage.setItem('f1_cc_last4', last4);
     }
 
-    // Retraso para simular conexión bancaria
     setTimeout(async () => {
         try {
             const res = await fetch(`${SECURE_AWS_URL}/api/upgrade`, { 
