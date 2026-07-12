@@ -14,7 +14,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes Referenciales de Unsplash - 100% Seguras)
+// VISTAS HTML PRINCIPALES (Imágenes exactas de la captura restauradas)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -39,21 +39,21 @@ const UI_LANDING = `
     <section>
         <h2 class="section-title">Pilotos <span>Destacados 2026</span></h2>
         <div class="drivers-grid">
-            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img" crossorigin="anonymous"><div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div></div>
-            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img" crossorigin="anonymous"><div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div></div>
-            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img" crossorigin="anonymous"><div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div></div>
-            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img" crossorigin="anonymous"><div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img" referrerpolicy="no-referrer"><div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img" referrerpolicy="no-referrer"><div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img" referrerpolicy="no-referrer"><div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div></div>
+            <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/G/GEORUS01_George_Russell/georus01.png" class="driver-img" referrerpolicy="no-referrer"><div class="driver-info"><h3>George Russell</h3><p>Mercedes AMG</p></div></div>
         </div>
     </section>
 
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS DE REFERENCIA EN UNSPLASH: Alta disponibilidad y 0% de bloqueos -->
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1533050487297-09b45013190a?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1580414057403-c5f451f30e1c?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1511252619047-920f01eb0d59?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
+            <!-- AQUÍ ESTÁN LAS 4 FOTOS EXACTAS DE TU CAPTURA DE PANTALLA -->
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Monaco_Grand_Prix_2010.jpg/800px-Monaco_Grand_Prix_2010.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Monza_start_2003.jpg/800px-Monza_start_2003.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/F1_2013_Spa_start.jpg/800px-F1_2013_Spa_start.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Singapore_Grand_Prix_2011.jpg/800px-Singapore_Grand_Prix_2011.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
         </div>
     </section>
 
@@ -162,7 +162,7 @@ const UI_DASHBOARD = `
 `;
 
 // ==========================================
-// MODALES FLOTANTES Y AJUSTES QUE GUARDAN EN BD
+// MODALES FLOTANTES Y AJUSTES
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
 
@@ -225,7 +225,7 @@ function openSettingsModal() {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-// FUNCIÓN PARA GUARDAR EN LA BD Y ACTUALIZAR SOLO EL @USUARIO
+// GUARDAR EN LA BD REAL Y ACTUALIZAR
 async function saveSettings(e) {
     e.preventDefault();
     const btn = document.getElementById('btn-save-settings');
@@ -234,7 +234,6 @@ async function saveSettings(e) {
     let newName = document.getElementById('set-name').value;
     let newLastname = document.getElementById('set-lastname').value;
     let newPass = document.getElementById('set-pass').value;
-    
     let celInput = document.getElementById('set-cel');
     let userInput = document.getElementById('set-username');
     
@@ -261,18 +260,17 @@ async function saveSettings(e) {
             const displaySpan = document.getElementById('user-name-display');
             if(displaySpan) { displaySpan.innerText = finalUser; }
             
-            showCustomAlert("¡Actualizado!", "Tus datos se actualizaron exitosamente en la base de datos.", "success");
+            showCustomAlert("¡Actualizado!", "Tus datos se guardaron permanentemente en la base de datos.", "success");
         } else {
             showCustomAlert("Error", "No se pudo actualizar en BD.", "error");
             btn.innerText = "Guardar Cambios";
         }
     } catch(err) {
-        showCustomAlert("Error AWS", "No hay conexión con el servidor.", "error");
+        showCustomAlert("Error AWS", "No hay conexión con el servidor. Verifica que el backend esté encendido.", "error");
         btn.innerText = "Guardar Cambios";
     }
 }
 
-// MODAL DE CANCELACIÓN ELEGANTE
 function confirmCancelPlan() {
     closeModal();
     const modalHtml = `
@@ -365,6 +363,7 @@ async function handleLogin(e) {
 function loadDashboard() {
     resetTimer(); appRoot().innerHTML = UI_DASHBOARD;
     
+    // CABECERA: MOSTRAR SOLO EL @USUARIO
     let savedUser = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
     document.getElementById('user-name-display').innerText = savedUser;
     
