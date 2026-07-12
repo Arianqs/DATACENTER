@@ -49,11 +49,17 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS DE UNSPLASH (Fórmula 1 Real - Garantizadas sin bloqueo) -->
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1541348263662-e068362d4941?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1627626022358-00910eaf3812?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
+            <!-- GP Mónaco (Monoplaza Red Bull) -->
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1532983330958-4b21bfa6e5b4?auto=format&fit=crop&w=800&q=80" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
+            
+            <!-- GP Monza (El que ya te funciona) -->
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?auto=format&fit=crop&w=800&q=80" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
+            
+            <!-- GP Spa-Francorchamps (Monoplaza Ferrari) -->
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1511252619047-920f01eb0d59?auto=format&fit=crop&w=800&q=80" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
+            
+            <!-- GP Singapur (El que ya te funciona) -->
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Singapur</h4></div></div>
         </div>
     </section>
 
