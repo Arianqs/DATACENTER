@@ -161,7 +161,7 @@ const UI_DASHBOARD = `
 `;
 
 // ==========================================
-// MODALES FLOTANTES Y AJUSTES DE PERFIL (GESTOR DE TARJETAS)
+// MODALES FLOTANTES Y AJUSTES DE PERFIL
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
 
@@ -201,7 +201,7 @@ function openSettingsModal() {
                 <button type="button" class="btn btn-outline" style="padding:4px 8px; font-size:11px; border-color:var(--f1-red); color:var(--f1-red);" onclick="removeCard()">Eliminar</button>
             </div>`;
         } else {
-            // Usuario PRO pero eliminó su tarjeta. Mostramos opción interactiva para agregar.
+            // Usuario PRO pero eliminó su tarjeta. Mostramos opción interactiva para agregar con inputs auto-formateables.
             paymentHtml = `
             <div style="margin-top:15px; padding:15px; background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.2); border-radius:6px;">
                 <div id="add-card-btn-container" style="text-align:center;">
@@ -210,10 +210,10 @@ function openSettingsModal() {
                 </div>
                 <form id="add-card-form" style="display:none;" onsubmit="saveNewCard(event)">
                     <h4 style="font-size:13px; margin-bottom:10px;">Vincular Tarjeta</h4>
-                    <div class="form-group"><input type="text" id="new-cc-num" placeholder="0000 0000 0000 0000" maxlength="19" required style="font-size:12px; padding:8px;"></div>
+                    <div class="form-group"><input type="text" id="new-cc-num" placeholder="0000 0000 0000 0000" maxlength="19" oninput="let v=this.value.replace(/[^0-9]/g,''); this.value=v.replace(/(.{4})/g,'$1 ').trim().substring(0,19);" required style="font-size:12px; padding:8px;"></div>
                     <div style="display:flex; gap:10px;">
-                        <div class="form-group" style="width:50%;"><input type="text" placeholder="MM/AA" maxlength="5" required style="font-size:12px; padding:8px;"></div>
-                        <div class="form-group" style="width:50%;"><input type="password" placeholder="CVV" maxlength="4" required style="font-size:12px; padding:8px;"></div>
+                        <div class="form-group" style="width:50%;"><input type="text" placeholder="MM/AA" maxlength="5" oninput="let v=this.value.replace(/[^0-9]/g,''); if(v.length>2) v=v.substring(0,2)+'/'+v.substring(2,4); this.value=v;" required style="font-size:12px; padding:8px;"></div>
+                        <div class="form-group" style="width:50%;"><input type="password" placeholder="CVV" maxlength="4" oninput="this.value=this.value.replace(/[^0-9]/g,'').substring(0,4);" required style="font-size:12px; padding:8px;"></div>
                     </div>
                     <div style="display:flex; gap:10px;">
                         <button type="button" class="btn btn-outline" style="width:50%; padding:8px; font-size:12px;" onclick="cancelAddCard()">Cancelar</button>
@@ -271,7 +271,7 @@ function openSettingsModal() {
 function removeCard() {
     sessionStorage.removeItem('f1_payment_method');
     sessionStorage.removeItem('f1_cc_last4');
-    openSettingsModal(); // Recarga el modal para mostrar la opción de agregar tarjeta
+    openSettingsModal(); // Recarga el modal
 }
 
 function showAddCardForm() {
@@ -286,14 +286,12 @@ function cancelAddCard() {
 
 function saveNewCard(e) {
     e.preventDefault();
-    let ccInput = document.getElementById('new-cc-num').value;
+    let ccInput = document.getElementById('new-cc-num').value.replace(/\\s+/g, '');
     let last4 = ccInput.length >= 4 ? ccInput.slice(-4) : "4242";
     
-    // Guardamos la nueva tarjeta en la sesión (Vinculada al usuario actual)
     sessionStorage.setItem('f1_payment_method', 'visa');
     sessionStorage.setItem('f1_cc_last4', last4);
     
-    // Actualizamos el panel
     openSettingsModal();
 }
 
@@ -374,7 +372,7 @@ async function executeCancelPro(btnElement) {
 }
 
 // ==========================================
-// PASARELA DE PAGOS (VISA / YAPE)
+// PASARELA DE PAGOS (VISA / YAPE API)
 // ==========================================
 function processUpgrade() {
     if(!currentUserTier) { openAuthModal('login'); return; }
@@ -397,18 +395,24 @@ function openPaymentModal() {
                     <button id="tab-yape" class="btn btn-outline" style="width:50%; border-color:#742284; color:#742284;" onclick="switchPayment('yape')"><i class="fa-solid fa-mobile-screen"></i> Yape</button>
                 </div>
 
-                <!-- FORMULARIO VISA -->
+                <!-- FORMULARIO VISA CON AUTOFORMATO -->
                 <form id="form-visa" onsubmit="executePayment(event, 'visa')">
-                    <div class="form-group"><label>Número de Tarjeta</label><input type="text" id="cc-num" placeholder="0000 0000 0000 0000" maxlength="19" required></div>
+                    <div class="form-group"><label>Número de Tarjeta</label>
+                        <input type="text" id="cc-num" placeholder="0000 0000 0000 0000" maxlength="19" oninput="let v=this.value.replace(/[^0-9]/g,''); this.value=v.replace(/(.{4})/g,'$1 ').trim().substring(0,19);" required>
+                    </div>
                     <div style="display:flex; gap:10px;">
-                        <div class="form-group" style="width:50%;"><label>Vencimiento</label><input type="text" placeholder="MM/AA" maxlength="5" required></div>
-                        <div class="form-group" style="width:50%;"><label>CVV</label><input type="password" placeholder="123" maxlength="4" required></div>
+                        <div class="form-group" style="width:50%;"><label>Vencimiento</label>
+                            <input type="text" placeholder="MM/AA" maxlength="5" oninput="let v=this.value.replace(/[^0-9]/g,''); if(v.length>2) v=v.substring(0,2)+'/'+v.substring(2,4); this.value=v;" required>
+                        </div>
+                        <div class="form-group" style="width:50%;"><label>CVV</label>
+                            <input type="password" placeholder="123" maxlength="4" oninput="this.value=this.value.replace(/[^0-9]/g,'').substring(0,4);" required>
+                        </div>
                     </div>
                     <div class="form-group"><label>Titular de la tarjeta</label><input type="text" placeholder="Nombre que figura en la tarjeta" required></div>
                     <button type="submit" id="btn-pay-visa" class="btn btn-primary" style="width:100%; margin-top:10px;"><i class="fa-solid fa-lock"></i> Autorizar Pago Seguro</button>
                 </form>
 
-                <!-- FORMULARIO YAPE -->
+                <!-- FORMULARIO YAPE EMPRESA (API) -->
                 <form id="form-yape" onsubmit="executePayment(event, 'yape')" style="display:none;">
                     <div style="text-align:center; margin-bottom:20px; background:rgba(116, 34, 132, 0.1); padding:15px; border-radius:8px; border: 1px solid rgba(116, 34, 132, 0.3);">
                         <i class="fa-solid fa-building" style="font-size:24px; color:#742284; margin-bottom:10px;"></i>
@@ -451,7 +455,7 @@ async function executePayment(e, type) {
 
     sessionStorage.setItem('f1_payment_method', type);
     if(type === 'visa') {
-        let ccInput = document.getElementById('cc-num').value;
+        let ccInput = document.getElementById('cc-num').value.replace(/\\s+/g, '');
         let last4 = ccInput.length >= 4 ? ccInput.slice(-4) : "4242";
         sessionStorage.setItem('f1_cc_last4', last4);
     }
