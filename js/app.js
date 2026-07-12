@@ -161,7 +161,7 @@ const UI_DASHBOARD = `
 `;
 
 // ==========================================
-// MODALES FLOTANTES Y AJUSTES
+// MODALES FLOTANTES Y AJUSTES DE PERFIL (GESTOR DE TARJETAS)
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
 
@@ -184,20 +184,44 @@ function openSettingsModal() {
     let savedCel = sessionStorage.getItem('f1_cel') || "";
     let savedUser = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
 
+    // LÓGICA DE TARJETAS Y MÉTODOS DE PAGO
     let paymentMethod = sessionStorage.getItem('f1_payment_method');
-    let last4 = sessionStorage.getItem('f1_cc_last4') || "****";
+    let last4 = sessionStorage.getItem('f1_cc_last4');
     let paymentHtml = "";
     
-    if (paymentMethod === 'yape') {
-        paymentHtml = `<div style="margin-top:15px; padding:10px; background:rgba(116,34,132,0.1); border:1px solid rgba(116,34,132,0.3); border-radius:6px; color:var(--text-main); font-size:12px;">
-            <i class="fa-solid fa-mobile-screen" style="color:#742284;"></i> <strong>Suscripción pagada con Yape</strong><br>
-            <span style="color:var(--text-muted);">El cobro mensual se solicitará a tu app de Yape.</span>
-        </div>`;
-    } else if (paymentMethod === 'visa') {
-        paymentHtml = `<div style="margin-top:15px; padding:10px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:var(--text-main); font-size:12px; display:flex; justify-content:space-between; align-items:center;">
-            <div><i class="fa-brands fa-cc-visa" style="font-size:16px; margin-right:5px;"></i> <strong>Tarjeta terminada en ${last4}</strong></div>
-            <button type="button" class="btn btn-outline" style="padding:4px 8px; font-size:11px; border-color:var(--f1-red); color:var(--f1-red);" onclick="removeCard()">Eliminar</button>
-        </div>`;
+    if (isPro) {
+        if (paymentMethod === 'yape') {
+            paymentHtml = `<div style="margin-top:15px; padding:10px; background:rgba(116,34,132,0.1); border:1px solid rgba(116,34,132,0.3); border-radius:6px; color:var(--text-main); font-size:12px;">
+                <i class="fa-solid fa-mobile-screen" style="color:#742284;"></i> <strong>Suscripción pagada con Yape Empresa</strong><br>
+                <span style="color:var(--text-muted);">El cobro automático mensual ha sido validado vía pasarela.</span>
+            </div>`;
+        } else if (paymentMethod === 'visa' && last4) {
+            paymentHtml = `<div style="margin-top:15px; padding:10px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:var(--text-main); font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+                <div><i class="fa-brands fa-cc-visa" style="font-size:16px; margin-right:5px;"></i> <strong>Tarjeta terminada en ${last4}</strong></div>
+                <button type="button" class="btn btn-outline" style="padding:4px 8px; font-size:11px; border-color:var(--f1-red); color:var(--f1-red);" onclick="removeCard()">Eliminar</button>
+            </div>`;
+        } else {
+            // Usuario PRO pero eliminó su tarjeta. Mostramos opción interactiva para agregar.
+            paymentHtml = `
+            <div style="margin-top:15px; padding:15px; background:rgba(255,255,255,0.02); border:1px dashed rgba(255,255,255,0.2); border-radius:6px;">
+                <div id="add-card-btn-container" style="text-align:center;">
+                    <p style="font-size:12px; color:var(--f1-red); margin-bottom:10px;">No tienes un método de pago vinculado.</p>
+                    <button type="button" class="btn btn-outline" style="font-size:12px; padding:6px 12px;" onclick="showAddCardForm()">+ Agregar nueva tarjeta</button>
+                </div>
+                <form id="add-card-form" style="display:none;" onsubmit="saveNewCard(event)">
+                    <h4 style="font-size:13px; margin-bottom:10px;">Vincular Tarjeta</h4>
+                    <div class="form-group"><input type="text" id="new-cc-num" placeholder="0000 0000 0000 0000" maxlength="19" required style="font-size:12px; padding:8px;"></div>
+                    <div style="display:flex; gap:10px;">
+                        <div class="form-group" style="width:50%;"><input type="text" placeholder="MM/AA" maxlength="5" required style="font-size:12px; padding:8px;"></div>
+                        <div class="form-group" style="width:50%;"><input type="password" placeholder="CVV" maxlength="4" required style="font-size:12px; padding:8px;"></div>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button type="button" class="btn btn-outline" style="width:50%; padding:8px; font-size:12px;" onclick="cancelAddCard()">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" style="width:50%; padding:8px; font-size:12px;">Guardar Tarjeta</button>
+                    </div>
+                </form>
+            </div>`;
+        }
     }
 
     let subInfo = isPro 
@@ -243,10 +267,34 @@ function openSettingsModal() {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
+// FUNCIONES INTERACTIVAS DEL GESTOR DE TARJETAS
 function removeCard() {
     sessionStorage.removeItem('f1_payment_method');
     sessionStorage.removeItem('f1_cc_last4');
-    showCustomAlert("Tarjeta Eliminada", "Tu método de pago ha sido desvinculado de la plataforma.", "success");
+    openSettingsModal(); // Recarga el modal para mostrar la opción de agregar tarjeta
+}
+
+function showAddCardForm() {
+    document.getElementById('add-card-btn-container').style.display = 'none';
+    document.getElementById('add-card-form').style.display = 'block';
+}
+
+function cancelAddCard() {
+    document.getElementById('add-card-form').style.display = 'none';
+    document.getElementById('add-card-btn-container').style.display = 'block';
+}
+
+function saveNewCard(e) {
+    e.preventDefault();
+    let ccInput = document.getElementById('new-cc-num').value;
+    let last4 = ccInput.length >= 4 ? ccInput.slice(-4) : "4242";
+    
+    // Guardamos la nueva tarjeta en la sesión (Vinculada al usuario actual)
+    sessionStorage.setItem('f1_payment_method', 'visa');
+    sessionStorage.setItem('f1_cc_last4', last4);
+    
+    // Actualizamos el panel
+    openSettingsModal();
 }
 
 async function saveSettings(e) {
@@ -287,7 +335,7 @@ async function saveSettings(e) {
             btn.innerText = "Guardar Cambios";
         }
     } catch(err) {
-        showCustomAlert("Error AWS", "No hay conexión con el servidor. Verifica que el backend esté encendido.", "error");
+        showCustomAlert("Error AWS", "No hay conexión con el servidor.", "error");
         btn.innerText = "Guardar Cambios";
     }
 }
@@ -326,7 +374,7 @@ async function executeCancelPro(btnElement) {
 }
 
 // ==========================================
-// PASARELA DE PAGOS (VISA / YAPE API)
+// PASARELA DE PAGOS (VISA / YAPE)
 // ==========================================
 function processUpgrade() {
     if(!currentUserTier) { openAuthModal('login'); return; }
@@ -363,10 +411,13 @@ function openPaymentModal() {
                 <!-- FORMULARIO YAPE -->
                 <form id="form-yape" onsubmit="executePayment(event, 'yape')" style="display:none;">
                     <div style="text-align:center; margin-bottom:20px; background:rgba(116, 34, 132, 0.1); padding:15px; border-radius:8px; border: 1px solid rgba(116, 34, 132, 0.3);">
-                                                <p style="font-size:12px; color:var(--text-muted);">Empresa: F1 Telemetry Analytics SAC</p>
+                        <i class="fa-solid fa-building" style="font-size:24px; color:#742284; margin-bottom:10px;"></i>
+                        <h3 style="color:#742284; margin-bottom:5px;">Aprobación de Servicio</h3>
+                        <p style="font-size:14px; color:var(--text-main); font-weight:bold; margin-bottom: 5px;">F1 Telemetry Analytics SAC</p>
+                        <p style="font-size:12px; color:var(--text-muted);">El cobro se procesará mediante pasarela de pago.</p>
                     </div>
-                    <div class="form-group"><label>Tu número de Celular (Desde donde Yapeas)</label><input type="tel" placeholder="Ingresa tu número" maxlength="9" pattern="[0-9]{9}" required></div>
-                    <div class="form-group"><label>Código de Aprobación de la App (6 dígitos)</label><input type="text" placeholder="Ej: 123456" maxlength="6" pattern="[0-9]{6}" required title="El código de Yape tiene exactamente 6 números"></div>
+                    <div class="form-group"><label>Número de celular</label><input type="tel" placeholder="Ingresa tu número" maxlength="9" pattern="[0-9]{9}" required></div>
+                    <div class="form-group"><label>Código de aprobación</label><input type="text" placeholder="Ej: 123456" maxlength="6" pattern="[0-9]{6}" required title="El código de Yape tiene exactamente 6 números"></div>
                     <button type="submit" id="btn-pay-yape" class="btn btn-primary" style="width:100%; margin-top:10px; background-color:#742284; border-color:#742284;"><i class="fa-solid fa-check-double"></i> Validar Transacción</button>
                 </form>
             </div>
