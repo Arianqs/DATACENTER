@@ -14,7 +14,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES (Imágenes 100% Restauradas al Original)
+// VISTAS HTML PRINCIPALES
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -39,7 +39,6 @@ const UI_LANDING = `
     <section>
         <h2 class="section-title">Pilotos <span>Destacados 2026</span></h2>
         <div class="drivers-grid">
-            <!-- PILOTOS OFICIALES PNG RESTAURADOS (Los que pediste) -->
             <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png" class="driver-img" referrerpolicy="no-referrer"><div class="driver-info"><h3>Max Verstappen</h3><p>Red Bull Racing</p></div></div>
             <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/C/CHALEC01_Charles_Leclerc/chalec01.png" class="driver-img" referrerpolicy="no-referrer"><div class="driver-info"><h3>Charles Leclerc</h3><p>Scuderia Ferrari</p></div></div>
             <div class="driver-card"><img src="https://media.formula1.com/d_driver_fallback_image.png/content/dam/fom-website/drivers/L/LANNOR01_Lando_Norris/lannor01.png" class="driver-img" referrerpolicy="no-referrer"><div class="driver-info"><h3>Lando Norris</h3><p>McLaren F1 Team</p></div></div>
@@ -50,14 +49,11 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- Mónaco y Spa apuntando a los servidores principales de alta resolución (sin bloqueo de miniaturas) -->
+            <!-- Mónaco y Spa apuntando a los servidores principales de alta resolución -->
             <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Monaco_Grand_Prix_2018_%2842368940021%29.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
-            
             <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/F1_2018_Italy_-_2.jpg/640px-F1_2018_Italy_-_2.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
-            
             <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/3/30/Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
-            
-            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Singapur </h4></div></div>
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
         </div>
     </section>
 
@@ -166,7 +162,7 @@ const UI_DASHBOARD = `
 `;
 
 // ==========================================
-// MODALES FLOTANTES Y AJUSTES DE USUARIO
+// MODALES FLOTANTES Y AJUSTES
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
 
