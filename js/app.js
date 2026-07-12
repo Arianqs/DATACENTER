@@ -262,7 +262,7 @@ async function saveSettings(e) {
             btn.innerText = "Guardar Cambios";
         }
     } catch(err) {
-        showCustomAlert("Error AWS", "No hay conexión con el servidor. Verifica que el backend esté encendido.", "error");
+        showCustomAlert("Error AWS", "No hay conexión con el servidor.", "error");
         btn.innerText = "Guardar Cambios";
     }
 }
@@ -374,7 +374,7 @@ async function executePayment(e, type) {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando pago con el banco...';
     btn.disabled = true;
 
-    // Simulamos el retraso real de una pasarela (Stripe/Niubiz) por 2.5 segundos
+    // Simulamos el retraso real de una pasarela por 2.5 segundos
     setTimeout(async () => {
         try {
             const res = await fetch(`${SECURE_AWS_URL}/api/upgrade`, { 
@@ -550,7 +550,7 @@ async function fetchTelemetryData() {
         });
         
         if(currentUserTier === 'Free') {
-            tbody.innerHTML += `<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--f1-red); font-weight:bold; cursor:pointer; background:rgba(225,6,0,0.05);" onclick="renderPricing()"><i class="fa-solid fa-lock"></i> Hazte PRO para ver la telemetría de los 20 pilotos</td></tr>`;
+            tbody.innerHTML += `<tr><td colspan="9" style="text-align:center; padding:20px; color:var(--f1-red); font-weight:bold; cursor:pointer; background:rgba(225,6,0,0.05);" onclick="processUpgrade()"><i class="fa-solid fa-lock"></i> Hazte PRO para ver la telemetría de los 20 pilotos</td></tr>`;
         }
     } catch (err) { handleNetError(true); }
 }
@@ -571,7 +571,7 @@ async function fetchStandingsData() {
         });
         
         if(currentUserTier === 'Free') {
-            tbody.innerHTML += `<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--f1-red); font-weight:bold; cursor:pointer; background:rgba(225,6,0,0.05);" onclick="renderPricing()"><i class="fa-solid fa-lock"></i> Hazte PRO para ver la clasificación completa</td></tr>`;
+            tbody.innerHTML += `<tr><td colspan="6" style="text-align:center; padding:20px; color:var(--f1-red); font-weight:bold; cursor:pointer; background:rgba(225,6,0,0.05);" onclick="processUpgrade()"><i class="fa-solid fa-lock"></i> Hazte PRO para ver la clasificación completa</td></tr>`;
         }
     } catch (err) { handleNetError(true); }
 }
@@ -585,7 +585,7 @@ async function fetchCircuitsData() {
         grid.innerHTML = "";
         data.forEach(c => { grid.innerHTML += `<div class="card"><img src="${c.image}" style="object-fit:contain; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;"><h3>${c.name}</h3><p>${c.location}</p></div>`; });
         if (currentUserTier === 'Free') {
-            grid.innerHTML += `<div class="card" style="display:flex; flex-direction:column; justify-content:center; border-color:var(--f1-red); background:rgba(225,6,0,0.05); cursor:pointer;" onclick="renderPricing()"><i class="fa-solid fa-lock" style="font-size:30px; color:var(--f1-red); margin-bottom:15px;"></i><h3 style="color:var(--f1-red);">21 Circuitos Ocultos</h3><p style="font-size:12px; color:var(--text-muted);">Disponibles en el Plan PRO.</p><button class="btn btn-primary">Desbloquear</button></div>`;
+            grid.innerHTML += `<div class="card" style="display:flex; flex-direction:column; justify-content:center; border-color:var(--f1-red); background:rgba(225,6,0,0.05); cursor:pointer;" onclick="processUpgrade()"><i class="fa-solid fa-lock" style="font-size:30px; color:var(--f1-red); margin-bottom:15px;"></i><h3 style="color:var(--f1-red);">21 Circuitos Ocultos</h3><p style="font-size:12px; color:var(--text-muted);">Disponibles en el Plan PRO.</p><button class="btn btn-primary">Desbloquear</button></div>`;
         }
     } catch (err) { handleNetError(true); }
 }
