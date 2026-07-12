@@ -49,14 +49,10 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS OFICIALES DE F1.COM (Mismo servidor que los pilotos, 100% seguras) -->
-            <div class="circuit-item"><img src="https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Monaco.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
-            
-            <div class="circuit-item"><img src="https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Italy.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
-            
-            <div class="circuit-item"><img src="https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Belgium.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
-            
-            <div class="circuit-item"><img src="https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Singapore.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/1/14/Monaco_Grand_Prix_2018_%2842368940021%29.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/F1_2018_Italy_-_2.jpg/640px-F1_2018_Italy_-_2.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
+            <div class="circuit-item"><img src="https://upload.wikimedia.org/wikipedia/commons/3/30/Start_of_the_2017_Belgian_Grand_Prix_%281%29.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
+            <div class="circuit-item"><img src="https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Singapur (Nocturno)</h4></div></div>
         </div>
     </section>
 
@@ -90,7 +86,7 @@ const UI_PRICING = `
             </div>
             <div class="pricing-card pro">
                 <div style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); background:var(--f1-red); color:#fff; font-size:11px; font-weight:700; padding:5px 15px; border-radius:20px;">MÁS ELEGIDO</div>
-                <h3>PRO</h3><div class="price">$15<span>/mes</span></div>
+                <h3>PRO</h3><div class="price">S/ 1.00<span>/mes</span></div>
                 <ul>
                     <li><i class="fa-solid fa-check"></i> Todo lo gratuito</li>
                     <li><i class="fa-solid fa-check"></i> Parrilla Completa (20 Pilotos)</li>
@@ -228,7 +224,6 @@ function openSettingsModal() {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-// GUARDAR EN LA BD REAL
 async function saveSettings(e) {
     e.preventDefault();
     const btn = document.getElementById('btn-save-settings');
@@ -237,7 +232,6 @@ async function saveSettings(e) {
     let newName = document.getElementById('set-name').value;
     let newLastname = document.getElementById('set-lastname').value;
     let newPass = document.getElementById('set-pass').value;
-    
     let celInput = document.getElementById('set-cel');
     let userInput = document.getElementById('set-username');
     
@@ -260,10 +254,8 @@ async function saveSettings(e) {
             sessionStorage.setItem('f1_cel', finalCel);
             
             closeModal(); 
-            
             const displaySpan = document.getElementById('user-name-display');
             if(displaySpan) { displaySpan.innerText = finalUser; }
-            
             showCustomAlert("¡Actualizado!", "Tus datos se guardaron permanentemente en la base de datos.", "success");
         } else {
             showCustomAlert("Error", "No se pudo actualizar en BD.", "error");
@@ -275,7 +267,6 @@ async function saveSettings(e) {
     }
 }
 
-// MODAL DE CANCELACIÓN ELEGANTE
 function confirmCancelPlan() {
     closeModal();
     const modalHtml = `
@@ -307,6 +298,109 @@ async function executeCancelPro(btnElement) {
     } catch(err) { showCustomAlert("Error de Red", "AWS no responde.", "error"); }
 }
 
+// ==========================================
+// PASARELA DE PAGOS (VISA / YAPE)
+// ==========================================
+function processUpgrade() {
+    if(!currentUserTier) { openAuthModal('login'); return; }
+    if(currentUserTier === 'Free') { openPaymentModal(); } 
+}
+
+function openPaymentModal() {
+    closeModal();
+    const modalHtml = `
+        <div id="dynamic-modal" class="modal-overlay" onclick="closeModalOnOutside(event)">
+            <div class="modal-box" style="max-width: 400px; padding: 30px;">
+                <i class="fa-solid fa-xmark modal-close" onclick="closeModal()"></i>
+                <h2 style="margin-bottom: 5px;">Pasarela de Pagos</h2>
+                <p style="color:var(--text-muted); font-size:14px; margin-bottom:20px;">
+                    Suscripción PRO. Total a pagar: <strong style="color:var(--accent-green); font-size:18px;">S/ 1.00</strong> 
+                    <span style="text-decoration:line-through; font-size:12px; margin-left:5px;">$15.00</span>
+                </p>
+
+                <div style="display:flex; gap:10px; margin-bottom: 25px;">
+                    <button id="tab-visa" class="btn btn-primary" style="width:50%;" onclick="switchPayment('visa')"><i class="fa-brands fa-cc-visa" style="font-size:18px;"></i> Tarjeta</button>
+                    <button id="tab-yape" class="btn btn-outline" style="width:50%; border-color:#742284; color:#742284;" onclick="switchPayment('yape')"><i class="fa-solid fa-mobile-screen"></i> Yape</button>
+                </div>
+
+                <!-- FORMULARIO VISA -->
+                <form id="form-visa" onsubmit="executePayment(event, 'visa')">
+                    <div class="form-group"><label>Número de Tarjeta</label><input type="text" placeholder="0000 0000 0000 0000" maxlength="19" required></div>
+                    <div style="display:flex; gap:10px;">
+                        <div class="form-group" style="width:50%;"><label>Vencimiento</label><input type="text" placeholder="MM/AA" maxlength="5" required></div>
+                        <div class="form-group" style="width:50%;"><label>CVV</label><input type="password" placeholder="123" maxlength="4" required></div>
+                    </div>
+                    <div class="form-group"><label>Titular de la tarjeta</label><input type="text" placeholder="Nombre que figura en la tarjeta" required></div>
+                    <button type="submit" id="btn-pay-visa" class="btn btn-primary" style="width:100%; margin-top:10px;"><i class="fa-solid fa-lock"></i> Pagar S/ 1.00 de forma segura</button>
+                </form>
+
+                <!-- FORMULARIO YAPE -->
+                <form id="form-yape" onsubmit="executePayment(event, 'yape')" style="display:none;">
+                    <div style="text-align:center; margin-bottom:20px; background:rgba(116, 34, 132, 0.1); padding:15px; border-radius:8px; border: 1px solid rgba(116, 34, 132, 0.3);">
+                        <h3 style="color:#742284; margin-bottom:5px;">Yapea S/ 1.00</h3>
+                        <p style="font-size:18px; font-weight:bold; color:var(--text-main); margin-bottom:5px;">999 999 999</p>
+                        <p style="font-size:12px; color:var(--text-muted);">A nombre de: F1 Telemetry Analytics SAC</p>
+                    </div>
+                    <div class="form-group"><label>Tu número de Celular (Yape)</label><input type="tel" placeholder="Ingresa tu número" maxlength="9" pattern="[0-9]{9}" required></div>
+                    <div class="form-group"><label>Código de Aprobación</label><input type="text" placeholder="Ej: 012345" maxlength="8" required></div>
+                    <button type="submit" id="btn-pay-yape" class="btn btn-primary" style="width:100%; margin-top:10px; background-color:#742284; border-color:#742284;"><i class="fa-solid fa-check-double"></i> Validar Yape</button>
+                </form>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function switchPayment(type) {
+    const fVisa = document.getElementById('form-visa'); const fYape = document.getElementById('form-yape');
+    const tVisa = document.getElementById('tab-visa'); const tYape = document.getElementById('tab-yape');
+
+    if(type === 'visa') {
+        fVisa.style.display = 'block'; fYape.style.display = 'none';
+        tVisa.className = 'btn btn-primary'; 
+        tYape.className = 'btn btn-outline'; 
+        tYape.style.borderColor = '#742284'; tYape.style.color = '#742284'; tYape.style.background = 'transparent';
+    } else {
+        fVisa.style.display = 'none'; fYape.style.display = 'block';
+        tVisa.className = 'btn btn-outline';
+        tYape.className = 'btn btn-primary'; 
+        tYape.style.background = '#742284'; tYape.style.borderColor = '#742284'; tYape.style.color = '#fff';
+    }
+}
+
+async function executePayment(e, type) {
+    e.preventDefault();
+    const btn = document.getElementById(type === 'visa' ? 'btn-pay-visa' : 'btn-pay-yape');
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando pago con el banco...';
+    btn.disabled = true;
+
+    // Simulamos el retraso real de una pasarela (Stripe/Niubiz) por 2.5 segundos
+    setTimeout(async () => {
+        try {
+            const res = await fetch(`${SECURE_AWS_URL}/api/upgrade`, { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify({email: currentUserEmail}) 
+            });
+            const data = await res.json();
+            
+            if(data.status === 'success') {
+                showCustomAlert("¡Transacción Exitosa!", "El pago de S/ 1.00 ha sido aprobado. Ahora eres usuario PRO.", "success");
+                currentUserTier = 'Pro'; 
+                sessionStorage.setItem('f1_tier', 'Pro'); 
+                setTimeout(() => { loadDashboard(); }, 2500);
+            } else { 
+                showCustomAlert("Transacción Rechazada", "Hubo un problema procesando el pago en la base de datos.", "error"); 
+            }
+        } catch(err) { 
+            showCustomAlert("Error de Conexión", "Los servidores del banco no responden. AWS falló.", "error"); 
+        }
+    }, 2500);
+}
+
+// ==========================================
+// RESTO DE FUNCIONES DEL SISTEMA
+// ==========================================
 function getLoginForm() { return `<h2>Iniciar Sesión</h2><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Ingresa a tu panel</p><form onsubmit="handleLogin(event)"><div class="form-group"><label>Correo</label><input type="email" id="log-email" required></div><div class="form-group"><label>Contraseña</label><input type="password" id="log-pass" required></div><div id="auth-error" style="color:var(--f1-red); font-size:12px; margin-bottom:10px; display:none;"></div><button type="submit" class="btn btn-primary" style="width:100%;">Ingresar</button></form><p style="text-align:center; font-size:12px; margin-top:15px;">¿Nuevo? <a href="#" style="color:var(--accent-blue);" onclick="openAuthModal('register')">Regístrate</a></p>`; }
 function getRegisterForm() { return `<h2>Crear Cuenta</h2><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Únete a la plataforma</p><form onsubmit="handleRegister(event)"><div style="display:flex; gap:10px;"><div class="form-group" style="width:50%;"><label>Nombre</label><input type="text" id="reg-nombre" required></div><div class="form-group" style="width:50%;"><label>Apellido</label><input type="text" id="reg-apellido" required></div></div><div class="form-group"><label>Correo</label><input type="email" id="reg-email" required></div><div class="form-group"><label>Contraseña</label><input type="password" id="reg-pass" required></div><div id="auth-error" style="font-size:12px; margin-bottom:10px; display:none;"></div><button type="submit" class="btn btn-primary" style="width:100%;">Registrarse</button></form><p style="text-align:center; font-size:12px; margin-top:15px;">¿Ya tienes cuenta? <a href="#" style="color:var(--accent-blue);" onclick="openAuthModal('login')">Ingresa aquí</a></p>`; }
 function closeModal() { const m = document.getElementById('dynamic-modal'); if(m) m.remove(); }
@@ -319,9 +413,7 @@ function showCustomAlert(title, message, type="error") {
     document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-// ==========================================
 // LÓGICA DE AUTENTICACIÓN
-// ==========================================
 async function handleRegister(e) {
     e.preventDefault();
     const btn = e.target.querySelector('button'); const msg = document.getElementById('auth-error'); btn.innerText = "Procesando...";
@@ -368,7 +460,6 @@ async function handleLogin(e) {
 function loadDashboard() {
     resetTimer(); appRoot().innerHTML = UI_DASHBOARD;
     
-    // CABECERA: MOSTRAR SOLO EL @USUARIO
     let savedUser = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
     document.getElementById('user-name-display').innerText = savedUser;
     
@@ -396,20 +487,6 @@ function loadDashboard() {
     select.innerHTML = ""; allRaces.forEach(c => select.innerHTML += `<option value="${c.val}">📍 ${c.txt}</option>`);
 
     fetchTelemetryData();
-}
-
-async function processUpgrade() {
-    if(!currentUserTier) { openAuthModal('login'); return; }
-    if(currentUserTier === 'Free') { 
-        try {
-            const res = await fetch(`${SECURE_AWS_URL}/api/upgrade`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email: currentUserEmail}) });
-            const data = await res.json();
-            if(data.status === 'success') {
-                showCustomAlert("¡Plan Mejorado!", "Tu cuenta es ahora PRO en la Base de Datos AWS.", "success");
-                currentUserTier = 'Pro'; sessionStorage.setItem('f1_tier', 'Pro'); setTimeout(() => { loadDashboard(); }, 2000);
-            } else { showCustomAlert("Error", "Fallo al procesar el pago.", "error"); }
-        } catch(err) { showCustomAlert("Error AWS", "No se pudo contactar con el servidor.", "error"); }
-    } 
 }
 
 function logout() { 
