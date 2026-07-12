@@ -14,7 +14,7 @@ function resetTimer() {
 window.onload = resetTimer; document.onmousemove = resetTimer; document.onkeypress = resetTimer; document.ontouchstart = resetTimer;
 
 // ==========================================
-// VISTAS HTML PRINCIPALES
+// VISTAS HTML PRINCIPALES (Imágenes oficiales F1.com restauradas)
 // ==========================================
 const UI_LANDING = `
     <nav class="landing-navbar">
@@ -49,7 +49,7 @@ const UI_LANDING = `
     <section style="margin-top: 50px;">
         <h2 class="section-title">Circuitos <span>Emblemáticos</span></h2>
         <div class="circuits-preview">
-            <!-- FOTOS OFICIALES DE F1.COM RESTAURADAS (100% Seguras) -->
+            <!-- FOTOS OFICIALES DE F1.COM (Las que te funcionaban y no deben moverse) -->
             <div class="circuit-item"><img src="https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Monaco.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Mónaco</h4></div></div>
             <div class="circuit-item"><img src="https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Italy.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Monza</h4></div></div>
             <div class="circuit-item"><img src="https://media.formula1.com/image/upload/content/dam/fom-website/2018-redesign-assets/Racehub%20header%20images%2016x9/Belgium.jpg" referrerpolicy="no-referrer"><div class="circuit-overlay"><h4>GP Spa-Francorchamps</h4></div></div>
@@ -87,7 +87,7 @@ const UI_PRICING = `
             </div>
             <div class="pricing-card pro">
                 <div style="position:absolute; top:-15px; left:50%; transform:translateX(-50%); background:var(--f1-red); color:#fff; font-size:11px; font-weight:700; padding:5px 15px; border-radius:20px;">MÁS ELEGIDO</div>
-                <h3>PRO</h3><div class="price">S/ 1.00<span>/mes</span></div>
+                <h3>PRO</h3><div class="price">$15<span>/mes</span></div>
                 <ul>
                     <li><i class="fa-solid fa-check"></i> Todo lo gratuito</li>
                     <li><i class="fa-solid fa-check"></i> Parrilla Completa (20 Pilotos)</li>
@@ -162,7 +162,7 @@ const UI_DASHBOARD = `
 `;
 
 // ==========================================
-// MODALES FLOTANTES Y AJUSTES
+// MODALES FLOTANTES Y AJUSTES DE PERFIL (CON TARJETAS)
 // ==========================================
 const appRoot = () => document.getElementById('app-root');
 
@@ -185,14 +185,34 @@ function openSettingsModal() {
     let savedCel = sessionStorage.getItem('f1_cel') || "";
     let savedUser = sessionStorage.getItem('f1_username') || `@${currentUserName.toLowerCase()}`;
 
+    // LÓGICA PARA MOSTRAR TARJETA O YAPE EN EL PERFIL
+    let paymentMethod = sessionStorage.getItem('f1_payment_method');
+    let last4 = sessionStorage.getItem('f1_cc_last4') || "****";
+    let paymentHtml = "";
+    
+    if (paymentMethod === 'yape') {
+        paymentHtml = `<div style="margin-top:15px; padding:10px; background:rgba(116,34,132,0.1); border:1px solid rgba(116,34,132,0.3); border-radius:6px; color:var(--text-main); font-size:12px;">
+            <i class="fa-solid fa-mobile-screen" style="color:#742284;"></i> <strong>Suscripción pagada con Yape</strong><br>
+            <span style="color:var(--text-muted);">El cobro mensual se solicitará a tu app de Yape.</span>
+        </div>`;
+    } else if (paymentMethod === 'visa') {
+        paymentHtml = `<div style="margin-top:15px; padding:10px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:var(--text-main); font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+            <div><i class="fa-brands fa-cc-visa" style="font-size:16px; margin-right:5px;"></i> <strong>Tarjeta terminada en ${last4}</strong></div>
+            <button type="button" class="btn btn-outline" style="padding:4px 8px; font-size:11px; border-color:var(--f1-red); color:var(--f1-red);" onclick="removeCard()">Eliminar</button>
+        </div>`;
+    }
+
     let subInfo = isPro 
-        ? `<div style="display:flex; justify-content:space-between; align-items:center; background:rgba(225,6,0,0.1); border:1px solid rgba(225,6,0,0.3); padding:15px; border-radius:8px; margin-top:20px;">
-            <div><strong style="color:var(--f1-red);"><i class="fa-solid fa-crown"></i> Licencia PRO</strong><br><span style="font-size:12px; color:var(--text-muted);">Renovación automática activada</span></div>
-            <button class="btn btn-outline" style="color:var(--f1-red); border-color:var(--f1-red); padding:8px 12px; font-size:12px;" onclick="confirmCancelPlan()">Cancelar Plan</button>
+        ? `<div style="background:var(--bg-dark); border:1px solid rgba(225,6,0,0.3); padding:15px; border-radius:8px; margin-top:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div><strong style="color:var(--f1-red);"><i class="fa-solid fa-crown"></i> Licencia PRO</strong><br><span style="font-size:12px; color:var(--text-muted);">Renovación automática: $15.00/mes</span></div>
+                <button type="button" class="btn btn-outline" style="color:var(--f1-red); border-color:var(--f1-red); padding:8px 12px; font-size:12px;" onclick="confirmCancelPlan()">Cancelar Plan</button>
+            </div>
+            ${paymentHtml}
            </div>`
         : `<div style="text-align:center; background:rgba(255,255,255,0.05); padding:20px; border-radius:8px; margin-top:20px;">
             <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">Estás en el plan limitado. Mejora para desbloquear todas las funciones.</p>
-            <button class="btn btn-primary" style="width:100%;" onclick="closeModal(); renderPricing()"><i class="fa-solid fa-crown"></i> Mejorar a PRO</button>
+            <button type="button" class="btn btn-primary" style="width:100%;" onclick="closeModal(); processUpgrade()"><i class="fa-solid fa-crown"></i> Mejorar a PRO</button>
            </div>`;
 
     const modalHtml = `
@@ -223,6 +243,12 @@ function openSettingsModal() {
         </div>
     `;
     document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function removeCard() {
+    sessionStorage.removeItem('f1_payment_method');
+    sessionStorage.removeItem('f1_cc_last4');
+    showCustomAlert("Tarjeta Eliminada", "Tu método de pago ha sido desvinculado de la plataforma.", "success");
 }
 
 async function saveSettings(e) {
@@ -293,6 +319,8 @@ async function executeCancelPro(btnElement) {
         const res = await fetch(`${SECURE_AWS_URL}/api/cancel`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({email: currentUserEmail}) });
         const data = await res.json();
         if(data.status === 'success') {
+            sessionStorage.removeItem('f1_payment_method');
+            sessionStorage.removeItem('f1_cc_last4');
             showCustomAlert("Plan Cancelado", "Has vuelto a la versión Gratuita de Aficionado.", "success");
             currentUserTier = 'Free'; sessionStorage.setItem('f1_tier', 'Free'); setTimeout(() => { loadDashboard(); }, 2000);
         }
@@ -300,7 +328,7 @@ async function executeCancelPro(btnElement) {
 }
 
 // ==========================================
-// PASARELA DE PAGOS (VISA / YAPE)
+// PASARELA DE PAGOS (MOCKUP VISUAL)
 // ==========================================
 function processUpgrade() {
     if(!currentUserTier) { openAuthModal('login'); return; }
@@ -315,8 +343,7 @@ function openPaymentModal() {
                 <i class="fa-solid fa-xmark modal-close" onclick="closeModal()"></i>
                 <h2 style="margin-bottom: 5px;">Pasarela de Pagos</h2>
                 <p style="color:var(--text-muted); font-size:14px; margin-bottom:20px;">
-                    Suscripción PRO. Total a pagar: <strong style="color:var(--accent-green); font-size:18px;">S/ 1.00</strong> 
-                    <span style="text-decoration:line-through; font-size:12px; margin-left:5px;">$15.00</span>
+                    Suscripción PRO. Total a pagar: <strong style="color:var(--accent-green); font-size:18px;">$15.00</strong> 
                 </p>
 
                 <div style="display:flex; gap:10px; margin-bottom: 25px;">
@@ -326,25 +353,26 @@ function openPaymentModal() {
 
                 <!-- FORMULARIO VISA -->
                 <form id="form-visa" onsubmit="executePayment(event, 'visa')">
-                    <div class="form-group"><label>Número de Tarjeta</label><input type="text" placeholder="0000 0000 0000 0000" maxlength="19" required></div>
+                    <div class="form-group"><label>Número de Tarjeta</label><input type="text" id="cc-num" placeholder="0000 0000 0000 0000" maxlength="19" required></div>
                     <div style="display:flex; gap:10px;">
                         <div class="form-group" style="width:50%;"><label>Vencimiento</label><input type="text" placeholder="MM/AA" maxlength="5" required></div>
                         <div class="form-group" style="width:50%;"><label>CVV</label><input type="password" placeholder="123" maxlength="4" required></div>
                     </div>
                     <div class="form-group"><label>Titular de la tarjeta</label><input type="text" placeholder="Nombre que figura en la tarjeta" required></div>
-                    <button type="submit" id="btn-pay-visa" class="btn btn-primary" style="width:100%; margin-top:10px;"><i class="fa-solid fa-lock"></i> Pagar S/ 1.00 de forma segura</button>
+                    <button type="submit" id="btn-pay-visa" class="btn btn-primary" style="width:100%; margin-top:10px;"><i class="fa-solid fa-lock"></i> Autorizar Pago Seguro</button>
                 </form>
 
                 <!-- FORMULARIO YAPE -->
                 <form id="form-yape" onsubmit="executePayment(event, 'yape')" style="display:none;">
                     <div style="text-align:center; margin-bottom:20px; background:rgba(116, 34, 132, 0.1); padding:15px; border-radius:8px; border: 1px solid rgba(116, 34, 132, 0.3);">
-                        <h3 style="color:#742284; margin-bottom:5px;">Yapea S/ 1.00</h3>
-                        <p style="font-size:18px; font-weight:bold; color:var(--text-main); margin-bottom:5px;">999 999 999</p>
-                        <p style="font-size:12px; color:var(--text-muted);">A nombre de: F1 Telemetry Analytics SAC</p>
+                        <i class="fa-solid fa-building" style="font-size:24px; color:#742284; margin-bottom:10px;"></i>
+                        <h3 style="color:#742284; margin-bottom:5px;">Aprobación de Servicio</h3>
+                        <p style="font-size:13px; color:var(--text-main); font-weight:bold;">Empresa: F1 Telemetry Analytics SAC</p>
+                        <p style="font-size:12px; color:var(--text-muted);">Monto: $15.00 USD (Equivalente en moneda local)</p>
                     </div>
                     <div class="form-group"><label>Tu número de Celular (Yape)</label><input type="tel" placeholder="Ingresa tu número" maxlength="9" pattern="[0-9]{9}" required></div>
-                    <div class="form-group"><label>Código de Aprobación</label><input type="text" placeholder="Ej: 012345" maxlength="8" required></div>
-                    <button type="submit" id="btn-pay-yape" class="btn btn-primary" style="width:100%; margin-top:10px; background-color:#742284; border-color:#742284;"><i class="fa-solid fa-check-double"></i> Validar Yape</button>
+                    <div class="form-group"><label>Código de Aprobación de la App</label><input type="text" placeholder="Ej: 012345" maxlength="8" required></div>
+                    <button type="submit" id="btn-pay-yape" class="btn btn-primary" style="width:100%; margin-top:10px; background-color:#742284; border-color:#742284;"><i class="fa-solid fa-check-double"></i> Validar Transacción</button>
                 </form>
             </div>
         </div>
@@ -372,10 +400,18 @@ function switchPayment(type) {
 async function executePayment(e, type) {
     e.preventDefault();
     const btn = document.getElementById(type === 'visa' ? 'btn-pay-visa' : 'btn-pay-yape');
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando pago con el banco...';
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Procesando pago con la pasarela...';
     btn.disabled = true;
 
-    // Simulamos el retraso real de una pasarela por 2.5 segundos
+    // Guardar el método de pago localmente para mostrarlo en el panel
+    sessionStorage.setItem('f1_payment_method', type);
+    if(type === 'visa') {
+        let ccInput = document.getElementById('cc-num').value;
+        let last4 = ccInput.length >= 4 ? ccInput.slice(-4) : "4242";
+        sessionStorage.setItem('f1_cc_last4', last4);
+    }
+
+    // Retraso para simular conexión bancaria
     setTimeout(async () => {
         try {
             const res = await fetch(`${SECURE_AWS_URL}/api/upgrade`, { 
@@ -386,15 +422,15 @@ async function executePayment(e, type) {
             const data = await res.json();
             
             if(data.status === 'success') {
-                showCustomAlert("¡Transacción Exitosa!", "El pago de S/ 1.00 ha sido aprobado. Ahora eres usuario PRO.", "success");
+                showCustomAlert("¡Transacción Exitosa!", "El pago ha sido procesado por el banco. Eres usuario PRO.", "success");
                 currentUserTier = 'Pro'; 
                 sessionStorage.setItem('f1_tier', 'Pro'); 
                 setTimeout(() => { loadDashboard(); }, 2500);
             } else { 
-                showCustomAlert("Transacción Rechazada", "Hubo un problema procesando el pago en la base de datos.", "error"); 
+                showCustomAlert("Transacción Rechazada", "Hubo un problema procesando el pago en AWS.", "error"); 
             }
         } catch(err) { 
-            showCustomAlert("Error de Conexión", "Los servidores del banco no responden. AWS falló.", "error"); 
+            showCustomAlert("Error de Red", "La pasarela no responde.", "error"); 
         }
     }, 2500);
 }
@@ -494,6 +530,7 @@ function logout() {
     currentUserTier = null; currentUserName = ""; currentUserEmail = "";
     sessionStorage.removeItem('f1_tier'); sessionStorage.removeItem('f1_name'); sessionStorage.removeItem('f1_email');
     sessionStorage.removeItem('f1_lastname'); sessionStorage.removeItem('f1_username'); sessionStorage.removeItem('f1_cel');
+    sessionStorage.removeItem('f1_payment_method'); sessionStorage.removeItem('f1_cc_last4');
     clearTimeout(inactivityTimer); renderLanding(); 
 }
 
