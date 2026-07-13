@@ -12,7 +12,8 @@
 body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden;}
 
 /* LANDING PAGE Y NAVEGACIÓN */
-.landing-navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border-color); position: fixed; top: 0; width: 100%; box-sizing: border-box; z-index: 100; }
+/* Añadido gap: 15px para evitar colisiones en pantallas intermedias */
+.landing-navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border-color); position: fixed; top: 0; width: 100%; box-sizing: border-box; z-index: 100; gap: 15px; }
 .brand-logo { font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px; cursor: pointer; display:flex; align-items:center; gap:8px;}
 .brand-logo img { width: 30px; } .brand-logo span { color: var(--f1-red); }
 .nav-links { display: flex; gap: 20px; align-items: center; }
@@ -112,4 +113,47 @@ td { padding: 15px 20px; font-size: 13px; border-bottom: 1px solid var(--border-
 /* PRICING */
 .pricing-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 40px 30px; text-align: left; position: relative; } .pricing-card.pro { border-color: var(--f1-red); } .pricing-card h3 { font-size: 18px; margin: 0 0 10px 0; color: var(--text-muted); } .pricing-card .price { font-size: 40px; font-weight: 900; margin-bottom: 20px; } .pricing-card ul { list-style: none; padding: 0; margin: 0 0 30px 0; } .pricing-card li { margin-bottom: 12px; font-size: 14px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; } .pricing-card li i { color: var(--accent-green); } .pricing-card li i.fa-xmark { color: var(--f1-red); }
 
-@media (max-width: 768px) { .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; } .dash-controls { width: 100%; justify-content: space-between; flex-wrap: wrap;} .hero-section h1 { font-size: 32px; } .landing-navbar { padding: 15px 20px; } .filters { flex-direction: column; align-items: stretch; } .two-col { flex-direction: column; gap: 0; } }
+/* ==========================================
+   MEDIA QUERIES (RESPONSIVE)
+   ========================================== */
+@media (max-width: 768px) { 
+    /* CORRECCIONES DEL HEADER EN MÓVILES */
+    .landing-navbar { 
+        padding: 12px 15px; 
+        gap: 10px; 
+    }
+    
+    .brand-logo { 
+        font-size: 15px; 
+        gap: 6px; 
+    }
+    
+    .brand-logo img { 
+        width: 22px; 
+    }
+    
+    /* Ocultar 'Paquetes' para evitar que choque con el botón INGRESAR */
+    .nav-links { 
+        display: none; 
+    }
+    
+    /* Achicar botones generales en móvil */
+    .btn { 
+        padding: 8px 14px; 
+        font-size: 11px; 
+    }
+
+    /* ESTILOS ORIGINALES DEL DASHBOARD MÓVIL */
+    .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; } 
+    .dash-controls { width: 100%; justify-content: space-between; flex-wrap: wrap;} 
+    .hero-section h1 { font-size: 32px; } 
+    .filters { flex-direction: column; align-items: stretch; } 
+    .two-col { flex-direction: column; gap: 0; } 
+}
+
+/* CORRECCIÓN EXTRA PARA CELULARES MUY PEQUEÑOS (Ej. iPhone SE) */
+@media (max-width: 380px) {
+    .brand-logo { font-size: 13px; }
+    .brand-logo img { width: 18px; }
+    .btn { padding: 6px 10px; font-size: 10px; }
+}
