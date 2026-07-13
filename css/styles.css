@@ -12,7 +12,6 @@
 body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden;}
 
 /* LANDING PAGE Y NAVEGACIÓN */
-/* Añadido gap: 15px para evitar colisiones en pantallas intermedias */
 .landing-navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: rgba(5, 5, 5, 0.9); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border-color); position: fixed; top: 0; width: 100%; box-sizing: border-box; z-index: 100; gap: 15px; }
 .brand-logo { font-size: 20px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.5px; cursor: pointer; display:flex; align-items:center; gap:8px;}
 .brand-logo img { width: 30px; } .brand-logo span { color: var(--f1-red); }
@@ -114,15 +113,16 @@ td { padding: 15px 20px; font-size: 13px; border-bottom: 1px solid var(--border-
 .pricing-card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 40px 30px; text-align: left; position: relative; } .pricing-card.pro { border-color: var(--f1-red); } .pricing-card h3 { font-size: 18px; margin: 0 0 10px 0; color: var(--text-muted); } .pricing-card .price { font-size: 40px; font-weight: 900; margin-bottom: 20px; } .pricing-card ul { list-style: none; padding: 0; margin: 0 0 30px 0; } .pricing-card li { margin-bottom: 12px; font-size: 14px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; } .pricing-card li i { color: var(--accent-green); } .pricing-card li i.fa-xmark { color: var(--f1-red); }
 
 /* ==========================================
-   MEDIA QUERIES (RESPONSIVE)
+   MEDIA QUERIES (RESPONSIVE) - CORREGIDO
    ========================================== */
 @media (max-width: 768px) { 
-    /* CORRECCIONES DEL HEADER EN MÓVILES */
+    /* 1. Ajustamos el navbar para que quepa todo sin ocultar nada */
     .landing-navbar { 
-        padding: 12px 15px; 
-        gap: 10px; 
+        padding: 12px 15px; /* Reducimos bordes laterales */
+        gap: 10px; /* Reducimos separación al centro */
     }
     
+    /* 2. Achicamos el logo un poco */
     .brand-logo { 
         font-size: 15px; 
         gap: 6px; 
@@ -132,14 +132,19 @@ td { padding: 15px 20px; font-size: 13px; border-bottom: 1px solid var(--border-
         width: 22px; 
     }
     
-    /* Ocultar 'Paquetes' para evitar que choque con el botón INGRESAR */
+    /* 3. Mantenemos nav-links visible, pero achicamos sus espacios */
     .nav-links { 
-        display: none; 
+        display: flex; /* Vuelve a ser visible */
+        gap: 12px;     /* Menos espacio entre enlace y botón */
+    }
+
+    .nav-link {
+        font-size: 12px; /* Letra más pequeña para "Paquetes" */
     }
     
-    /* Achicar botones generales en móvil */
-    .btn { 
-        padding: 8px 14px; 
+    /* 4. Achicamos específicamente el botón de la cabecera */
+    .landing-navbar .btn { 
+        padding: 6px 12px; 
         font-size: 11px; 
     }
 
@@ -153,7 +158,12 @@ td { padding: 15px 20px; font-size: 13px; border-bottom: 1px solid var(--border-
 
 /* CORRECCIÓN EXTRA PARA CELULARES MUY PEQUEÑOS (Ej. iPhone SE) */
 @media (max-width: 380px) {
+    .landing-navbar {
+        padding: 10px;
+    }
     .brand-logo { font-size: 13px; }
     .brand-logo img { width: 18px; }
-    .btn { padding: 6px 10px; font-size: 10px; }
+    .nav-links { gap: 8px; }
+    .nav-link { font-size: 11px; }
+    .landing-navbar .btn { padding: 5px 10px; font-size: 10px; }
 }
